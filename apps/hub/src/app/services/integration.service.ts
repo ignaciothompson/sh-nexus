@@ -32,6 +32,9 @@ export class IntegrationService {
   
   status$ = this.statusSubject.asObservable();
 
+  // Skip health checks in local dev (no ping backend available)
+  private isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -44,6 +47,18 @@ export class IntegrationService {
         online: false, 
         lastChecked: new Date() 
       });
+    }
+
+    // Skip health checks in local development (no ping backend)
+    if (this.isLocalDev) {
+      const status: AppStatus = {
+        appId: app.id,
+        templateId: app.templateId,
+        online: true, // Assume online in dev mode
+        lastChecked: new Date()
+      };
+      this.updateCache(app.id, status);
+      return of(status);
     }
 
     // Use template-specific check if available

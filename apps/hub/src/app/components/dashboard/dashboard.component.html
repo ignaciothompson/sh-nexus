@@ -15,12 +15,6 @@
                 </div>
                 <!-- Action Buttons -->
                 <div class="header-buttons">
-                    <button class="header-btn" (click)="openAddModal()" title="Add New">
-                        <span class="material-symbols-outlined">add</span>
-                    </button>
-                    <button class="header-btn" (click)="toggleSidebar()" title="Calendar">
-                        <span class="material-symbols-outlined">calendar_month</span>
-                    </button>
                     <button class="header-btn" title="Power Options">
                         <span class="material-symbols-outlined">power_settings_new</span>
                     </button>
@@ -92,19 +86,22 @@
                     </div>
                 </section>
                 <!-- Quick Access & Notifications Row -->
-                <section class="two-col-section" *ngIf="bookmarks.length > 0">
+                <section class="two-col-section">
                     <!-- Quick Access -->
                     <div class="quick-access-section">
                         <div class="section-header">
                             <h3 class="section-title">
                                 <span class="material-symbols-outlined text-yellow">bolt</span> Quick Access
                             </h3>
-                            <button class="section-action">Edit Shortcuts</button>
+                            <button class="section-menu-btn" (click)="openReorderModal()">
+                                <span class="material-symbols-outlined">more_horiz</span>
+                            </button>
                         </div>
                         <div class="quick-access-grid">
                             <div *ngFor="let item of bookmarks; trackBy: trackById" class="glass-panel quick-card" (click)="openUrl(item.url)">
                                 <div class="quick-icon" [ngClass]="getQuickIconClass(item)">
-                                    <span class="material-symbols-outlined">{{getQuickIcon(item)}}</span>
+                                    <img *ngIf="item.icon && !$any(item).iconError" [src]="item.icon" [alt]="item.name" class="quick-icon-img" (error)="$any(item).iconError = true">
+                                    <span *ngIf="!item.icon || $any(item).iconError" class="material-symbols-outlined">{{getQuickIcon(item)}}</span>
                                 </div>
                                 <div class="quick-info">
                                     <span class="quick-name">{{item.name}}</span>
@@ -114,6 +111,26 @@
                                 <button class="quick-config-btn" (click)="openEditModal(item); $event.stopPropagation()">
                                     <span class="material-symbols-outlined">settings</span>
                                 </button>
+                            </div>
+                            <!-- Add Button for Quick Access -->
+                            <div class="glass-panel quick-card quick-card-add" (click)="openAddBookmarkModal()">
+                                <span class="material-symbols-outlined add-icon">add</span>
+                                <span class="add-label">Add Shortcut</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Notifications -->
+                    <div class="notifications-section">
+                        <div class="section-header">
+                            <h3 class="section-title">
+                                <span class="material-symbols-outlined text-red">notifications_active</span> Notifications & Alerts
+                            </h3>
+                            <button class="section-action">Clear All</button>
+                        </div>
+                        <div class="glass-panel notifications-list">
+                            <div class="notif-empty" *ngIf="true">
+                                <span class="material-symbols-outlined">check_circle</span>
+                                <span>No new notifications</span>
                             </div>
                         </div>
                     </div>
@@ -137,7 +154,7 @@
                                         <span class="material-symbols-outlined">chevron_right</span>
                                     </button>
                                 </ng-container>
-                                <button class="section-menu-btn">
+                                <button class="section-menu-btn" (click)="openReorderModal(section)">
                                     <span class="material-symbols-outlined">more_horiz</span>
                                 </button>
                             </div>
@@ -166,6 +183,39 @@
 <!-- Settings Modal -->
 <app-settings-modal *ngIf="showSettingsModal" [sections]="sections" (close)="onSettingsClose()" (sectionsUpdated)="loadSections()">
 </app-settings-modal>
-<!-- Right Sidebar -->
-<app-right-sidebar [isOpen]="showSidebar" (closed)="showSidebar = false">
-</app-right-sidebar>
+<!-- Reorder Modal -->
+<div class="reorder-modal-overlay" *ngIf="showReorderModal" (click)="closeReorderModal()">
+    <div class="reorder-modal" (click)="$event.stopPropagation()">
+        <div class="reorder-header">
+            <h3>Reorder {{reorderTitle}}</h3>
+            <button class="close-btn" (click)="closeReorderModal()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="reorder-list">
+            <div *ngFor="let item of reorderItems; let i = index" class="reorder-item">
+                <div class="reorder-item-info">
+                    <img *ngIf="item.icon" [src]="item.icon" class="reorder-icon" (error)="$any(item).iconError = true" [hidden]="$any(item).iconError">
+                    <span *ngIf="!item.icon || $any(item).iconError" class="material-symbols-outlined reorder-icon-fallback">link</span>
+                    <span class="reorder-name">{{item.name}}</span>
+                </div>
+                <div class="reorder-actions">
+                    <button class="reorder-btn" (click)="moveItemUp(i)" [disabled]="i === 0">
+                        <span class="material-symbols-outlined">keyboard_arrow_up</span>
+                    </button>
+                    <button class="reorder-btn" (click)="moveItemDown(i)" [disabled]="i === reorderItems.length - 1">
+                        <span class="material-symbols-outlined">keyboard_arrow_down</span>
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="reorderItems.length === 0" class="reorder-empty">
+                <span class="material-symbols-outlined">inventory_2</span>
+                <span>No items to reorder</span>
+            </div>
+        </div>
+        <div class="reorder-footer">
+            <button class="btn-cancel" (click)="closeReorderModal()">Cancel</button>
+            <button class="btn-save" (click)="saveReorder()">Save Order</button>
+        </div>
+    </div>
+</div>

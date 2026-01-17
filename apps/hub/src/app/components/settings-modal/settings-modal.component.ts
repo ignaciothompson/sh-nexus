@@ -17,7 +17,24 @@ export class SettingsModalComponent {
   @Output() close = new EventEmitter<void>();
   @Output() sectionsUpdated = new EventEmitter<void>();
 
+  // Tab state
+  activeTab: 'sections' | 'appearance' | 'about' = 'sections';
+
+  // Appearance settings (mock for now)
+  theme = 'dark';
+  accentColor = '#359EFF';
+
+  // Input modal state
+  showInputModal = false;
+  inputModalTitle = '';
+  inputModalValue = '';
+  inputModalCallback: ((value: string) => void) | null = null;
+
   constructor(private api: ApiService, private toastr: ToastrService) {}
+
+  setTab(tab: 'sections' | 'appearance' | 'about') {
+    this.activeTab = tab;
+  }
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.sections, event.previousIndex, event.currentIndex);
@@ -29,32 +46,50 @@ export class SettingsModalComponent {
         sec.order = index;
         if (sec.id) this.api.updateSection(sec.id, sec).subscribe();
     });
-    // We don't necessarily need to reload sections here if we just updated order locally, 
-    // but the parent might want to know to refresh.
-    // Actually, local update is enough for UI, but let's emit event.
     this.sectionsUpdated.emit();
   }
 
+  // --- INPUT MODAL ---
+  openInputModal(title: string, defaultValue: string, callback: (value: string) => void) {
+    this.inputModalTitle = title;
+    this.inputModalValue = defaultValue;
+    this.inputModalCallback = callback;
+    this.showInputModal = true;
+  }
+
+  confirmInputModal() {
+    if (this.inputModalValue.trim() && this.inputModalCallback) {
+      this.inputModalCallback(this.inputModalValue.trim());
+    }
+    this.closeInputModal();
+  }
+
+  closeInputModal() {
+    this.showInputModal = false;
+    this.inputModalValue = '';
+    this.inputModalCallback = null;
+  }
+
   addSection() {
-    const title = prompt("New Section Title:");
-    if (title) {
+    this.openInputModal('New Section Title', '', (title) => {
       const newSec: Section = { title, order: this.sections.length };
       this.api.addSection(newSec).subscribe(() => {
         this.toastr.success('Section added');
         this.sectionsUpdated.emit();
       });
-    }
+    });
   }
 
   renameSection(section: Section) {
-    const newTitle = prompt("Rename Section:", section.title);
-    if (newTitle && newTitle !== section.title && section.id) {
-      section.title = newTitle;
-      this.api.updateSection(section.id, section).subscribe(() => {
-        this.toastr.success('Section renamed');
-        this.sectionsUpdated.emit();
-      });
-    }
+    this.openInputModal('Rename Section', section.title, (newTitle) => {
+      if (newTitle !== section.title && section.id) {
+        section.title = newTitle;
+        this.api.updateSection(section.id, section).subscribe(() => {
+          this.toastr.success('Section renamed');
+          this.sectionsUpdated.emit();
+        });
+      }
+    });
   }
 
   deleteSection(section: Section) {

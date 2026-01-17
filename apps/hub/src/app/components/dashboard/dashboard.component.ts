@@ -5,7 +5,6 @@ import { ApiService, AppItem, Section } from '../../services/api.service';
 import { AppTileComponent } from '../app-tile/app-tile.component';
 import { EditAppModalComponent } from '../edit-app-modal/edit-app-modal.component';
 import { SettingsModalComponent } from '../settings-modal/settings-modal.component';
-import { RightSidebarComponent } from '../right-sidebar/right-sidebar.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { ToastrService } from 'ngx-toastr';
 
@@ -18,7 +17,6 @@ import { ToastrService } from 'ngx-toastr';
     AppTileComponent, 
     EditAppModalComponent,
     SettingsModalComponent,
-    RightSidebarComponent,
     SidebarComponent
   ],
   templateUrl: './dashboard.component.html',
@@ -41,6 +39,12 @@ export class DashboardComponent implements OnInit {
   // Pagination state - track current page per section
   sectionPages: Map<string, number> = new Map();
   readonly ITEMS_PER_PAGE = 6;
+
+  // Reorder modal state
+  showReorderModal = false;
+  reorderTitle = '';
+  reorderItems: AppItem[] = [];
+  reorderSectionId: string | null = null; // null = bookmarks
 
   constructor(private api: ApiService, private toastr: ToastrService) {}
 
@@ -200,6 +204,11 @@ export class DashboardComponent implements OnInit {
       this.showModal = true;
   }
 
+  openAddBookmarkModal() {
+      this.editingItem = { name: '', url: '', type: 'bookmark' };
+      this.showModal = true;
+  }
+
   openSettingsModal() {
       this.showSettingsModal = true;
   }
@@ -290,5 +299,60 @@ export class DashboardComponent implements OnInit {
     if (this.searchQuery.trim()) {
       window.open(`https://www.google.com/search?q=${encodeURIComponent(this.searchQuery)}`, '_blank');
     }
+  }
+
+  // --- REORDER MODAL ---
+  openReorderModal(section?: Section) {
+    if (section) {
+      this.reorderTitle = section.title;
+      this.reorderItems = [...(section.AppItems || [])];
+      this.reorderSectionId = section.id || null;
+    } else {
+      // Bookmarks / Quick Access
+      this.reorderTitle = 'Quick Access';
+      this.reorderItems = [...this.bookmarks];
+      this.reorderSectionId = null;
+    }
+    this.showReorderModal = true;
+  }
+
+  moveItemUp(index: number) {
+    if (index > 0) {
+      const temp = this.reorderItems[index];
+      this.reorderItems[index] = this.reorderItems[index - 1];
+      this.reorderItems[index - 1] = temp;
+    }
+  }
+
+  moveItemDown(index: number) {
+    if (index < this.reorderItems.length - 1) {
+      const temp = this.reorderItems[index];
+      this.reorderItems[index] = this.reorderItems[index + 1];
+      this.reorderItems[index + 1] = temp;
+    }
+  }
+
+  saveReorder() {
+    // Update order property for each item
+    this.reorderItems.forEach((item, idx) => {
+      item.order = idx;
+      if (item.id) {
+        this.api.updateApp(item.id, item).subscribe();
+      }
+    });
+
+    // Refresh data
+    if (this.reorderSectionId === null) {
+      this.loadBookmarks();
+    } else {
+      this.loadSections();
+    }
+
+    this.showReorderModal = false;
+    this.toastr.success('Order updated');
+  }
+
+  closeReorderModal() {
+    this.showReorderModal = false;
   }
 }

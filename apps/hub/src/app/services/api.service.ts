@@ -29,7 +29,13 @@ export interface Section {
   providedIn: 'root'
 })
 export class ApiService {
-  private pb = new PocketBase('/'); // Same container - PocketBase serves Angular at root
+  // PocketBase: empty string for localhost (uses proxy), root for production
+  private pb = new PocketBase(this.isLocalhost() ? '' : '/');
+  
+  private isLocalhost(): boolean {
+    const hostname = window.location.hostname;
+    return hostname === 'localhost' || hostname === '127.0.0.1';
+  }
   
   // Legacy Backend URL for Proxy/Stats only
   private get backendUrl(): string {
