@@ -1,0 +1,49 @@
+<div class="metrics-container">
+    <button class="back-btn" (click)="goBack()">← Back to Home</button>
+    <h1 class="page-title">Viewing Activity</h1>
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card glass-panel">
+            <div class="icon">🎬</div>
+            <div class="value">{{ stats.movies }}</div>
+            <div class="label">Movies Watched</div>
+        </div>
+        <div class="stat-card glass-panel">
+            <div class="icon">📺</div>
+            <div class="value">{{ stats.episodes }}</div>
+            <div class="label">Episodes Watched</div>
+        </div>
+        <div class="stat-card glass-panel">
+            <div class="icon">⏱️</div>
+            <div class="value">{{ stats.hours | number:'1.0-1' }}h</div>
+            <div class="label">Time Spent</div>
+        </div>
+    </div>
+    <div class="charts-section">
+        <div class="chart-container glass-panel">
+            <h2>Genre Distribution</h2>
+            <div class="genre-list">
+                <div class="genre-row" *ngFor="let g of genreCounts">
+                    <span class="g-name">{{g.name}}</span>
+                    <div class="bar-container">
+                        <div class="bar" [style.width.%]="(g.count / stats.total) * 100"></div>
+                    </div>
+                    <span class="g-count">{{g.count}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="history-container glass-panel">
+            <h2>Recent History</h2>
+            <ul class="history-list">
+                <li *ngFor="let item of recentHistory">
+                    <div class="h-info">
+                        <span class="h-title">{{ item.title }}</span>
+                        <span class="h-date">{{ item.watched_at | date:'mediumDate' }}</span>
+                    </div>
+                    <div class="h-type">{{ item.media_type }}</div>
+                </li>
+                <li *ngIf="recentHistory.length === 0" class="empty-msg">No history yet. Go watch something!</li>
+            </ul>
+        </div>
+    </div>
+</div>

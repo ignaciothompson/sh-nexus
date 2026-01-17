@@ -1,0 +1,11 @@
+<nav class="navbar glass-panel">
+    <div class="logo">MediaTracker</div>
+    <div class="links">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        <a routerLink="/chat" routerLinkActive="active">AI Chat</a>
+        <a routerLink="/metrics" routerLinkActive="active">Activity</a>
+    </div>
+</nav>
+<div class="main-content">
+    <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SH-Nexus Hub Dashboard Refined</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#359EFF", "background-light": "#f5f7f8", "background-dark": "#0f0f0f", "surface-dark": "#161616", "surface-glass": "rgba(22, 22, 22, 0.6)", "card-dark": "#1c1c1e", "sidebar-dark": "#161618"}, fontFamily: {display: "Manrope", body: ["Noto Sans", "sans-serif"], mono: ["monospace"]}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}, backdropBlur: {xs: "2px"}}}};</script>
+<style>
+        .glass-panel {
+            background: rgba(22, 22, 22, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-pill {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .glass-pill:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(19, 236, 91, 0.3);
+            box-shadow: 0 0 15px -5px rgba(19, 236, 91, 0.2);
+        }
+        .nav-item-active {
+            background: rgba(53, 158, 255, 0.15);
+            color: #359EFF;
+            border-right: 2px solid #359EFF;
+        }
+        .nav-item:hover:not(.nav-item-active) {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+        .sparkline {
+            fill: none;
+            stroke: #13ec5b;
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+        .sparkline-area {
+            fill: rgba(19, 236, 91, 0.1);
+            stroke: none;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0f0f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #28392e;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #13ec5b;
+        }
+        .app-card {
+            background-color: #1c1c1e;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .app-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+        .notif-item {
+            transition: background-color 0.2s ease;
+        }
+        .notif-item:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+    </style>
+</head>
+<body class="bg-[#0f0f0f] font-display text-white overflow-hidden h-screen flex w-full">
+<aside class="w-20 lg:w-64 h-full bg-[#161618] border-r border-white/5 flex flex-col justify-between shrink-0 transition-all duration-300 z-20">
+<div class="flex flex-col gap-8 pt-6">
+<div class="flex items-center gap-3 px-6 justify-center lg:justify-start">
+<div class="size-8 rounded-full bg-gradient-to-br from-primary/80 to-primary/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-black text-lg">dns</span>
+</div>
+<div class="hidden lg:flex flex-col">
+<h1 class="text-white text-lg font-bold leading-none tracking-tight">SH-Nexus</h1>
+<span class="text-primary/60 text-xs font-mono">v2.0.4</span>
+</div>
+</div>
+<nav class="flex flex-col gap-2 px-3">
+<a class="nav-item-active flex items-center gap-4 px-3 py-3 rounded-lg group transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="hidden lg:block text-sm font-medium">Home</span>
+</a>
+<a class="nav-item flex items-center gap-4 px-3 py-3 rounded-lg text-gray-400 transition-colors" href="#">
+<span class="material-symbols-outlined">router</span>
+<span class="hidden lg:block text-sm font-medium">Network</span>
+</a>
+<a class="nav-item flex items-center gap-4 px-3 py-3 rounded-lg text-gray-400 transition-colors" href="#">
+<span class="material-symbols-outlined">smart_display</span>
+<span class="hidden lg:block text-sm font-medium">Media</span>
+</a>
+<a class="nav-item flex items-center gap-4 px-3 py-3 rounded-lg text-gray-400 transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="hidden lg:block text-sm font-medium">Calendar</span>
+</a>
+<a class="nav-item flex items-center gap-4 px-3 py-3 rounded-lg text-gray-400 transition-colors" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="hidden lg:block text-sm font-medium">Notes/Planner</span>
+</a>
+<a class="nav-item flex items-center gap-4 px-3 py-3 rounded-lg text-gray-400 transition-colors" href="#">
+<span class="material-symbols-outlined">code</span>
+<span class="hidden lg:block text-sm font-medium">Code</span>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-2 p-4 border-t border-white/5">
+<a class="nav-item flex items-center gap-4 px-3 py-3 rounded-lg text-gray-400 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="hidden lg:block text-sm font-medium">Settings</span>
+</a>
+<div class="flex items-center gap-3 mt-2 px-3 lg:px-0 justify-center lg:justify-start">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 shrink-0 ring-2 ring-primary/20" data-alt="User avatar with neon futuristic style" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBUyPzrhg49lESJLKZx7GuMp9XrGyz2pfI2uKiR9epv0QEqEf1dsyKA9a7fgtNAotAJBldHzCuDdklZcnjEzW5geUSOImeKtpaUdjXvRFtJ7SMVvVPN9G-wNVuiGlEy5EDS1nY2V8ZPU6JoaCcltt370XcAI6Tb1Sogrws73z4s4rtNC0ocurrNbDc-ir4iDfU73P47jYhYGxGP5GWhpCXnhf7kpVolB-w0Osu-kGjCnSEW068KLL2eTE2n7ilAEXApaHhpLNhGnwGI");'></div>
+<div class="hidden lg:flex flex-col">
+<p class="text-white text-xs font-medium leading-none">Admin</p>
+<p class="text-gray-500 text-[10px]">Logged in</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-full overflow-hidden bg-[#0f0f0f]">
+<header class="flex items-center justify-between px-8 py-5 border-b border-white/5 bg-[#0f0f0f]/90 backdrop-blur-sm z-10">
+<h2 class="text-white text-xl font-medium tracking-tight">System Overview</h2>
+<div class="flex items-center gap-6">
+<div class="relative group hidden md:block">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="bg-[#161616] border border-white/5 text-gray-300 text-sm rounded-lg focus:ring-1 focus:ring-primary focus:border-primary block w-64 pl-10 p-2.5 placeholder-gray-600 transition-all" placeholder="Search logs, apps..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<button class="relative p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full animate-pulse"></span>
+</button>
+<button class="p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
+<span class="material-symbols-outlined">power_settings_new</span>
+</button>
+</div>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-8 scroll-smooth">
+<div class="max-w-7xl mx-auto flex flex-col gap-10">
+<section class="flex flex-col xl:flex-row gap-8 items-start xl:items-center justify-between">
+<div>
+<h1 class="text-5xl font-light tracking-tighter text-white mb-1">09:41 <span class="text-lg font-normal text-gray-500 align-top ml-1">AM</span></h1>
+<p class="text-primary font-medium tracking-wide text-sm uppercase">Tuesday, Oct 24 • System Optimal</p>
+</div>
+<div class="flex flex-wrap gap-4 w-full xl:w-auto">
+<div class="glass-pill px-6 py-4 rounded-xl flex flex-col min-w-[140px] gap-1 cursor-default">
+<div class="flex items-center justify-between mb-1">
+<span class="text-gray-400 text-xs font-medium uppercase tracking-wider">CPU Load</span>
+<span class="material-symbols-outlined text-primary text-sm">memory</span>
+</div>
+<div class="flex items-end gap-2">
+<span class="text-2xl font-bold text-white font-mono">12%</span>
+<span class="text-xs text-primary/80 mb-1">-2%</span>
+</div>
+<div class="w-full bg-gray-800 h-1 mt-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 12%"></div>
+</div>
+</div>
+<div class="glass-pill px-6 py-4 rounded-xl flex flex-col min-w-[140px] gap-1 cursor-default">
+<div class="flex items-center justify-between mb-1">
+<span class="text-gray-400 text-xs font-medium uppercase tracking-wider">RAM</span>
+<span class="material-symbols-outlined text-purple-400 text-sm">storage</span>
+</div>
+<div class="flex items-end gap-2">
+<span class="text-2xl font-bold text-white font-mono">32%</span>
+<span class="text-xs text-orange-400 mb-1">+4%</span>
+</div>
+<div class="w-full bg-gray-800 h-1 mt-2 rounded-full overflow-hidden">
+<div class="bg-purple-500 h-full rounded-full" style="width: 32%"></div>
+</div>
+</div>
+<div class="glass-pill px-6 py-4 rounded-xl flex flex-col min-w-[140px] gap-1 cursor-default">
+<div class="flex items-center justify-between mb-1">
+<span class="text-gray-400 text-xs font-medium uppercase tracking-wider">Temp</span>
+<span class="material-symbols-outlined text-red-400 text-sm">thermostat</span>
+</div>
+<div class="flex items-end gap-2">
+<span class="text-2xl font-bold text-white font-mono">45°C</span>
+<span class="text-xs text-primary/80 mb-1">Stable</span>
+</div>
+<div class="w-full bg-gray-800 h-1 mt-2 rounded-full overflow-hidden">
+<div class="bg-gradient-to-r from-blue-500 to-red-500 h-full rounded-full" style="width: 45%"></div>
+</div>
+</div>
+<div class="glass-pill px-6 py-4 rounded-xl flex flex-col min-w-[140px] gap-1 cursor-default border-l-4 border-l-primary border-t border-r border-b border-t-white/5 border-r-white/5 border-b-white/5">
+<div class="flex items-center justify-between mb-1">
+<span class="text-gray-400 text-xs font-medium uppercase tracking-wider">Storage</span>
+<span class="material-symbols-outlined text-blue-400 text-sm">cloud</span>
+</div>
+<div class="flex items-end gap-2">
+<span class="text-2xl font-bold text-white font-mono">12<span class="text-sm text-gray-500 font-sans ml-0.5">TB</span></span>
+</div>
+<div class="flex justify-between text-[10px] text-gray-500 mt-2">
+<span>Free: 4TB</span>
+<span>Used: 75%</span>
+</div>
+</div>
+</div>
+</section>
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
+<div class="flex flex-col gap-5">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-medium text-white tracking-tight flex items-center gap-2">
+<span class="material-symbols-outlined text-yellow-400 text-xl">bolt</span> Quick Access
+                        </h3>
+<button class="text-xs text-primary hover:text-white transition-colors">Edit Shortcuts</button>
+</div>
+<div class="grid grid-cols-2 gap-4 h-full">
+<div class="glass-panel rounded-xl p-4 flex items-center gap-4 hover:bg-white/5 transition-colors cursor-pointer group">
+<div class="size-12 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:text-blue-300">
+<span class="material-symbols-outlined text-2xl">terminal</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-white">Terminal</span>
+<span class="text-xs text-gray-500">Root Access</span>
+</div>
+</div>
+<div class="glass-panel rounded-xl p-4 flex items-center gap-4 hover:bg-white/5 transition-colors cursor-pointer group">
+<div class="size-12 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400 group-hover:text-green-300">
+<span class="material-symbols-outlined text-2xl">folder</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-white">File Manager</span>
+<span class="text-xs text-gray-500">/mnt/user/data</span>
+</div>
+</div>
+<div class="glass-panel rounded-xl p-4 flex items-center gap-4 hover:bg-white/5 transition-colors cursor-pointer group">
+<div class="size-12 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400 group-hover:text-purple-300">
+<span class="material-symbols-outlined text-2xl">settings_ethernet</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-white">Network Config</span>
+<span class="text-xs text-gray-500">Static IP</span>
+</div>
+</div>
+<div class="glass-panel rounded-xl p-4 flex items-center gap-4 hover:bg-white/5 transition-colors cursor-pointer group">
+<div class="size-12 rounded-lg bg-orange-500/20 flex items-center justify-center text-orange-400 group-hover:text-orange-300">
+<span class="material-symbols-outlined text-2xl">restart_alt</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-white">Reboot System</span>
+<span class="text-xs text-gray-500">Last: 14d ago</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-5">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-medium text-white tracking-tight flex items-center gap-2">
+<span class="material-symbols-outlined text-red-400 text-xl">notifications_active</span> Notifications &amp; Alerts
+                        </h3>
+<button class="text-xs text-gray-500 hover:text-white transition-colors">Clear All</button>
+</div>
+<div class="glass-panel rounded-xl p-1 flex flex-col h-full overflow-hidden max-h-[220px] overflow-y-auto">
+<div class="notif-item p-3 border-b border-white/5 flex gap-3 items-start">
+<span class="size-2 rounded-full bg-red-500 mt-1.5 shrink-0"></span>
+<div class="flex-1">
+<p class="text-sm text-gray-200">High CPU usage detected on 'Plex' container.</p>
+<p class="text-[10px] text-gray-500 mt-1">2 mins ago</p>
+</div>
+</div>
+<div class="notif-item p-3 border-b border-white/5 flex gap-3 items-start">
+<span class="size-2 rounded-full bg-yellow-500 mt-1.5 shrink-0"></span>
+<div class="flex-1">
+<p class="text-sm text-gray-200">Backup completed with warnings.</p>
+<p class="text-[10px] text-gray-500 mt-1">45 mins ago</p>
+</div>
+</div>
+<div class="notif-item p-3 border-b border-white/5 flex gap-3 items-start">
+<span class="size-2 rounded-full bg-blue-500 mt-1.5 shrink-0"></span>
+<div class="flex-1">
+<p class="text-sm text-gray-200">New device connected: 'iPhone-14-Pro'.</p>
+<p class="text-[10px] text-gray-500 mt-1">2 hours ago</p>
+</div>
+</div>
+<div class="notif-item p-3 flex gap-3 items-start">
+<span class="size-2 rounded-full bg-green-500 mt-1.5 shrink-0"></span>
+<div class="flex-1">
+<p class="text-sm text-gray-200">System update available (v2.0.5).</p>
+<p class="text-[10px] text-gray-500 mt-1">Yesterday</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+<div class="flex flex-col gap-5">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-medium text-white tracking-tight flex items-center gap-2">
+<span class="material-symbols-outlined text-purple-400 text-xl">smart_display</span> Media
+                        </h3>
+<button class="text-gray-500 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-lg">more_horiz</span>
+</button>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-yellow-500 text-3xl mb-2">play_arrow</span>
+<span class="text-xs font-medium text-gray-200">Plex</span>
+</div>
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-green-500"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-purple-500 text-3xl mb-2">movie</span>
+<span class="text-xs font-medium text-gray-200">Jellyfin</span>
+</div>
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-green-500"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-blue-400 text-3xl mb-2">tv</span>
+<span class="text-xs font-medium text-gray-200">Sonarr</span>
+</div>
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-green-500"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-yellow-400 text-3xl mb-2">movie_filter</span>
+<span class="text-xs font-medium text-gray-200">Radarr</span>
+</div>
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-green-500"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-orange-400 text-3xl mb-2">monitoring</span>
+<span class="text-xs font-medium text-gray-200">Tautulli</span>
+</div>
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-red-500"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-emerald-400 text-3xl mb-2">menu_book</span>
+<span class="text-xs font-medium text-gray-200">Books</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-5">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-medium text-white tracking-tight flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-400 text-xl">dns</span> System
+                        </h3>
+<button class="text-gray-500 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-lg">more_horiz</span>
+</button>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-green-500"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-blue-500 text-3xl mb-2">deployed_code</span>
+<span class="text-xs font-medium text-gray-200">Portainer</span>
+</div>
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-green-500"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-[#0082c9] text-3xl mb-2">cloud_circle</span>
+<span class="text-xs font-medium text-gray-200">Nextcloud</span>
+</div>
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-green-500"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-green-400 text-3xl mb-2">http</span>
+<span class="text-xs font-medium text-gray-200">Nginx PM</span>
+</div>
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-green-500"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-orange-500 text-3xl mb-2">query_stats</span>
+<span class="text-xs font-medium text-gray-200">Grafana</span>
+</div>
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-green-500"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-teal-400 text-3xl mb-2">monitor_heart</span>
+<span class="text-xs font-medium text-gray-200">Uptime</span>
+</div>
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-green-500"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-orange-600 text-3xl mb-2">dns</span>
+<span class="text-xs font-medium text-gray-200">Proxmox</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-5">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-medium text-white tracking-tight flex items-center gap-2">
+<span class="material-symbols-outlined text-green-400 text-xl">smart_toy</span> Automation
+                        </h3>
+<button class="text-gray-500 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-lg">more_horiz</span>
+</button>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-green-500"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-blue-500 text-3xl mb-2">home_iot_device</span>
+<span class="text-xs font-medium text-gray-200">H.A.</span>
+</div>
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-green-500"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-red-500 text-3xl mb-2">account_tree</span>
+<span class="text-xs font-medium text-gray-200">Node-RED</span>
+</div>
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-red-500"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-white text-3xl mb-2">settings_input_component</span>
+<span class="text-xs font-medium text-gray-200">ESPHome</span>
+</div>
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-green-500"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-purple-400 text-3xl mb-2">hub</span>
+<span class="text-xs font-medium text-gray-200">MQTT</span>
+</div>
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer">
+<div class="absolute top-2 left-2 size-2 rounded-full bg-green-500"></div>
+<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-gray-400 text-xs hover:text-white">open_in_new</span>
+</div>
+<span class="material-symbols-outlined text-yellow-500 text-3xl mb-2">sensors</span>
+<span class="text-xs font-medium text-gray-200">Zigbee</span>
+</div>
+<div class="app-card rounded-lg p-3 relative group flex flex-col items-center justify-center aspect-square cursor-pointer border border-dashed border-white/10 hover:border-primary/50 bg-transparent">
+<span class="material-symbols-outlined text-gray-600 group-hover:text-primary text-xl mb-1">add</span>
+<span class="text-[10px] font-medium text-gray-600 group-hover:text-gray-300">Add</span>
+</div>
+</div>
+</div>
+</section>
+<footer class="mt-auto pt-6 pb-2 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 font-mono">
+<div class="flex gap-4">
+<span class="flex items-center gap-2"><span class="size-2 bg-green-500 rounded-full animate-pulse"></span> Uptime: 14d 2h 12m</span>
+<span class="hidden md:inline">|</span>
+<span>Docker: 18 Containers</span>
+</div>
+<div class="flex gap-4 mt-2 md:mt-0">
+<span>LAN: 192.168.1.50</span>
+<span class="hidden md:inline">|</span>
+<span>WAN: 84.12.xxx.xxx</span>
+</div>
+</footer>
+</div>
+</div>
+</main>
+
+</body></html>

@@ -1,0 +1,158 @@
+/* ================================
+   APP TILE COMPONENT STYLES
+   SH-Nexus New Design
+   ================================ */
+
+.app-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #1c1c1e;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.app-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.app-card-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    height: 100%;
+    padding: 0.75rem;
+    gap: 0.5rem;
+    aspect-ratio: 1;
+}
+
+/* Status Indicator - Top Left */
+.status-indicator {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.status-indicator.online {
+    background: #22c55e;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
+}
+
+.status-indicator.offline {
+    background: #ef4444;
+}
+
+/* Open Hint - Top Right (on hover) */
+.open-hint {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 5;
+}
+
+.app-card:hover .open-hint {
+    opacity: 1;
+}
+
+.open-hint .material-symbols-outlined {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.open-hint:hover .material-symbols-outlined {
+    color: white;
+}
+
+/* Icon Wrapper */
+.app-icon-wrapper {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.app-card:hover .app-icon-wrapper {
+    transform: scale(1.1);
+}
+
+/* Icon Image */
+.app-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 0.25rem;
+}
+
+/* Icon Fallback */
+.app-icon-fallback {
+    font-size: 1.875rem;
+    color: #60a5fa;
+}
+
+/* App Name */
+.app-name {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #d1d5db;
+    text-align: center;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+}
+
+.app-card:hover .app-name {
+    color: white;
+}
+
+/* Config Button - Hover Only */
+.card-config-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.25rem;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.app-card:hover .card-config-btn {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.card-config-btn:hover {
+    background: #359EFF;
+    border-color: #359EFF;
+}
+
+.card-config-btn .material-symbols-outlined {
+    font-size: 0.75rem;
+}

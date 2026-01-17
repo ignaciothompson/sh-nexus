@@ -1,0 +1,171 @@
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <app-sidebar [activeRoute]="'home'" (openSettings)="openSettingsModal()">
+    </app-sidebar>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="main-header">
+            <h2 class="header-title">System Overview</h2>
+            <div class="header-actions">
+                <!-- Search Bar -->
+                <div class="search-wrapper">
+                    <span class="material-symbols-outlined search-icon">search</span>
+                    <input type="text" class="search-input" placeholder="Search logs, apps..." [(ngModel)]="searchQuery" (keydown.enter)="performSearch()">
+                </div>
+                <!-- Action Buttons -->
+                <div class="header-buttons">
+                    <button class="header-btn" (click)="openAddModal()" title="Add New">
+                        <span class="material-symbols-outlined">add</span>
+                    </button>
+                    <button class="header-btn" (click)="toggleSidebar()" title="Calendar">
+                        <span class="material-symbols-outlined">calendar_month</span>
+                    </button>
+                    <button class="header-btn" title="Power Options">
+                        <span class="material-symbols-outlined">power_settings_new</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        <!-- Scrollable Content -->
+        <div class="content-scroll">
+            <div class="content-wrapper">
+                <!-- Time & Status Section -->
+                <section class="hero-section">
+                    <div class="time-block">
+                        <h1 class="time-display"> {{currentTime | date:'HH:mm'}} <span class="time-period">{{currentTime | date:'a'}}</span>
+                        </h1>
+                        <p class="date-display"> {{currentTime | date:'EEEE, MMM d'}} • System Optimal </p>
+                    </div>
+                    <!-- Status Pills -->
+                    <div class="status-pills">
+                        <div class="glass-pill status-card">
+                            <div class="status-header">
+                                <span class="status-label">CPU Load</span>
+                                <span class="material-symbols-outlined status-icon text-primary">memory</span>
+                            </div>
+                            <div class="status-value">
+                                <span class="value-main">{{hostStats?.cpuPercent || 12}}%</span>
+                            </div>
+                            <div class="status-bar-bg">
+                                <div class="status-bar-fill bg-primary" [style.width.%]="hostStats?.cpuPercent || 12"></div>
+                            </div>
+                        </div>
+                        <div class="glass-pill status-card">
+                            <div class="status-header">
+                                <span class="status-label">RAM</span>
+                                <span class="material-symbols-outlined status-icon text-purple">storage</span>
+                            </div>
+                            <div class="status-value">
+                                <span class="value-main">{{hostStats?.memPercent || 32}}%</span>
+                            </div>
+                            <div class="status-bar-bg">
+                                <div class="status-bar-fill bg-purple" [style.width.%]="hostStats?.memPercent || 32"></div>
+                            </div>
+                        </div>
+                        <div class="glass-pill status-card">
+                            <div class="status-header">
+                                <span class="status-label">Temp</span>
+                                <span class="material-symbols-outlined status-icon text-red">thermostat</span>
+                            </div>
+                            <div class="status-value">
+                                <span class="value-main">45°C</span>
+                                <span class="value-sub text-primary">Stable</span>
+                            </div>
+                            <div class="status-bar-bg">
+                                <div class="status-bar-fill bg-gradient-temp" style="width: 45%"></div>
+                            </div>
+                        </div>
+                        <div class="glass-pill status-card status-card-accent">
+                            <div class="status-header">
+                                <span class="status-label">Storage</span>
+                                <span class="material-symbols-outlined status-icon text-blue">cloud</span>
+                            </div>
+                            <div class="status-value">
+                                <span class="value-main">{{hostStats?.disk?.total || '12'}}<span class="value-unit">TB</span></span>
+                            </div>
+                            <div class="status-footer">
+                                <span>Free: {{hostStats?.disk?.free || '4TB'}}</span>
+                                <span>Used: {{hostStats?.disk?.usage || '75%'}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Quick Access & Notifications Row -->
+                <section class="two-col-section" *ngIf="bookmarks.length > 0">
+                    <!-- Quick Access -->
+                    <div class="quick-access-section">
+                        <div class="section-header">
+                            <h3 class="section-title">
+                                <span class="material-symbols-outlined text-yellow">bolt</span> Quick Access
+                            </h3>
+                            <button class="section-action">Edit Shortcuts</button>
+                        </div>
+                        <div class="quick-access-grid">
+                            <div *ngFor="let item of bookmarks; trackBy: trackById" class="glass-panel quick-card" (click)="openUrl(item.url)">
+                                <div class="quick-icon" [ngClass]="getQuickIconClass(item)">
+                                    <span class="material-symbols-outlined">{{getQuickIcon(item)}}</span>
+                                </div>
+                                <div class="quick-info">
+                                    <span class="quick-name">{{item.name}}</span>
+                                    <span class="quick-desc">{{item.url | slice:0:30}}</span>
+                                </div>
+                                <!-- Config Button -->
+                                <button class="quick-config-btn" (click)="openEditModal(item); $event.stopPropagation()">
+                                    <span class="material-symbols-outlined">settings</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- App Sections Grid -->
+                <section class="apps-sections">
+                    <div *ngFor="let section of sections; trackBy: trackById" class="app-section-block">
+                        <!-- Section Header -->
+                        <div class="section-header">
+                            <h3 class="section-title">
+                                <span class="material-symbols-outlined" [ngClass]="getSectionIconClass(section)"> {{getSectionIcon(section)}} </span> {{section.title}}
+                            </h3>
+                            <div class="section-controls">
+                                <!-- Pagination -->
+                                <ng-container *ngIf="section.AppItems && section.AppItems.length > 6">
+                                    <button class="pagination-btn" (click)="prevPage(section)" [disabled]="getSectionPage(section) === 0">
+                                        <span class="material-symbols-outlined">chevron_left</span>
+                                    </button>
+                                    <span class="pagination-info"> {{getSectionPage(section) + 1}}/{{getTotalPages(section)}} </span>
+                                    <button class="pagination-btn" (click)="nextPage(section)" [disabled]="getSectionPage(section) >= getTotalPages(section) - 1">
+                                        <span class="material-symbols-outlined">chevron_right</span>
+                                    </button>
+                                </ng-container>
+                                <button class="section-menu-btn">
+                                    <span class="material-symbols-outlined">more_horiz</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Apps Grid (6 items per page) -->
+                        <div class="apps-grid">
+                            <div *ngFor="let item of getPagedApps(section); trackBy: trackById" class="app-item-wrapper">
+                                <app-app-tile [app]="item" [editMode]="false" (edit)="openEditModal($event)" (delete)="onDeleteApp($event)">
+                                </app-app-tile>
+                            </div>
+                            <!-- Add Button (only on last page if room) -->
+                            <div *ngIf="showAddButton(section)" class="app-card app-card-add" (click)="openAddModalForSection(section)">
+                                <span class="material-symbols-outlined">add</span>
+                                <span class="add-label">Add</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+</div>
+<!-- Modal -->
+<app-edit-app-modal *ngIf="showModal" [app]="editingItem" [sections]="sections" (saveApp)="onSaveApp($event)" (deleteApp)="onDeleteApp($event); showModal = false" (cancel)="showModal = false">
+</app-edit-app-modal>
+<!-- Settings Modal -->
+<app-settings-modal *ngIf="showSettingsModal" [sections]="sections" (close)="onSettingsClose()" (sectionsUpdated)="loadSections()">
+</app-settings-modal>
+<!-- Right Sidebar -->
+<app-right-sidebar [isOpen]="showSidebar" (closed)="showSidebar = false">
+</app-right-sidebar>

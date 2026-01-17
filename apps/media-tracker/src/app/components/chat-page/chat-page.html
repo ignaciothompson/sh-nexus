@@ -1,0 +1,39 @@
+<div class="chat-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar glass-panel">
+        <h2>Context</h2>
+        <div class="section">
+            <h3>Genres</h3>
+            <div class="chips">
+                <span *ngFor="let g of genres" class="chip" [class.active]="selectedGenres.includes(g)" (click)="toggleGenre(g)"> {{ g }} </span>
+            </div>
+        </div>
+        <div class="section">
+            <h3>Liked Movies/Shows</h3>
+            <div class="input-group">
+                <input type="text" placeholder="Search..." [(ngModel)]="searchQuery" (keyup.enter)="addContextItem(searchQuery)">
+                <button (click)="addContextItem(searchQuery)">+</button>
+            </div>
+            <div class="context-list">
+                <div *ngFor="let item of selectedMovies" class="context-item"> {{ item }} <span class="remove" (click)="removeContextItem(item)">×</span>
+                </div>
+            </div>
+        </div>
+        <button class="clear-btn" (click)="clearContext()">Clear Context</button>
+    </aside>
+    <!-- Chat Area -->
+    <main class="chat-area glass-panel">
+        <div class="messages">
+            <div *ngFor="let msg of messages" class="message" [class.user]="msg.isUser">
+                <div class="bubble">{{ msg.text }}</div>
+            </div>
+            <div *ngIf="isLoading" class="message ai">
+                <div class="bubble typing">...</div>
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" [(ngModel)]="userInput" (keyup.enter)="sendMessage()" placeholder="Ask for a recommendation..." [disabled]="isLoading">
+            <button (click)="sendMessage()" [disabled]="isLoading || !userInput.trim()">Send</button>
+        </div>
+    </main>
+</div>

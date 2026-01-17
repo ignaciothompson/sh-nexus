@@ -1,0 +1,36 @@
+<aside class="sidebar">
+    <!-- Logo Section -->
+    <div class="sidebar-top">
+        <div class="logo-section">
+            <div class="logo-icon">
+                <span class="material-symbols-outlined">dns</span>
+            </div>
+            <div class="logo-text">
+                <h1>SH-Nexus</h1>
+                <span class="version">v2.0.4</span>
+            </div>
+        </div>
+        <!-- Navigation -->
+        <nav class="nav-list">
+            <a *ngFor="let item of navItems" class="nav-item" [class.nav-item-active]="item.route === activeRoute" (click)="onNavClick(item.route)" href="javascript:void(0)">
+                <span class="material-symbols-outlined" [class.icon-filled]="item.route === activeRoute"> {{item.icon}} </span>
+                <span class="nav-label">{{item.label}}</span>
+            </a>
+        </nav>
+    </div>
+    <!-- Bottom Section -->
+    <div class="sidebar-bottom">
+        <a class="nav-item" (click)="onSettingsClick()" href="javascript:void(0)">
+            <span class="material-symbols-outlined">settings</span>
+            <span class="nav-label">Settings</span>
+        </a>
+        <!-- User Section -->
+        <div class="user-section">
+            <div class="user-avatar"></div>
+            <div class="user-info">
+                <p class="user-name">Admin</p>
+                <p class="user-status">Logged in</p>
+            </div>
+        </div>
+    </div>
+</aside>

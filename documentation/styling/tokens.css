@@ -1,0 +1,186 @@
+/* ============================================================
+   SH-NEXUS SHARED DESIGN TOKENS
+   ============================================================
+   
+   This file contains the canonical CSS variables used across
+   all SH-Nexus applications. Import or copy these into your
+   app's styles.css file.
+   
+   Usage:
+   1. Copy this entire :root block into your styles.css
+   2. Override --primary and related accent colors per app
+   
+   ============================================================ */
+
+:root {
+  /* ===========================================
+     PRIMARY COLORS - CUSTOMIZE PER APP
+     =========================================== */
+  
+  /* Hub: Blue Theme */
+  --primary: #135bec;
+  --primary-light: rgba(19, 91, 236, 0.2);
+  --primary-glow: rgba(19, 91, 236, 0.5);
+  --primary-hover: #1d6af5;
+  
+  /* Notes/Planner: Green Theme (uncomment to use)
+  --primary: #10b981;
+  --primary-light: rgba(16, 185, 129, 0.2);
+  --primary-glow: rgba(16, 185, 129, 0.5);
+  --primary-hover: #059669;
+  */
+  
+  /* MediaTracker: Purple Theme (uncomment to use)
+  --primary: #a855f7;
+  --primary-light: rgba(168, 85, 247, 0.2);
+  --primary-glow: rgba(168, 85, 247, 0.5);
+  --primary-hover: #9333ea;
+  */
+
+  /* ===========================================
+     BACKGROUND COLORS - DARK NAVY THEME
+     =========================================== */
+  --bg-dark: #101622;       /* Darkest - page background */
+  --bg: #1a1d24;            /* Default surface/card background */
+  --bg-light: #232833;      /* Hover states, secondary surfaces */
+  --bg-elevated: #232f48;   /* Elevated elements, dropdowns */
+
+  /* ===========================================
+     TEXT COLORS
+     =========================================== */
+  --text: #ffffff;          /* Primary text */
+  --text-secondary: #e2e8f0; /* Secondary text, descriptions */
+  --text-muted: #94a3b8;    /* Muted text, placeholders, meta */
+
+  /* ===========================================
+     BORDER COLORS
+     =========================================== */
+  --border: #232f48;                    /* Standard borders */
+  --border-muted: rgba(35, 47, 72, 0.5); /* Subtle, semi-transparent */
+
+  /* ===========================================
+     STATUS COLORS
+     =========================================== */
+  --success: #10b981;  /* Green - connected, complete, online */
+  --warning: #f59e0b;  /* Amber - starred, pending, caution */
+  --danger: #ef4444;   /* Red - error, delete, offline */
+  --info: #3b82f6;     /* Blue - information, help */
+
+  /* ===========================================
+     APP ICON COLORS (Hub Dashboard)
+     =========================================== */
+  --icon-plex: #e5a00d;
+  --icon-spotify: #1db954;
+  --icon-jellyfin: #a855f7;
+  --icon-sonarr: #38bdf8;
+  --icon-radarr: #fbbf24;
+  --icon-overseerr: #818cf8;
+  --icon-docker: #3b82f6;
+  --icon-pihole: #ef4444;
+  --icon-grafana: #f97316;
+  --icon-portainer: #06b6d4;
+  --icon-nginx: #22c55e;
+  --icon-unraid: #ea580c;
+}
+
+/* ===========================================
+   GLOBAL RESETS AND BASE STYLES
+   =========================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  color-scheme: dark;
+  background-color: var(--bg-dark) !important;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg-dark);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Override Angular root/main backgrounds */
+app-root,
+main,
+.app-main {
+  background-color: var(--bg-dark) !important;
+}
+
+/* ===========================================
+   SELECTION STYLING
+   =========================================== */
+::selection {
+  background: var(--primary);
+  color: white;
+}
+
+/* ===========================================
+   SCROLLBAR STYLING
+   =========================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-elevated);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #34425e;
+}
+
+/* ===========================================
+   FOCUS STYLES (ACCESSIBILITY)
+   =========================================== */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ===========================================
+   BUTTON RESET
+   =========================================== */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* ===========================================
+   LINK RESET
+   =========================================== */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ===========================================
+   FORM RESET
+   =========================================== */
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+}

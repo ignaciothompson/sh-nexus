@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  hub:
+    build: 
+      context: ./apps/hub
+      dockerfile: Dockerfile
+    container_name: nexus-hub
+    restart: unless-stopped
+    ports:
+      - "5100:8080"
+    volumes:
+      - ./data/hub_pb_data:/pb/pb_data
+    networks:
+      - nexus_net
+
+  media-tracker:
+    build:
+      context: ./apps/media-tracker
+      dockerfile: Dockerfile
+    container_name: nexus-media
+    restart: unless-stopped
+    ports:
+      - "5101:8080"
+    volumes:
+      - ./data/media_pb_data:/pb/pb_data
+    networks:
+      - nexus_net
+
+  notes:
+    build:
+      context: ./apps/notes
+      dockerfile: Dockerfile
+    container_name: nexus-notes
+    restart: unless-stopped
+    ports:
+      - "5102:8080"
+    volumes:
+      - ./data/notes_pb_data:/pb/pb_data
+    networks:
+      - nexus_net
+
+  planner:
+    build:
+      context: ./apps/planner
+      dockerfile: Dockerfile
+    container_name: nexus-planner
+    restart: unless-stopped
+    ports:
+      - "5103:8080"
+    volumes:
+      - ./data/planner_pb_data:/pb/pb_data
+    networks:
+      - nexus_net
+
+networks:
+  nexus_net:
+    driver: bridge

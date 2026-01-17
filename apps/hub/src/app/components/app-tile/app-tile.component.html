@@ -1,0 +1,22 @@
+<div class="app-card">
+    <a [href]="app.url" target="_blank" class="app-card-link">
+        <!-- Status Indicator (top left) -->
+        <div *ngIf="hasStatus" class="status-indicator" [class.online]="isOnline" [class.offline]="!isOnline" [title]="isOnline ? 'Online' : 'Offline'">
+        </div>
+        <!-- Hover Open Icon (top right) -->
+        <div class="open-hint">
+            <span class="material-symbols-outlined">open_in_new</span>
+        </div>
+        <!-- Icon -->
+        <div class="app-icon-wrapper">
+            <img *ngIf="!imageError && app.icon" [src]="app.icon" [alt]="app.name" class="app-icon" (error)="onError()">
+            <span *ngIf="imageError || !app.icon" class="material-symbols-outlined app-icon-fallback"> deployed_code </span>
+        </div>
+        <!-- Name -->
+        <span class="app-name">{{app.name}}</span>
+    </a>
+    <!-- Config button - visible on hover -->
+    <button class="card-config-btn" (click)="onEdit($event)">
+        <span class="material-symbols-outlined">open_in_new</span>
+    </button>
+</div>

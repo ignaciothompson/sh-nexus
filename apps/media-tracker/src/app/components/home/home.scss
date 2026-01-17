@@ -1,0 +1,54 @@
+.home-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  overflow-x: hidden; /* Prevent page scroll from carousel overflow */
+}
+
+/* Removed Hero Section as per potential user preference or to simplify, 
+   but kept container padding. If user wants hero back, we can re-add. 
+   User removed it in their edit, so I will respect that. */
+
+.content-section {
+  margin-bottom: 40px;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #e2e8f0;
+  border-left: 4px solid #6366f1;
+  padding-left: 10px;
+}
+
+.carousel {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 20px; /* Space for scrollbar */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  
+  /* Hide scrollbar for cleaner look, but allow scrolling */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.carousel::-webkit-scrollbar {
+  height: 8px;
+}
+
+.carousel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.carousel::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+/* Ensure cards don't shrink */
+app-movie-card {
+  flex: 0 0 auto;
+  width: 200px;
+}

@@ -1,0 +1,31 @@
+<div class="details-container" *ngIf="item$ | async as item">
+    <!-- Hero Backdrop -->
+    <div class="hero-backdrop" [style.backgroundImage]="'url(https://image.tmdb.org/t/p/original' + item.backdrop_path + ')'">
+        <div class="overlay"></div>
+    </div>
+    <div class="content glass-panel">
+        <button class="back-btn" (click)="goBack()">← Back</button>
+        <div class="grid-layout">
+            <div class="poster-col">
+                <img [src]="'https://image.tmdb.org/t/p/w500' + item.poster_path" class="poster" alt="Poster">
+            </div>
+            <div class="info-col">
+                <h1 class="title">{{ item.title || item.name }}</h1>
+                <p class="tagline" *ngIf="item.tagline">"{{ item.tagline }}"</p>
+                <div class="meta-row">
+                    <span class="badge">{{ getYear(item.release_date || item.first_air_date) }}</span>
+                    <span class="badge" *ngFor="let g of item.genres">{{ g.name }}</span>
+                    <span class="badge rating">⭐ {{ item.vote_average | number:'1.1-1' }}</span>
+                </div>
+                <p class="overview">{{ item.overview }}</p>
+                <div class="actions">
+                    <button class="action-btn primary" (click)="track('watchlist', item)">
+                        <span>+</span> Add to Watchlist </button>
+                    <button class="action-btn secondary" (click)="track('seen', item)">
+                        <span>👁</span> Mark as Seen </button>
+                    <button class="action-btn icon-only" [class.active]="isFavorite" (click)="track('favorite', item)"> ♥ </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
