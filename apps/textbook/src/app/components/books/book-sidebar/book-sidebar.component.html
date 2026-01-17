@@ -1,0 +1,54 @@
+<div class="sidebar-header">
+    <h2 class="text-sm font-bold uppercase tracking-widest text-gray-500">My Library</h2>
+    <button class="btn-icon-add" title="New Section">
+        <span class="material-symbols-outlined text-[20px]">add_box</span>
+    </button>
+</div>
+<div class="search-container">
+    <div class="relative group">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">search</span>
+        <input class="search-input" placeholder="Quick search..." type="text" />
+    </div>
+</div>
+<div class="books-list">
+    <div class="space-y-1">
+        <!-- Active Book Item -->
+        <div class="book-item active group">
+            <span class="material-symbols-outlined text-gray-500 text-[18px]">expand_more</span>
+            <span class="material-symbols-outlined text-accent text-[20px]">import_contacts</span>
+            <span class="text-sm font-semibold truncate flex-1">Engineering Handbook</span>
+            <span class="material-symbols-outlined text-gray-600 opacity-0 group-hover:opacity-100 text-[16px]">more_vert</span>
+        </div>
+        <!-- Nested Pages -->
+        <div class="ml-8 space-y-0.5 border-l border-border-subtle">
+            <div class="page-item">
+                <span class="material-symbols-outlined text-[18px]">description</span>
+                <span>System Architecture</span>
+            </div>
+            <div class="page-item active-page">
+                <span class="material-symbols-outlined text-accent text-[18px]">article</span>
+                <span>API Design Patterns</span>
+            </div>
+            <div class="page-item">
+                <span class="material-symbols-outlined text-[18px]">description</span>
+                <span>Security Protocols</span>
+            </div>
+        </div>
+    </div>
+    <!-- Other Books -->
+    <div class="book-item group">
+        <span class="material-symbols-outlined text-gray-500 text-[18px]">chevron_right</span>
+        <span class="material-symbols-outlined text-orange-400 text-[20px]">science</span>
+        <span class="text-sm font-medium truncate flex-1">Product Roadmap 2024</span>
+        <span class="counter-badge">12</span>
+    </div>
+    <div class="book-item group">
+        <span class="material-symbols-outlined text-gray-500 text-[18px]">chevron_right</span>
+        <span class="material-symbols-outlined text-purple-400 text-[20px]">auto_awesome</span>
+        <span class="text-sm font-medium truncate flex-1">Personal Wiki</span>
+    </div>
+</div>
+<div class="sidebar-footer">
+    <button class="trash-btn">
+        <span class="material-symbols-outlined text-[18px]">delete</span> Trash </button>
+</div>

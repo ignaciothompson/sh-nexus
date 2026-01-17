@@ -1,0 +1,13 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.text-accent { color: var(--color-accent); }
+.bg-accent\/5 { background-color: rgba(var(--color-accent-rgb), 0.05); }
+.border-accent { border-color: var(--color-accent); }
+.decoration-accent { text-decoration-color: var(--color-accent); }
+.bg-deep-dark\/50 { background-color: rgba(15, 15, 15, 0.5); }
+.border-border-subtle { border-color: var(--border-subtle); }
+.border-border-subtle\/50 { border-color: rgba(38, 38, 38, 0.5); }

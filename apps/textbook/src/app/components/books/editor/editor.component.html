@@ -1,0 +1,62 @@
+<header class="h-14 border-b border-border-subtle flex items-center justify-between px-8 bg-deep-dark/80 backdrop-blur-md sticky top-0 z-20">
+    <div class="flex items-center gap-3 text-xs">
+        <div class="flex items-center gap-1.5 text-gray-500">
+            <span class="material-symbols-outlined text-[16px]">folder_open</span>
+            <span>Engineering Handbook</span>
+        </div>
+        <span class="text-gray-700">/</span>
+        <div class="flex items-center gap-1.5 text-gray-300 font-medium">
+            <span class="material-symbols-outlined text-[16px]">article</span>
+            <span>API Design Patterns</span>
+        </div>
+    </div>
+    <div class="flex items-center gap-4">
+        <div class="flex -space-x-2">
+            <div class="size-6 rounded-full border border-deep-dark bg-gray-400"></div>
+            <div class="size-6 rounded-full border border-deep-dark bg-accent flex items-center justify-center text-[10px] font-bold text-white">+2</div>
+        </div>
+        <div class="h-4 w-px bg-border-subtle mx-2"></div>
+        <button class="text-gray-500 hover:text-white"><span class="material-symbols-outlined text-[20px]">history</span></button>
+        <button class="text-gray-500 hover:text-white"><span class="material-symbols-outlined text-[20px]">star</span></button>
+        <button class="bg-accent hover:bg-accent/90 text-white text-xs px-3 py-1.5 rounded-md font-bold transition-all">Publish</button>
+    </div>
+</header>
+<div class="flex-1 overflow-y-auto relative">
+    <!-- Floating Toolbar -->
+    <div class="fixed left-1/2 -translate-x-1/2 bottom-8 z-30 bg-surface-dark border border-border-subtle shadow-2xl rounded-xl p-1.5 flex items-center gap-1">
+        <button class="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-accent"><span class="material-symbols-outlined text-[20px]">format_bold</span></button>
+        <button class="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-accent"><span class="material-symbols-outlined text-[20px]">format_italic</span></button>
+        <button class="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-accent"><span class="material-symbols-outlined text-[20px]">strikethrough_s</span></button>
+        <div class="w-px h-6 bg-border-subtle mx-1"></div>
+        <button class="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-accent"><span class="material-symbols-outlined text-[20px]">link</span></button>
+        <button class="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-accent"><span class="material-symbols-outlined text-[20px]">image</span></button>
+        <button class="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-accent"><span class="material-symbols-outlined text-[20px]">code_blocks</span></button>
+    </div>
+    <div class="max-w-4xl mx-auto py-16 px-12">
+        <!-- Cover Image -->
+        <div class="h-48 w-full rounded-2xl bg-gradient-to-br from-accent/20 to-purple-500/10 mb-12 border border-border-subtle relative overflow-hidden group">
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                <button class="px-4 py-2 bg-black/60 backdrop-blur text-xs rounded-lg border border-white/10 hover:bg-black/80 text-white">Change Cover</button>
+            </div>
+        </div>
+        <div class="space-y-6">
+            <div class="group relative">
+                <input class="w-full bg-transparent text-5xl font-extrabold text-white border-none focus:ring-0 p-0 placeholder-gray-800 outline-none" type="text" value="API Design Patterns" />
+                <div class="flex items-center gap-4 mt-4 text-xs text-gray-500">
+                    <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 24, 2023</span>
+                    <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">timer</span> 8 min read</span>
+                    <div class="flex gap-2">
+                        <span class="bg-accent/10 text-accent px-2 py-0.5 rounded border border-accent/20">#architecture</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Editor Content (Mock) -->
+            <div class="editor-block relative group">
+                <p class="text-xl text-gray-400 leading-relaxed outline-none" contenteditable="true"> Effective API design patterns are essential for building scalable, maintainable, and developer-friendly web services. </p>
+            </div>
+            <div class="editor-block relative group pt-4">
+                <h2 class="text-2xl font-bold text-white" contenteditable="true">1. Resource-Oriented Design</h2>
+            </div>
+        </div>
+    </div>
+</div>

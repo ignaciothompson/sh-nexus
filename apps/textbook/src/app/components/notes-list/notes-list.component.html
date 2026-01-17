@@ -1,0 +1,64 @@
+<div class="notes-container">
+    <!-- Take a Note Input Bar -->
+    <div class="take-note-wrapper">
+        <div class="take-note-bar" (click)="openCreateModal()">
+            <span class="placeholder-text">Take a note...</span>
+            <div class="bar-actions">
+                <button class="btn-icon" title="New Image" (click)="fileInput.click()">
+                    <span class="material-symbols-outlined">image</span>
+                </button>
+                <input #fileInput type="file" style="display: none" (change)="onFileSelected($event)" accept="image/*">
+            </div>
+        </div>
+    </div>
+    <!-- Notes Grid -->
+    <div class="notes-grid"> @for (note of filteredNotes; track note.id) { <div class="note-card" (click)="openEditModal(note)"> @if (note.images && note.images.length > 0) { <img [src]="note.images[0]" class="note-image" alt="Note attachment"> } <h3 class="note-title">{{ note.title }}</h3>
+            <p class="note-preview">{{ note.content }}</p>
+            <div class="note-labels"> @if (note.expand?.label) { <span class="label-chip">{{ note.expand?.label?.name }}</span> } </div>
+            <div class="note-actions">
+                <button class="btn-icon pin-btn" [class.active]="note.is_favorite" (click)="$event.stopPropagation(); togglePin(note)">
+                    <span class="material-symbols-outlined icon-sm">keep</span>
+                </button>
+                <button class="btn-icon" (click)="$event.stopPropagation(); deleteNote(note.id)">
+                    <span class="material-symbols-outlined icon-sm">delete</span>
+                </button>
+            </div>
+        </div> } </div>
+</div>
+<!-- Lightbox Overlay --> @if (expandedImage) { <div class="lightbox-overlay" (click)="expandedImage = null">
+    <img [src]="expandedImage" class="lightbox-image" (click)="$event.stopPropagation()">
+    <button class="lightbox-close" (click)="expandedImage = null">
+        <span class="material-symbols-outlined">close</span>
+    </button>
+</div> } <!-- Edit/Create Modal --> @if (showModal) { <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <!-- Label Selector -->
+            <select class="label-select" [(ngModel)]="formData.label">
+                <option [ngValue]="undefined">No Label</option> @for (label of labels; track label.id) { <option [value]="label.id">{{ label.name }}</option> }
+            </select>
+            <button class="btn-icon pin-btn" [class.active]="formData.is_favorite" (click)="formData.is_favorite = !formData.is_favorite">
+                <span class="material-symbols-outlined">keep</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <input #titleInput type="text" class="modal-title-input" placeholder="Title" [(ngModel)]="formData.title">
+            <textarea class="modal-text-area" placeholder="Write something..." [(ngModel)]="formData.content"></textarea>
+            <!-- Image Gallery (New Uploads + Existing) --> @if (imagePreview || (formData.images && formData.images.length > 0)) { <div class="modal-gallery"> @if (imagePreview) { <div class="gallery-item-wrapper">
+                    <img [src]="imagePreview" class="gallery-thumb" (click)="expandedImage = imagePreview">
+                    <span class="gallery-badge new-badge">New</span>
+                </div> } @for (img of formData.images; track img) { <div class="gallery-item-wrapper">
+                    <img [src]="img" class="gallery-thumb" (click)="expandedImage = img">
+                </div> } </div> }
+        </div>
+        <div class="modal-footer">
+            <div class="left-actions">
+                <button class="btn-icon" title="Add Image" (click)="fileInputModal.click()">
+                    <span class="material-symbols-outlined">image</span>
+                </button>
+                <input #fileInputModal type="file" style="display: none" (change)="onFileSelected($event)" accept="image/*">
+            </div>
+            <button class="btn btn-primary" (click)="saveNote()">Save</button>
+        </div>
+    </div>
+</div> }

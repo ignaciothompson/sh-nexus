@@ -1,0 +1,23 @@
+<div class="sidebar-container">
+    <div class="section-title">NOTES</div>
+    <div class="nav-item active">
+        <span class="material-symbols-outlined icon-sm">home</span>
+        <span>Home</span>
+    </div>
+    <div class="section-title">LABELS</div> @for (label of labels; track label.id) { <div class="nav-item">
+        <span class="material-symbols-outlined icon-sm">label</span>
+        <span>{{ label.name }}</span>
+    </div> } <div class="nav-item edit-item">
+        <span class="material-symbols-outlined icon-sm">edit</span>
+        <span>Edit labels</span>
+    </div>
+    <div class="section-title">MANAGEMENT</div>
+    <div class="nav-item">
+        <span class="material-symbols-outlined icon-sm">archive</span>
+        <span>Archive</span>
+    </div>
+    <div class="nav-item">
+        <span class="material-symbols-outlined icon-sm">delete</span>
+        <span>Trash</span>
+    </div>
+</div>
