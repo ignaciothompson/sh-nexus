@@ -29,22 +29,11 @@ export interface Section {
   providedIn: 'root'
 })
 export class ApiService {
-  // PocketBase: empty string for localhost (uses proxy), root for production
-  private pb = new PocketBase(this.isLocalhost() ? '' : '/');
-  
-  private isLocalhost(): boolean {
-    const hostname = window.location.hostname;
-    return hostname === 'localhost' || hostname === '127.0.0.1';
-  }
-  
-  // Legacy Backend URL for Proxy/Stats only
-  private get backendUrl(): string {
-    const hostname = window.location.hostname;
-    if (hostname === 'localhost' || hostname === '127.0.0.1') {
-      return 'http://localhost:3000/api';
-    }
-    return '/api'; 
-  }
+  // PocketBase URL - Comment/uncomment based on environment
+  // Production: uncomment this line
+  private pb = new PocketBase('https://hub.sh-nexus.com');
+  // Dev: uncomment this line
+  // private pb = new PocketBase('http://localhost:5100');
 
   constructor(private http: HttpClient) { }
 
@@ -229,16 +218,4 @@ export class ApiService {
     return from(this.pb.collection('apps').delete(id));
   }
 
-  // --- UPLOAD ---
-  // Replaced by direct create/update with File in addApp/updateApp
-  // But kept for compatibility if needed? No, we refactor.
-
-  // Proxy
-  getJellyfinStatus(url: string): Observable<any> {
-    return this.http.get(`${this.backendUrl}/status/jellyfin?url=${encodeURIComponent(url)}`);
-  }
-
-  getHostStats(): Observable<any> {
-    return this.http.get(`${this.backendUrl}/status/host`);
-  }
 }

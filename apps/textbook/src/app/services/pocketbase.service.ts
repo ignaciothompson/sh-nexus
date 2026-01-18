@@ -8,8 +8,13 @@ export class PocketbaseService {
   private pb: PocketBase;
 
   constructor() {
-    // Connect to external PocketBase instance
-    this.pb = new PocketBase('http://127.0.0.1:5102');
+    // PocketBase URL - Comment/uncomment based on environment
+    // Production: uncomment this line
+    const pbUrl = 'https://textbook.sh-nexus.com';
+    // Dev: uncomment this line
+    // const pbUrl = 'http://localhost:5102';
+    
+    this.pb = new PocketBase(pbUrl);
   }
 
   get client(): PocketBase {
