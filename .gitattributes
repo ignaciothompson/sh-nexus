@@ -1,0 +1,11 @@
+# Ensure shell scripts always use LF line endings (Unix format)
+*.sh text eol=lf
+
+# Ensure consistency for other text files
+*.ts text
+*.js text
+*.json text
+*.html text
+*.css text
+*.md text
+Dockerfile text
