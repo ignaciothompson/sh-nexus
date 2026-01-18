@@ -1,62 +1,243 @@
-<header class="h-14 border-b border-border-subtle flex items-center justify-between px-8 bg-deep-dark/80 backdrop-blur-md sticky top-0 z-20">
-    <div class="flex items-center gap-3 text-xs">
-        <div class="flex items-center gap-1.5 text-gray-500">
-            <span class="material-symbols-outlined text-[16px]">folder_open</span>
-            <span>Engineering Handbook</span>
+<header class="editor-header">
+    <div class="breadcrumb">
+        <div class="breadcrumb-item text-gray-500">
+            <span class="material-symbols-outlined">folder_open</span>
+            <span>{{ bookName }}</span>
         </div>
         <span class="text-gray-700">/</span>
-        <div class="flex items-center gap-1.5 text-gray-300 font-medium">
-            <span class="material-symbols-outlined text-[16px]">article</span>
-            <span>API Design Patterns</span>
+        <div class="breadcrumb-item text-gray-300 font-medium">
+            <span class="material-symbols-outlined">article</span>
+            <span>{{ pageTitle }}</span>
         </div>
     </div>
-    <div class="flex items-center gap-4">
-        <div class="flex -space-x-2">
-            <div class="size-6 rounded-full border border-deep-dark bg-gray-400"></div>
-            <div class="size-6 rounded-full border border-deep-dark bg-accent flex items-center justify-center text-[10px] font-bold text-white">+2</div>
-        </div>
-        <div class="h-4 w-px bg-border-subtle mx-2"></div>
-        <button class="text-gray-500 hover:text-white"><span class="material-symbols-outlined text-[20px]">history</span></button>
-        <button class="text-gray-500 hover:text-white"><span class="material-symbols-outlined text-[20px]">star</span></button>
-        <button class="bg-accent hover:bg-accent/90 text-white text-xs px-3 py-1.5 rounded-md font-bold transition-all">Publish</button>
+    <div class="header-actions">
+          <button 
+            class="btn-icon-header" 
+            title="Favorite" 
+            (click)="toggleFavorite()">
+            <span 
+                class="material-symbols-outlined"
+                [class.icon-filled]="currentPage?.is_favorite">
+                star
+            </span>
+          </button>
     </div>
 </header>
-<div class="flex-1 overflow-y-auto relative">
-    <!-- Floating Toolbar -->
-    <div class="fixed left-1/2 -translate-x-1/2 bottom-8 z-30 bg-surface-dark border border-border-subtle shadow-2xl rounded-xl p-1.5 flex items-center gap-1">
-        <button class="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-accent"><span class="material-symbols-outlined text-[20px]">format_bold</span></button>
-        <button class="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-accent"><span class="material-symbols-outlined text-[20px]">format_italic</span></button>
-        <button class="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-accent"><span class="material-symbols-outlined text-[20px]">strikethrough_s</span></button>
-        <div class="w-px h-6 bg-border-subtle mx-1"></div>
-        <button class="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-accent"><span class="material-symbols-outlined text-[20px]">link</span></button>
-        <button class="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-accent"><span class="material-symbols-outlined text-[20px]">image</span></button>
-        <button class="p-2 hover:bg-white/5 rounded-lg text-gray-400 hover:text-accent"><span class="material-symbols-outlined text-[20px]">code_blocks</span></button>
+
+<div class="editor-content">
+    <!-- Empty State -->
+    <div *ngIf="!currentPage" class="empty-state">
+        <span class="material-symbols-outlined empty-icon">description</span>
+        <h2 class="empty-title">No Page Selected</h2>
+        <p class="empty-message">Select a page from the sidebar or create a new one to start editing.</p>
     </div>
-    <div class="max-w-4xl mx-auto py-16 px-12">
+
+    <!-- Content (when page selected) -->
+    <div *ngIf="currentPage" class="page-content">
+        <!-- Floating Toolbar -->
+        <div class="floating-toolbar">
+            <!-- Text Formatting -->
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('bold')"
+                (click)="formatText('bold')" 
+                title="Bold (Ctrl+B)">
+                <span class="material-symbols-outlined">format_bold</span>
+            </button>
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('italic')"
+                (click)="formatText('italic')" 
+                title="Italic (Ctrl+I)">
+                <span class="material-symbols-outlined">format_italic</span>
+            </button>
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('underline')"
+                (click)="formatText('underline')" 
+                title="Underline (Ctrl+U)">
+                <span class="material-symbols-outlined">format_underlined</span>
+            </button>
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('strikethrough')"
+                (click)="formatText('strikethrough')" 
+                title="Strikethrough">
+                <span class="material-symbols-outlined">strikethrough_s</span>
+            </button>
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('highlight')"
+                (click)="formatText('highlight')" 
+                title="Highlight">
+                <span class="material-symbols-outlined">ink_highlighter</span>
+            </button>
+            
+            <div class="toolbar-divider"></div>
+            
+            <!-- Headings -->
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('h1')"
+                (click)="formatText('h1')" 
+                title="Heading 1">
+                <span class="toolbar-text">H1</span>
+            </button>
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('h2')"
+                (click)="formatText('h2')" 
+                title="Heading 2">
+                <span class="toolbar-text">H2</span>
+            </button>
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('h3')"
+                (click)="formatText('h3')" 
+                title="Heading 3">
+                <span class="toolbar-text">H3</span>
+            </button>
+            
+            <div class="toolbar-divider"></div>
+            
+            <!-- Lists -->
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('bulletList')"
+                (click)="formatText('bulletList')" 
+                title="Bullet List">
+                <span class="material-symbols-outlined">format_list_bulleted</span>
+            </button>
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('orderedList')"
+                (click)="formatText('orderedList')" 
+                title="Numbered List">
+                <span class="material-symbols-outlined">format_list_numbered</span>
+            </button>
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('taskList')"
+                (click)="formatText('taskList')" 
+                title="Task List">
+                <span class="material-symbols-outlined">check_box</span>
+            </button>
+            
+            <div class="toolbar-divider"></div>
+            
+            <!-- Alignment -->
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('alignLeft')"
+                (click)="formatText('alignLeft')" 
+                title="Align Left">
+                <span class="material-symbols-outlined">format_align_left</span>
+            </button>
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('alignCenter')"
+                (click)="formatText('alignCenter')" 
+                title="Align Center">
+                <span class="material-symbols-outlined">format_align_center</span>
+            </button>
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('alignRight')"
+                (click)="formatText('alignRight')" 
+                title="Align Right">
+                <span class="material-symbols-outlined">format_align_right</span>
+            </button>
+            
+            <div class="toolbar-divider"></div>
+            
+            <!-- Code & Quote -->
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('code')"
+                (click)="formatText('code')" 
+                title="Inline Code">
+                <span class="material-symbols-outlined">code</span>
+            </button>
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('codeBlock')"
+                (click)="formatText('codeBlock')" 
+                title="Code Block">
+                <span class="material-symbols-outlined">code_blocks</span>
+            </button>
+            <button 
+                class="toolbar-btn" 
+                [class.active]="isActive('blockquote')"
+                (click)="formatText('blockquote')" 
+                title="Quote">
+                <span class="material-symbols-outlined">format_quote</span>
+            </button>
+            
+            <div class="toolbar-divider"></div>
+            
+            <!-- Links & Images -->
+            <button 
+                class="toolbar-btn" 
+                [class.active]="editor.isActive('link')"
+                (click)="addLink()" 
+                title="Add Link">
+                <span class="material-symbols-outlined">link</span>
+            </button>
+            <button 
+                class="toolbar-btn" 
+                (click)="addImage()" 
+                title="Add Image">
+                <span class="material-symbols-outlined">image</span>
+            </button>
+            <button 
+                class="toolbar-btn" 
+                (click)="formatText('horizontalRule')" 
+                title="Horizontal Line">
+                <span class="material-symbols-outlined">horizontal_rule</span>
+            </button>
+        </div>
+
+    <div class="page-container">
         <!-- Cover Image -->
-        <div class="h-48 w-full rounded-2xl bg-gradient-to-br from-accent/20 to-purple-500/10 mb-12 border border-border-subtle relative overflow-hidden group">
-            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
-                <button class="px-4 py-2 bg-black/60 backdrop-blur text-xs rounded-lg border border-white/10 hover:bg-black/80 text-white">Change Cover</button>
+        <div class="cover-image group">
+            <div class="cover-overlay">
+                <button class="btn-change-cover">Change Cover</button>
             </div>
         </div>
-        <div class="space-y-6">
-            <div class="group relative">
-                <input class="w-full bg-transparent text-5xl font-extrabold text-white border-none focus:ring-0 p-0 placeholder-gray-800 outline-none" type="text" value="API Design Patterns" />
-                <div class="flex items-center gap-4 mt-4 text-xs text-gray-500">
-                    <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">calendar_today</span> Oct 24, 2023</span>
-                    <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">timer</span> 8 min read</span>
-                    <div class="flex gap-2">
-                        <span class="bg-accent/10 text-accent px-2 py-0.5 rounded border border-accent/20">#architecture</span>
+
+        <div class="editor-blocks">
+            <!-- Page Title -->
+            <div class="title-block">
+                <input 
+                    class="page-title-input" 
+                    type="text" 
+                    [(ngModel)]="pageTitle" 
+                    (blur)="savePageTitle()"
+                    placeholder="Untitled" />
+                <div class="page-meta">
+                    <span class="meta-item">
+                        <span class="material-symbols-outlined">calendar_today</span> 
+                        {{ createdDate }}
+                    </span>
+                    <span class="meta-item">
+                        <span class="material-symbols-outlined">timer</span> 
+                        {{ readTime }}
+                    </span>
+                    <div class="tags">
+                        <span class="tag" *ngFor="let tag of tags">{{ tag }}</span>
                     </div>
                 </div>
             </div>
-            <!-- Editor Content (Mock) -->
-            <div class="editor-block relative group">
-                <p class="text-xl text-gray-400 leading-relaxed outline-none" contenteditable="true"> Effective API design patterns are essential for building scalable, maintainable, and developer-friendly web services. </p>
-            </div>
-            <div class="editor-block relative group pt-4">
-                <h2 class="text-2xl font-bold text-white" contenteditable="true">1. Resource-Oriented Design</h2>
+
+            <!-- Tiptap Editor -->
+            <div class="tiptap-wrapper">
+                <tiptap-editor 
+                    *ngIf="editor"
+                    [editor]="editor"
+                    [(ngModel)]="editorContent">
+                </tiptap-editor>
             </div>
         </div>
+    </div>
     </div>
 </div>

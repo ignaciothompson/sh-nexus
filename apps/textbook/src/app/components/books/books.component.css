@@ -1,35 +1,39 @@
 :host {
     display: block;
     height: 100%;
+    width: 100%;
 }
 
 .books-container {
     display: flex;
-    height: calc(100vh - var(--space-8));
-    /* Adjust based on main layout padding if needed, otherwise 100% */
     height: 100%;
     width: 100%;
     overflow: hidden;
+    background: #0f0f0f; /* deep-dark */
 }
 
 .book-sidebar {
-    width: 300px; /* Match reference w-[300px] */
+    width: 300px;
     flex-shrink: 0;
     border-right: 1px solid var(--border-subtle);
     background: #121212; /* surface-darker */
+    overflow: hidden;
 }
 
 .editor-area {
     flex: 1;
-    min-width: 0; /* Prevent flex overflow */
+    min-width: 0;
     display: flex;
     flex-direction: column;
     background: #0f0f0f; /* deep-dark */
+    overflow: hidden;
 }
 
 .toc-sidebar {
-    width: 280px; /* Match reference w-[280px] */
+    width: 280px;
     flex-shrink: 0;
     border-left: 1px solid var(--border-subtle);
     background: #161616; /* surface-dark */
+    overflow: hidden;
 }
+

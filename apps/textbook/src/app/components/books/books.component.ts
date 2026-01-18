@@ -11,4 +11,10 @@ import { TocSidebarComponent } from './toc-sidebar/toc-sidebar.component';
   templateUrl: './books.component.html',
   styleUrls: ['./books.component.css']
 })
-export class BooksComponent {}
+export class BooksComponent {
+  editorContent: string = '';
+
+  onEditorContentChange(content: string): void {
+    this.editorContent = content;
+  }
+}

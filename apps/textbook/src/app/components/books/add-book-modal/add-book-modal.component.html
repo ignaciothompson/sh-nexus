@@ -1,0 +1,86 @@
+<div class="modal-overlay" (click)="onBackdropClick($event)">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2 class="modal-title">{{ modalTitle }}</h2>
+            <button class="btn-close" (click)="onClose()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <!-- Title Input -->
+            <div class="form-group">
+                <label class="form-label">Book Title</label>
+                <input 
+                    type="text" 
+                    class="form-input"
+                    placeholder="Enter book title..."
+                    [(ngModel)]="title"
+                    autofocus />
+            </div>
+
+            <!-- Icon Selection -->
+            <div class="form-group">
+                <label class="form-label">Select Icon</label>
+                <input 
+                    type="text" 
+                    class="search-input"
+                    placeholder="Search icons..."
+                    [(ngModel)]="iconSearchQuery" />
+                <div class="icon-grid">
+                    <button
+                        *ngFor="let iconOption of filteredIcons"
+                        class="icon-option"
+                        [class.selected]="selectedIcon === iconOption.icon"
+                        (click)="selectIcon(iconOption.icon, iconOption.name)"
+                        [title]="iconOption.name"
+                        type="button">
+                        <span class="material-symbols-outlined">{{ iconOption.icon }}</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Color Selection -->
+            <div class="form-group">
+                <label class="form-label">Select Color</label>
+                <input 
+                    type="text" 
+                    class="search-input"
+                    placeholder="Search colors..."
+                    [(ngModel)]="colorSearchQuery" />
+                <div class="color-grid">
+                    <button
+                        *ngFor="let colorOption of filteredColors"
+                        class="color-option"
+                        [class.selected]="selectedColor === colorOption.class"
+                        (click)="selectColor(colorOption.class, colorOption.name)"
+                        type="button">
+                        <div class="color-circle" [style.background-color]="colorOption.hex"></div>
+                        <span class="color-name">{{ colorOption.name }}</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Preview -->
+            <div class="preview-section">
+                <label class="form-label">Preview</label>
+                <div class="preview-book">
+                    <span class="material-symbols-outlined preview-icon" [ngClass]="selectedColor">
+                        {{ selectedIcon }}
+                    </span>
+                    <span class="preview-title">{{ title || 'Book Title' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-cancel" (click)="onClose()">Cancel</button>
+            <button 
+                class="btn-save" 
+                [disabled]="!title.trim() || isSaving"
+                (click)="onSave()">
+                {{ isSaving ? 'Saving...' : saveButtonText }}
+            </button>
+        </div>
+    </div>
+</div>

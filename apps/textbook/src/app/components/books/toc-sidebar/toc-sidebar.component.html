@@ -1,31 +1,40 @@
-<div class="p-5 border-b border-border-subtle">
-    <h3 class="text-xs font-bold uppercase tracking-widest text-gray-500">On This Page</h3>
+<div class="toc-header">
+    <h3 class="toc-title">On This Page</h3>
 </div>
-<div class="flex-1 overflow-y-auto p-4 space-y-4">
-    <div class="space-y-1">
-        <div class="text-sm py-1.5 px-3 rounded-lg bg-accent/5 text-accent font-medium border-l-2 border-accent cursor-pointer">1. Resource-Oriented Design</div>
-        <div class="text-sm py-1.5 px-3 rounded-lg text-gray-500 hover:text-gray-300 cursor-pointer ml-3">1.1 Standard Headers</div>
-        <div class="text-sm py-1.5 px-3 rounded-lg text-gray-500 hover:text-gray-300 cursor-pointer ml-3">1.2 Error Responses</div>
-        <div class="text-sm py-1.5 px-3 rounded-lg text-gray-500 hover:text-gray-300 cursor-pointer">2. Pagination Models</div>
-        <div class="text-sm py-1.5 px-3 rounded-lg text-gray-500 hover:text-gray-300 cursor-pointer">3. Filtering & Searching</div>
+
+<!-- Empty State -->
+<div *ngIf="tocItems.length === 0" class="toc-empty">
+    <span class="material-symbols-outlined">list</span>
+    <p>No sections yet</p>
+</div>
+
+<!-- TOC Content -->
+<div *ngIf="tocItems.length > 0" class="toc-content">
+    <div class="toc-list">
+        <div 
+            *ngFor="let item of tocItems"
+            class="toc-item"
+            [class.active]="item.active"
+            [class.level-2]="item.level === 2"
+            (click)="scrollToSection(item)">
+            {{ item.title }}
+        </div>
     </div>
-    <div class="pt-6 border-t border-border-subtle/50">
-        <h4 class="text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-4">Linked Pages</h4>
-        <div class="space-y-2">
-            <div class="flex items-center gap-2 text-xs text-gray-400 hover:text-white cursor-pointer group">
-                <span class="material-symbols-outlined text-[16px]">link</span>
-                <span class="underline decoration-gray-700 underline-offset-4 group-hover:decoration-accent">Authentication Guide</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs text-gray-400 hover:text-white cursor-pointer group">
-                <span class="material-symbols-outlined text-[16px]">link</span>
-                <span class="underline decoration-gray-700 underline-offset-4 group-hover:decoration-accent">Webhooks Specification</span>
+
+    <div class="linked-pages-section">
+        <h4 class="linked-pages-title">Linked Pages</h4>
+        <div class="linked-pages-list">
+            <div class="linked-page" *ngFor="let page of linkedPages">
+                <span class="material-symbols-outlined">{{ page.icon }}</span>
+                <span class="linked-page-title">{{ page.title }}</span>
             </div>
         </div>
     </div>
 </div>
-<div class="p-4 bg-deep-dark/50 border-t border-border-subtle">
-    <button class="flex items-center justify-between w-full p-2.5 text-xs text-gray-400 hover:bg-white/5 rounded-lg transition-colors">
+
+<div class="toc-footer">
+    <button class="footer-btn">
         <span>Word Count</span>
-        <span class="text-gray-600 font-mono">1,248</span>
+        <span class="word-count">{{ wordCount }}</span>
     </button>
 </div>

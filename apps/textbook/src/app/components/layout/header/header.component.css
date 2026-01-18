@@ -6,6 +6,7 @@
   padding: 0 var(--space-6);
   /* background: var(--bg-base);  Transparent/Base */
   z-index: 50;
+  background: #161618;
 }
 
 .left-section {

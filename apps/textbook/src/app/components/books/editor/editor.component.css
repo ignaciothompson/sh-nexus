@@ -6,35 +6,583 @@
     color: var(--text-primary);
 }
 
-.bg-deep-dark\/80 { background-color: rgba(15, 15, 15, 0.8); }
-.border-border-subtle { border-color: var(--border-subtle); }
-.backdrop-blur-md { backdrop-filter: blur(12px); }
+/* Header Styles */
+.editor-header {
+    height: 3.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    background: rgba(15, 15, 15, 0.8);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.breadcrumb-item .material-symbols-outlined {
+    font-size: 16px;
+}
+
+.text-gray-500 { color: #6b7280; }
+.text-gray-700 { color: #374151; }
+.text-gray-300 { color: #d1d5db; }
+.font-medium { font-weight: 500; }
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.avatar-group {
+    display: flex;
+    gap: -0.5rem;
+}
+
+.avatar {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 9999px;
+    border: 1px solid #0f0f0f;
+}
+
+.avatar-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: white;
+    margin-left: -0.5rem;
+}
+
+.bg-gray-400 { background-color: #9ca3af; }
 .bg-accent { background-color: var(--color-accent); }
-.text-accent { color: var(--color-accent); }
-.bg-accent\/10 { background-color: rgba(var(--color-accent-rgb), 0.1); }
-.border-accent\/20 { border-color: rgba(var(--color-accent-rgb), 0.2); }
-.bg-surface-dark { background-color: #161616; }
 
-.size-6 { height: 1.5rem; width: 1.5rem; }
-.border-deep-dark { border-color: #0f0f0f; }
+.divider-vertical {
+    width: 1px;
+    height: 1rem;
+    background: var(--border-subtle);
+    margin: 0 0.5rem;
+}
 
-/* Editor Content */
+.btn-icon-header {
+    background: transparent;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+}
+
+.btn-icon-header:hover {
+    color: white;
+}
+
+.btn-icon-header .material-symbols-outlined {
+    font-size: 20px;
+}
+
+.btn-icon-header .material-symbols-outlined.icon-filled {
+    font-variation-settings: 'FILL' 1;
+    color: var(--color-accent);
+}
+
+.btn-publish {
+    background: var(--color-accent);
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-publish:hover {
+    opacity: 0.9;
+}
+
+/* Content Area */
+.editor-content {
+    flex: 1;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 4rem 2rem;
+}
+
+.empty-icon {
+    font-size: 96px;
+    color: #4b5563;
+    margin-bottom: 1.5rem;
+}
+
+.empty-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #9ca3af;
+    margin: 0 0 0.5rem;
+}
+
+.empty-message {
+    font-size: 0.95rem;
+    color: #6b7280;
+    text-align: center;
+    max-width: 400px;
+    margin: 0;
+}
+
+.page-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Floating Toolbar */
+.floating-toolbar {
+    position: fixed;
+    left: 50%;
+    bottom: 2rem;
+    transform: translateX(-50%);
+    z-index: 30;
+    background: #161616;
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    border-radius: 0.75rem;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    max-width: 95vw;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #4b5563 transparent;
+}
+
+.floating-toolbar::-webkit-scrollbar {
+    height: 4px;
+}
+
+.floating-toolbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.floating-toolbar::-webkit-scrollbar-thumb {
+    background: #4b5563;
+    border-radius: 2px;
+}
+
+.toolbar-btn {
+    padding: 0.5rem;
+    background: transparent;
+    border: none;
+    border-radius: 0.5rem;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+}
+
+.toolbar-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-accent);
+}
+
+.toolbar-btn.active {
+    background: rgba(156, 51, 255, 0.15);
+    color: #9c33ff;
+}
+
+.toolbar-btn .material-symbols-outlined {
+    font-size: 20px;
+}
+
+.toolbar-text {
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 1.5rem;
+    background: var(--border-subtle);
+    margin: 0 0.25rem;
+}
+
+/* Page Container */
+.page-container {
+    max-width: 56rem;
+    margin: 0 auto;
+    padding: 4rem 3rem;
+}
+
+/* Cover Image */
+.cover-image {
+    height: 12rem;
+    width: 100%;
+    border-radius: 1rem;
+    background: linear-gradient(to bottom right, rgba(156, 51, 255, 0.2), rgba(168, 85, 247, 0.1));
+    border: 1px solid var(--border-subtle);
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.cover-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.cover-image:hover .cover-overlay {
+    opacity: 1;
+}
+
+.btn-change-cover {
+    padding: 0.5rem 1rem;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    font-size: 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-change-cover:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+/* Editor Blocks */
+.editor-blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.title-block {
+    margin-bottom: 1rem;
+}
+
+.page-title-input {
+    width: 100%;
+    background: transparent;
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+    border: none;
+    outline: none;
+    padding: 0;
+    font-family: 'Manrope', sans-serif;
+}
+
+.page-title-input::placeholder {
+    color: #1f2937;
+}
+
+.page-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.meta-item .material-symbols-outlined {
+    font-size: 14px;
+}
+
+.tags {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tag {
+    background: rgba(156, 51, 255, 0.1);
+    color: var(--color-accent);
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid rgba(156, 51, 255, 0.2);
+}
+
+/* Content Blocks */
 .editor-block {
     position: relative;
 }
 
-.editor-block:hover:before {
+.block-paragraph {
+    font-size: 1.25rem;
+    color: #9ca3af;
+    line-height: 1.75;
+    outline: none;
+}
+
+.block-heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    outline: none;
+    padding-top: 1rem;
+}
+
+.block-placeholder {
+    color: #4b5563;
+    font-style: italic;
+    outline: none;
+}
+
+/* Editor Block Hover Effects */
+.editor-block:hover::before {
     content: "drag_indicator";
     font-family: 'Material Symbols Outlined';
     position: absolute;
-    left: -32px;
-    top: 4px; /* Adjust for block type */
+    left: -2rem;
+    top: 0.25rem;
     color: #4b5563;
     font-size: 20px;
     cursor: grab;
 }
 
-/* Gradients */
-.from-accent\/20 { --tw-gradient-from: rgba(var(--color-accent-rgb), 0.2); }
-.to-purple-500\/10 { --tw-gradient-to: rgba(168, 85, 247, 0.1); }
-.bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-from), var(--tw-gradient-to)); }
+.editor-block:active::before {
+    cursor: grabbing;
+}
+
+/* Tiptap Editor Styles */
+.tiptap-wrapper {
+    margin-top: 2rem;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror {
+    outline: none;
+    color: #d1d5db;
+    font-size: 1.125rem;
+    line-height: 1.75;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror p {
+    margin: 1rem 0;
+    color: #9ca3af;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror h1,
+::ng-deep .tiptap-wrapper .ProseMirror h2,
+::ng-deep .tiptap-wrapper .ProseMirror h3 {
+    color: white;
+    font-weight: 700;
+    margin: 1.5rem 0 1rem;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror h1 {
+    font-size: 2.25rem;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror h2 {
+    font-size: 1.875rem;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror h3 {
+    font-size: 1.5rem;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror strong {
+    font-weight: 700;
+    color: white;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror em {
+    font-style: italic;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror code {
+    background: rgba(156, 51, 255, 0.1);
+    color: var(--color-accent);
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875em;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror pre {
+    background: #0a0a0a;
+    border: 1px solid var(--border-subtle);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror pre code {
+    background: transparent;
+    color: #d1d5db;
+    padding: 0;
+    font-size: 0.875rem;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror ul,
+::ng-deep .tiptap-wrapper .ProseMirror ol {
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror li {
+    margin: 0.5rem 0;
+    color: #9ca3af;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror blockquote {
+    border-left: 3px solid var(--color-accent);
+    padding-left: 1rem;
+    margin: 1rem 0;
+    color: #9ca3af;
+    font-style: italic;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror hr {
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    margin: 2rem 0;
+}
+
+/* Placeholder */
+::ng-deep .tiptap-wrapper .ProseMirror p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    color: #4b5563;
+    font-style: italic;
+    pointer-events: none;
+    height: 0;
+    float: left;
+}
+
+/* Links */
+::ng-deep .tiptap-wrapper .ProseMirror a {
+    color: #9c33ff;
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror a:hover {
+    color: #b05bff;
+}
+
+/* Images */
+::ng-deep .tiptap-wrapper .ProseMirror img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    display: block;
+}
+
+/* Underline */
+::ng-deep .tiptap-wrapper .ProseMirror u {
+    text-decoration: underline;
+}
+
+/* Highlight */
+::ng-deep .tiptap-wrapper .ProseMirror mark {
+    background-color: rgba(255, 235, 59, 0.4);
+    color: white;
+    padding: 0.125rem 0;
+    border-radius: 0.125rem;
+}
+
+/* Task Lists */
+::ng-deep .tiptap-wrapper .ProseMirror ul[data-type="taskList"] {
+    list-style: none;
+    padding-left: 0;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror ul[data-type="taskList"] li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror ul[data-type="taskList"] li > label {
+    flex: 0 0 auto;
+    margin-top: 0.25rem;
+    user-select: none;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror ul[data-type="taskList"] li > div {
+    flex: 1 1 auto;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror ul[data-type="taskList"] input[type="checkbox"] {
+    cursor: pointer;
+    width: 1.125rem;
+    height: 1.125rem;
+    accent-color: #9c33ff;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror ul[data-type="taskList"] li[data-checked="true"] > div {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+/* Text Alignment */
+::ng-deep .tiptap-wrapper .ProseMirror [style*="text-align: center"] {
+    text-align: center;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror [style*="text-align: right"] {
+    text-align: right;
+}
+
+::ng-deep .tiptap-wrapper .ProseMirror [style*="text-align: left"] {
+    text-align: left;
+}
+
+/* Strike-through */
+::ng-deep .tiptap-wrapper .ProseMirror s {
+    text-decoration: line-through;
+    opacity: 0.8;
+}

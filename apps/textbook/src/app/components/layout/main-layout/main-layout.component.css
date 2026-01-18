@@ -14,6 +14,8 @@
 
 .main-content {
   flex: 1;
-  overflow-y: auto;
-  padding: 0; /* Remove padding here, let pages handle it or add minimal */
+  overflow: hidden; /* Let child components handle scrolling */
+  padding: 0;
+  display: flex;
+  flex-direction: column;
 }

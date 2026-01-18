@@ -1,54 +1,189 @@
 <div class="sidebar-header">
     <h2 class="text-sm font-bold uppercase tracking-widest text-gray-500">My Library</h2>
-    <button class="btn-icon-add" title="New Section">
-        <span class="material-symbols-outlined text-[20px]">add_box</span>
-    </button>
+    <div class="add-menu-container">
+        <button class="btn-icon-add" title="Add" (click)="toggleAddMenu($event)">
+            <span class="material-symbols-outlined icon-20">add_box</span>
+        </button>
+        
+        <!-- Add Dropdown Menu -->
+        <div *ngIf="showAddMenu" class="add-dropdown-menu">
+            <button class="add-menu-item" (click)="openAddPageModal()">
+                <span class="material-symbols-outlined">description</span>
+                <span>New Page</span>
+            </button>
+            <button class="add-menu-item" (click)="openAddBookModal()">
+                <span class="material-symbols-outlined">menu_book</span>
+                <span>New Book</span>
+            </button>
+            <div class="add-menu-divider"></div>
+            <button class="add-menu-item" (click)="addSection()">
+                <span class="material-symbols-outlined">more_horiz</span>
+                <span>Add Section</span>
+            </button>
+        </div>
+    </div>
 </div>
 <div class="search-container">
     <div class="relative group">
         <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">search</span>
-        <input class="search-input" placeholder="Quick search..." type="text" />
+        <input 
+            class="search-input" 
+            placeholder="Quick search..." 
+            type="text"
+            [(ngModel)]="searchQuery" />
     </div>
 </div>
 <div class="books-list">
-    <div class="space-y-1">
-        <!-- Active Book Item -->
-        <div class="book-item active group">
-            <span class="material-symbols-outlined text-gray-500 text-[18px]">expand_more</span>
-            <span class="material-symbols-outlined text-accent text-[20px]">import_contacts</span>
-            <span class="text-sm font-semibold truncate flex-1">Engineering Handbook</span>
-            <span class="material-symbols-outlined text-gray-600 opacity-0 group-hover:opacity-100 text-[16px]">more_vert</span>
+    <div class="space-y-1" *ngFor="let book of filteredBooks">
+        <!-- Section Separator -->
+        <div *ngIf="book.is_section" class="section-separator">
+            <span class="section-title">{{ book.title }}</span>
+            
+            <!-- Section Dropdown Menu -->
+            <div class="dropdown-container">
+                <button 
+                    class="btn-dropdown-section"
+                    (click)="toggleDropdown(book, $event)"
+                    [class.active]="book.id === activeDropdownId">
+                    <span class="material-symbols-outlined icon-14">more_horiz</span>
+                </button>
+                
+                <div 
+                    *ngIf="book.id === activeDropdownId"
+                    class="dropdown-menu">
+                    <button class="dropdown-item" (click)="editSection(book, $event)">
+                        <span class="material-symbols-outlined">edit</span>
+                        <span>Edit</span>
+                    </button>
+                    <button class="dropdown-item danger" (click)="deleteSection(book, $event)">
+                        <span class="material-symbols-outlined">delete</span>
+                        <span>Delete</span>
+                    </button>
+                </div>
+            </div>
         </div>
+        
+        <!-- Book Item -->
+        <div 
+            *ngIf="!book.is_section" 
+            class="book-item group"
+            [class.active]="book.expanded"
+            (click)="toggleBook(book)">
+            <span class="material-symbols-outlined text-gray-500 icon-18">
+                {{ book.expanded ? 'expand_more' : 'chevron_right' }}
+            </span>
+            <span class="material-symbols-outlined icon-20" [ngClass]="book.icon_color || 'text-purple-400'">
+                {{ book.icon }}
+            </span>
+            <span class="text-sm font-semibold truncate flex-1" [class.font-semibold]="book.expanded">
+                {{ book.title }}
+            </span>
+            <span 
+                *ngIf="book.pageCount && !book.expanded" 
+                class="counter-badge">
+                {{ book.pageCount }}
+            </span>
+            
+            <!-- Dropdown Menu -->
+            <div class="dropdown-container">
+                <button 
+                    class="btn-dropdown"
+                    (click)="toggleDropdown(book, $event)"
+                    [class.active]="book.id === activeDropdownId">
+                    <span class="material-symbols-outlined icon-16">more_vert</span>
+                </button>
+                
+                <div 
+                    *ngIf="book.id === activeDropdownId"
+                    class="dropdown-menu">
+                    <button class="dropdown-item" (click)="editBook(book, $event)">
+                        <span class="material-symbols-outlined">edit</span>
+                        <span>Edit</span>
+                    </button>
+                    <button class="dropdown-item danger" (click)="deleteBook(book, $event)">
+                        <span class="material-symbols-outlined">delete</span>
+                        <span>Delete</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
         <!-- Nested Pages -->
-        <div class="ml-8 space-y-0.5 border-l border-border-subtle">
-            <div class="page-item">
-                <span class="material-symbols-outlined text-[18px]">description</span>
-                <span>System Architecture</span>
-            </div>
-            <div class="page-item active-page">
-                <span class="material-symbols-outlined text-accent text-[18px]">article</span>
-                <span>API Design Patterns</span>
-            </div>
-            <div class="page-item">
-                <span class="material-symbols-outlined text-[18px]">description</span>
-                <span>Security Protocols</span>
+        <div 
+            class="pages-container ml-8 space-y-0.5 border-l border-border-subtle"
+            [class.expanded]="book.expanded"
+            [class.collapsed]="!book.expanded">
+            <div 
+                *ngFor="let page of book.pages"
+                class="page-item"
+                [class.active-page]="selectedPageId === page.id"
+                (click)="selectPage(page); $event.stopPropagation()">
+                <span 
+                    class="material-symbols-outlined icon-18"
+                    [class.text-accent]="selectedPageId === page.id">
+                    {{ page.icon }}
+                </span>
+                <span class="page-title">{{ page.title }}</span>
+                <button 
+                    class="btn-delete-page"
+                    (click)="deletePage(page, book, $event)"
+                    title="Delete page">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">delete</span>
+                </button>
             </div>
         </div>
-    </div>
-    <!-- Other Books -->
-    <div class="book-item group">
-        <span class="material-symbols-outlined text-gray-500 text-[18px]">chevron_right</span>
-        <span class="material-symbols-outlined text-orange-400 text-[20px]">science</span>
-        <span class="text-sm font-medium truncate flex-1">Product Roadmap 2024</span>
-        <span class="counter-badge">12</span>
-    </div>
-    <div class="book-item group">
-        <span class="material-symbols-outlined text-gray-500 text-[18px]">chevron_right</span>
-        <span class="material-symbols-outlined text-purple-400 text-[20px]">auto_awesome</span>
-        <span class="text-sm font-medium truncate flex-1">Personal Wiki</span>
     </div>
 </div>
 <div class="sidebar-footer">
     <button class="trash-btn">
-        <span class="material-symbols-outlined text-[18px]">delete</span> Trash </button>
+        <span class="material-symbols-outlined icon-18">delete</span> 
+        Trash 
+    </button>
 </div>
+
+<!-- Add Book Modal -->
+<app-add-book-modal 
+    *ngIf="showAddModal"
+    [mode]="modalMode"
+    [bookId]="editingBook?.id"
+    [initialData]="editingBook ? {
+        title: editingBook.title,
+        icon: editingBook.icon || 'menu_book',
+        iconColor: editingBook.icon_color || 'text-purple-400'
+    } : undefined"
+    (close)="closeAddBookModal()"
+    (save)="onSaveBook($event)">
+</app-add-book-modal>
+
+<!-- Add Page Modal -->
+<app-add-page-modal
+    *ngIf="showAddPageModal"
+    [books]="books"
+    [selectedBookId]="selectedBookIdForPage"
+    (close)="closeAddPageModal()"
+    (save)="onSavePage($event)">
+</app-add-page-modal>
+
+<!-- Delete Confirmation Dialog -->
+<app-confirm-dialog
+    *ngIf="showDeleteConfirm"
+    title="Delete Book?"
+    [message]="'Are you sure you want to delete &quot;' + (bookToDelete?.title || '') + '&quot;? This will also delete all its pages. This action cannot be undone.'"
+    confirmText="Delete"
+    cancelText="Cancel"
+    [isDanger]="true"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()">
+</app-confirm-dialog>
+
+<!-- Delete Page Confirmation Dialog -->
+<app-confirm-dialog
+    *ngIf="showDeletePageConfirm"
+    title="Delete Page?"
+    [message]="'Are you sure you want to delete &quot;' + (pageToDelete?.page?.title || '') + '&quot;? This action cannot be undone.'"
+    confirmText="Delete"
+    cancelText="Cancel"
+    [isDanger]="true"
+    (confirm)="confirmDeletePage()"
+    (cancel)="cancelDeletePage()">
+</app-confirm-dialog>
