@@ -13,8 +13,8 @@ import { PocketbaseService } from '../../../services/pocketbase.service';
   styleUrls: ['./main-layout.component.css']
 })
 export class MainLayoutComponent implements OnInit {
-  showWelcome = false;
-  isInitializing = true;
+//   showWelcome = false;
+//   isInitializing = true;
 
   constructor(private pb: PocketbaseService) {}
 
