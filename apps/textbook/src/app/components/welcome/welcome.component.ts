@@ -12,8 +12,18 @@ export class WelcomeComponent {
   @Output() setupComplete = new EventEmitter<void>();
   
   showDoneButton = false;
+  schemaCopied = false;
 
-  openSetup() {
+  async openSetup() {
+    // Copy schema to clipboard
+    try {
+      const schema = await fetch('/pb_schema.json').then(r => r.text());
+      await navigator.clipboard.writeText(schema);
+      this.schemaCopied = true;
+    } catch (error) {
+      console.error('Failed to copy schema:', error);
+    }
+    
     // Open PocketBase admin in new tab
     window.open('/_/', '_blank');
     // Show the "Done" button

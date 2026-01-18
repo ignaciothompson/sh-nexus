@@ -33,10 +33,11 @@ RUN unzip /tmp/pb.zip -d /pb/ && \
 # NOTE: Ensure only one project folder exists in dist/ or adjust path
 COPY --from=builder /app/dist/*/browser /pb/pb_public/
 
-# Copy schema and init script
-COPY pb_schema.json /pb/pb_schema.json
-COPY init-pb.sh /pb/init-pb.sh
-RUN chmod +x /pb/init-pb.sh
+# Copy schema and init script from builder stage
+COPY --from=builder /app/pb_schema.json /pb/pb_schema.json
+COPY --from=builder /app/init-pb.sh /pb/init-pb.sh
+# Fix line endings (CRLF to LF) and make executable
+RUN sed -i 's/\r$//' /pb/init-pb.sh && chmod +x /pb/init-pb.sh
 
 EXPOSE 8080
 

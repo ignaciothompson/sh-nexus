@@ -1,20 +1,8 @@
 #!/bin/sh
 set -e
 
-echo "Starting PocketBase initialization..."
+echo "Starting PocketBase..."
 
-# Check if this is first run (no database file exists)
-if [ ! -f /pb/pb_data/data.db ]; then
-  echo "🔧 First run detected - initializing database schema..."
-  
-  # Import schema collections
-  ./pocketbase migrate collections import /pb/pb_schema.json
-  
-  echo "✅ Schema imported successfully!"
-else
-  echo "📊 Database already exists, skipping initialization"
-fi
-
-# Start PocketBase
-echo "🚀 Starting PocketBase server..."
+# Just start PocketBase - admin will create account via /_/
+# Collections will be imported manually after admin is created
 exec ./pocketbase serve --http=0.0.0.0:8080

@@ -19,6 +19,8 @@ export class MainLayoutComponent implements OnInit {
   constructor(private pb: PocketbaseService) {}
 
   ngOnInit() {
+    this.showWelcome = true;
+    this.isInitializing = false;
     this.checkPocketBaseHealth();
   }
 

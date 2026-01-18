@@ -1,25 +1,32 @@
 <div class="welcome-container">
-    <div class="welcome-card">
-        <div class="welcome-icon">📚</div>
-        <h1>Welcome to Textbook!</h1>
-        <p class="welcome-description"> Before you can start using the application, you need to initialize PocketBase by creating an admin account. </p>
-        <div class="setup-steps">
-            <div class="step">
-                <span class="step-number">1</span>
-                <span class="step-text">Click "Setup PocketBase" to open the admin panel</span>
-            </div>
-            <div class="step">
-                <span class="step-number">2</span>
-                <span class="step-text">Create your admin email and password</span>
-            </div>
-            <div class="step">
-                <span class="step-number">3</span>
-                <span class="step-text">Return here and click "Done"</span>
+    <h1 class="welcome-title">Welcome to Textbook!</h1>
+    <p class="welcome-subtitle"> To get started, you need to initialize PocketBase and import the database schema. </p>
+    <div class="setup-steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3>Create Admin Account</h3>
+                <p>Click below to open PocketBase admin panel and create your admin credentials</p>
             </div>
         </div>
-        <div class="action-buttons">
-            <button class="btn btn-primary" (click)="openSetup()" *ngIf="!showDoneButton"> Setup PocketBase </button>
-            <button class="btn btn-success" (click)="onDone()" *ngIf="showDoneButton"> ✓ Done </button>
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3>Import Schema</h3>
+                <p>After logging in, go to Settings → Import collections and paste the copied schema</p>
+            </div>
         </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3>Return Here</h3>
+                <p>Click "Done" below to reload the application</p>
+            </div>
+        </div>
+    </div>
+    <div class="action-buttons">
+        <button class="btn-setup" (click)="openSetup()" *ngIf="!showDoneButton"> Open PocketBase Admin <span class="btn-hint" *ngIf="schemaCopied">✓ Schema copied!</span>
+        </button>
+        <button class="btn-done" (click)="onDone()" *ngIf="showDoneButton"> ✓ Done - Reload App </button>
     </div>
 </div>

@@ -1,13 +1,13 @@
 <div class="dashboard-layout">
-    <!-- Welcome Screen (first-time setup) -->
-    <app-welcome *ngIf="showWelcome" (setupComplete)="onSetupComplete()"></app-welcome>
-    <!-- Main Dashboard (hidden during setup) -->
-    <ng-container *ngIf="!showWelcome">
-        <!-- Sidebar -->
-        <app-sidebar [activeRoute]="'home'" (openSettings)="openSettingsModal()">
-        </app-sidebar>
-        <!-- Main Content -->
-        <main class="main-content">
+    <!-- Sidebar (always visible) -->
+    <app-sidebar [activeRoute]="'home'" (openSettings)="openSettingsModal()">
+    </app-sidebar>
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Welcome Screen (first-time setup) -->
+        <app-welcome *ngIf="showWelcome" (setupComplete)="onSetupComplete()"></app-welcome>
+        <!-- Regular Dashboard Content (hidden during setup) -->
+        <ng-container *ngIf="!showWelcome">
             <!-- Header -->
             <header class="main-header">
                 <h2 class="header-title">System Overview</h2>
@@ -179,8 +179,8 @@
                     </section>
                 </div>
             </div>
-        </main>
-    </ng-container>
+        </ng-container>
+    </main>
 </div>
 <!-- Modal -->
 <app-edit-app-modal *ngIf="showModal" [app]="editingItem" [sections]="sections" (saveApp)="onSaveApp($event)" (deleteApp)="onDeleteApp($event); showModal = false" (cancel)="showModal = false">
