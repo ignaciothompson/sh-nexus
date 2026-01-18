@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, from, map, catchError } from 'rxjs';
+import { Observable, from, map, catchError, of, switchMap } from 'rxjs';
 import PocketBase from 'pocketbase';
 
 export interface AppItem {
@@ -218,4 +218,15 @@ export class ApiService {
     return from(this.pb.collection('apps').delete(id));
   }
 
+  // --- HEALTH CHECK ---
+  checkHealth(): Observable<boolean> {
+    return from(this.pb.health.check()).pipe(
+      switchMap(() => {
+        // Also try to list sections to verify DB is initialized
+        return from(this.pb.collection('sections').getList(1, 1, { $autoCancel: false }));
+      }),
+      map(() => true),
+      catchError(() => of(false))
+    );
+  }
 }

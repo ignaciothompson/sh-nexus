@@ -20,4 +20,16 @@ export class PocketbaseService {
   get client(): PocketBase {
     return this.pb;
   }
+
+  // Health check - verify PocketBase is initialized
+  async checkHealth(): Promise<boolean> {
+    try {
+      await this.pb.health.check();
+      // Also verify DB is initialized by checking a collection
+      await this.pb.collection('books').getList(1, 1, { $autoCancel: false });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }

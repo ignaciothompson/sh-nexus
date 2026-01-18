@@ -24,6 +24,11 @@ RUN unzip /tmp/pb.zip -d /pb/ && \
 
 COPY --from=builder /app/dist/*/browser /pb/pb_public/
 
+# Copy schema and init script
+COPY pb_schema.json /pb/pb_schema.json
+COPY init-pb.sh /pb/init-pb.sh
+RUN chmod +x /pb/init-pb.sh
+
 EXPOSE 8080
 
-CMD ["./pocketbase", "serve", "--http=0.0.0.0:8080"]
+CMD ["/pb/init-pb.sh"]

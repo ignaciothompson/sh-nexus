@@ -1,9 +1,14 @@
 <div class="app-container">
-    <app-sidebar></app-sidebar>
-    <div class="content-wrapper">
-        <app-header></app-header>
-        <main class="main-content">
-            <router-outlet></router-outlet>
-        </main>
-    </div>
+    <!-- Welcome Screen (first-time setup) -->
+    <app-welcome *ngIf="showWelcome" (setupComplete)="onSetupComplete()"></app-welcome>
+    <!-- Main App (hidden during setup) -->
+    <ng-container *ngIf="!showWelcome">
+        <app-sidebar></app-sidebar>
+        <div class="content-wrapper">
+            <app-header></app-header>
+            <main class="main-content">
+                <router-outlet></router-outlet>
+            </main>
+        </div>
+    </ng-container>
 </div>

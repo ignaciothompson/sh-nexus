@@ -6,6 +6,7 @@ import { AppTileComponent } from '../app-tile/app-tile.component';
 import { EditAppModalComponent } from '../edit-app-modal/edit-app-modal.component';
 import { SettingsModalComponent } from '../settings-modal/settings-modal.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { WelcomeComponent } from '../welcome/welcome.component';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -17,7 +18,8 @@ import { ToastrService } from 'ngx-toastr';
     AppTileComponent, 
     EditAppModalComponent,
     SettingsModalComponent,
-    SidebarComponent
+    SidebarComponent,
+    WelcomeComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
@@ -30,6 +32,8 @@ export class DashboardComponent implements OnInit {
   showModal = false;
   showSettingsModal = false;
   showSidebar = false;
+  showWelcome = false;
+  isInitializing = true;
   editingItem: AppItem = { name: '', url: '' };
 
   hostStats: any = null;
@@ -49,6 +53,9 @@ export class DashboardComponent implements OnInit {
   constructor(private api: ApiService, private toastr: ToastrService) {}
 
   ngOnInit() {
+    // Check if PocketBase is initialized
+    this.checkPocketBaseHealth();
+    
     this.loadSections();
     // NOTE: Host stats disabled - no backend server in unified container
     // this.loadStats();
@@ -354,5 +361,37 @@ export class DashboardComponent implements OnInit {
 
   closeReorderModal() {
     this.showReorderModal = false;
+  }
+
+  // --- WELCOME / HEALTH CHECK ---
+  checkPocketBaseHealth() {
+    this.api.checkHealth().subscribe({
+      next: (isHealthy) => {
+        if (isHealthy) {
+          this.showWelcome = false;
+          this.isInitializing = false;
+        } else {
+          this.showWelcome = true;
+          this.isInitializing = false;
+        }
+      },
+      error: () => {
+        this.showWelcome = true;
+        this.isInitializing = false;
+      }
+    });
+  }
+
+  onSetupComplete() {
+    // User clicked "Done" - recheck health after a small delay
+    this.isInitializing = true;
+    setTimeout(() => {
+      this.checkPocketBaseHealth();
+      if (!this.showWelcome) {
+        // Setup successful, load data
+        this.loadSections();
+        this.loadBookmarks();
+      }
+    }, 1000);
   }
 }

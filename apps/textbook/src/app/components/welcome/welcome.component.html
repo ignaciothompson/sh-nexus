@@ -1,0 +1,25 @@
+<div class="welcome-container">
+    <div class="welcome-card">
+        <div class="welcome-icon">📚</div>
+        <h1>Welcome to Textbook!</h1>
+        <p class="welcome-description"> Before you can start using the application, you need to initialize PocketBase by creating an admin account. </p>
+        <div class="setup-steps">
+            <div class="step">
+                <span class="step-number">1</span>
+                <span class="step-text">Click "Setup PocketBase" to open the admin panel</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <span class="step-text">Create your admin email and password</span>
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <span class="step-text">Return here and click "Done"</span>
+            </div>
+        </div>
+        <div class="action-buttons">
+            <button class="btn btn-primary" (click)="openSetup()" *ngIf="!showDoneButton"> Setup PocketBase </button>
+            <button class="btn btn-success" (click)="onDone()" *ngIf="showDoneButton"> ✓ Done </button>
+        </div>
+    </div>
+</div>
