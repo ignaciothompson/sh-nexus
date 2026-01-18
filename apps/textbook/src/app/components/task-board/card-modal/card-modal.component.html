@@ -1,0 +1,230 @@
+<div class="modal-overlay" (click)="onClose()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h2 class="modal-title">{{ card ? 'Edit Card' : 'Create New Card' }}</h2>
+            <button class="btn-close" (click)="onClose()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="modal-body">
+            <!-- Title -->
+            <div class="form-group">
+                <label class="form-label">Title</label>
+                <input 
+                    type="text" 
+                    class="input-field" 
+                    [(ngModel)]="formData.title" 
+                    placeholder="Card title..."
+                    required>
+            </div>
+
+            <!-- Card Type -->
+            <div class="form-group">
+                <label class="form-label">Card Type</label>
+                <div class="card-type-selector">
+                    <button 
+                        class="type-btn"
+                        [class.active]="formData.card_type === 'text'"
+                        (click)="formData.card_type = 'text'; onCardTypeChange()">
+                        <span class="material-symbols-outlined">description</span>
+                        <span>Text</span>
+                    </button>
+                    <button 
+                        class="type-btn"
+                        [class.active]="formData.card_type === 'todo'"
+                        (click)="formData.card_type = 'todo'; onCardTypeChange()">
+                        <span class="material-symbols-outlined">checklist</span>
+                        <span>Todo List</span>
+                    </button>
+                    <button 
+                        class="type-btn"
+                        [class.active]="formData.card_type === 'progress'"
+                        (click)="formData.card_type = 'progress'; onCardTypeChange()">
+                        <span class="material-symbols-outlined">progress_activity</span>
+                        <span>Progress</span>
+                    </button>
+                    <button 
+                        class="type-btn"
+                        [class.active]="formData.card_type === 'note'"
+                        (click)="formData.card_type = 'note'; onCardTypeChange()">
+                        <span class="material-symbols-outlined">note</span>
+                        <span>Note</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea 
+                    class="input-field textarea-field" 
+                    [(ngModel)]="formData.description" 
+                    placeholder="Add more details..."
+                    rows="4">
+                </textarea>
+            </div>
+
+            <!-- Todo Items (visible when card_type === 'todo') -->
+            <div *ngIf="formData.card_type === 'todo'" class="form-group">
+                <label class="form-label">Tasks</label>
+                <div class="todo-list">
+                    <div *ngFor="let item of formData.todo_items" class="todo-item">
+                        <input 
+                            type="checkbox" 
+                            [checked]="item.completed"
+                            (change)="toggleTodoItem(item)"
+                            class="todo-checkbox">
+                        <span [class.completed]="item.completed" class="todo-text">{{ item.text }}</span>
+                        <button class="btn-remove-todo" (click)="removeTodoItem(item.id)">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    <div class="todo-input-wrapper">
+                        <input 
+                            type="text" 
+                            class="input-field todo-input" 
+                            [(ngModel)]="newTodoText"
+                            (keyup.enter)="addTodoItem()"
+                            placeholder="Add a task...">
+                        <button class="btn-add-todo" (click)="addTodoItem()">
+                            <span class="material-symbols-outlined">add</span>
+                        </button>
+                    </div>
+                    <div *ngIf="formData.todo_items && formData.todo_items.length > 0" class="todo-progress-info">
+                        <div class="progress-bar">
+                            <div class="progress-fill" [style.width.%]="todoProgress"></div>
+                        </div>
+                        <span class="progress-text">{{ todoProgress }}% Complete</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Bar (visible when card_type === 'progress') -->
+            <div *ngIf="formData.card_type === 'progress'" class="form-group">
+                <label class="form-label">Progress ({{ formData.progress_value }}%)</label>
+                <input 
+                    type="range" 
+                    class="progress-slider" 
+                    [(ngModel)]="formData.progress_value"
+                    min="0" 
+                    max="100" 
+                    step="5">
+                <div class="progress-bar-preview">
+                    <div class="progress-fill" [style.width.%]="formData.progress_value"></div>
+                </div>
+            </div>
+
+            <!-- Status & Priority -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="input-field select-field" [(ngModel)]="formData.status">
+                        <option value="blocked">🚫 Blocked</option>
+                        <option value="pending">📥 To Do</option>
+                        <option value="in_progress">⚡ In Progress</option>
+                        <option value="done">✅ Done</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Priority</label>
+                    <select class="input-field select-field" [(ngModel)]="formData.priority">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Due Date & Project -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Due Date</label>
+                    <input 
+                        type="date" 
+                        class="input-field" 
+                        [(ngModel)]="formData.due_date">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Project</label>
+                    <select class="input-field select-field" [(ngModel)]="formData.project">
+                        <option [value]="undefined">No Project</option>
+                        <option *ngFor="let project of projects" [value]="project.id">
+                            {{ project.name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="form-group">
+                <label class="form-label">Tags</label>
+                <div class="tags-container">
+                    <span *ngFor="let tag of formData.tags" class="tag">
+                        {{ tag }}
+                        <button class="btn-remove-tag" (click)="removeTag(tag)">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </span>
+                </div>
+                <div class="tag-input-wrapper">
+                    <input 
+                        type="text" 
+                        class="input-field tag-input" 
+                        [(ngModel)]="newTag"
+                        (keyup.enter)="addTag()"
+                        placeholder="Add a tag...">
+                    <button class="btn-add-tag" (click)="addTag()">
+                        <span class="material-symbols-outlined">add</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Linked Items -->
+            <div class="form-group">
+                <label class="form-label">Linked Items</label>
+                <div class="linked-items-display">
+                    <div *ngFor="let item of getLinkedItemsDisplay()" class="linked-item">
+                        <span class="material-symbols-outlined">link</span>
+                        <span>{{ item.title }}</span>
+                        <button class="btn-remove-link" (click)="toggleLinkedItem(item.id)">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="link-items-container">
+                    <button class="btn-link-item" (click)="toggleLinkItemsMenu()">
+                        <span class="material-symbols-outlined">add_link</span>
+                        Link to another card
+                    </button>
+                    <div *ngIf="showLinkItemsMenu" class="link-items-menu">
+                        <div *ngFor="let item of availableItems" 
+                             class="link-item-option"
+                             [class.linked]="isItemLinked(item.id)"
+                             (click)="toggleLinkedItem(item.id)">
+                            <input type="checkbox" [checked]="isItemLinked(item.id)">
+                            <span>{{ item.title }}</span>
+                        </div>
+                        <div *ngIf="availableItems.length === 0" class="empty-link-message">
+                            No other cards available to link.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="onClose()">Cancel</button>
+            <button class="btn btn-primary" 
+                    [disabled]="!formData.title?.trim()"
+                    (click)="onSave()">
+                {{ card ? 'Save Changes' : 'Create Card' }}
+            </button>
+        </div>
+    </div>
+</div>

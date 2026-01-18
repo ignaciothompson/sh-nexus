@@ -1,0 +1,57 @@
+<div class="planner-header">
+    <div class="header-center">
+        <div class="search-wrapper">
+            <span class="material-symbols-outlined search-icon">search</span>
+            <input 
+                type="text" 
+                class="search-input" 
+                placeholder="Search cards..."
+                [(ngModel)]="searchQuery"
+                (input)="onSearchChange()">
+            <button *ngIf="searchQuery" 
+                    class="btn-clear-search" 
+                    (click)="clearSearch()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="header-right">
+        <div class="filter-container">
+            <button class="btn-filter" (click)="toggleFilterMenu()">
+                <span class="material-symbols-outlined">filter_list</span>
+                <span>Filter</span>
+            </button>
+            <div *ngIf="showFilterMenu" class="filter-menu">
+                <button class="filter-option" 
+                        [class.active]="selectedFilter === 'all'"
+                        (click)="selectFilter('all')">
+                    All Priority
+                </button>
+                <button class="filter-option" 
+                        [class.active]="selectedFilter === 'high'"
+                        (click)="selectFilter('high')">
+                    <span class="priority-dot" style="background: #ef4444;"></span>
+                    High Priority
+                </button>
+                <button class="filter-option" 
+                        [class.active]="selectedFilter === 'medium'"
+                        (click)="selectFilter('medium')">
+                    <span class="priority-dot" style="background: #f59e0b;"></span>
+                    Medium Priority
+                </button>
+                <button class="filter-option" 
+                        [class.active]="selectedFilter === 'low'"
+                        (click)="selectFilter('low')">
+                    <span class="priority-dot" style="background: #3b82f6;"></span>
+                    Low Priority
+                </button>
+            </div>
+        </div>
+
+        <button class="btn-new-card" (click)="onNewCard()">
+            <span class="material-symbols-outlined">add</span>
+            New Card
+        </button>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotesService } from '../../../services/notes.service';
 import { NoteLabel } from '../../../models/types';
@@ -12,6 +12,10 @@ import { NoteLabel } from '../../../models/types';
 })
 export class NotesSidebarComponent implements OnInit {
   labels: NoteLabel[] = [];
+  selectedLabelId: string | null = null;
+
+  @Output() labelSelected = new EventEmitter<string | null>();
+  @Output() openLabelManager = new EventEmitter<void>();
 
   constructor(private notesService: NotesService) {}
 
@@ -25,5 +29,19 @@ export class NotesSidebarComponent implements OnInit {
     } catch (error) {
       console.error('Error loading labels:', error);
     }
+  }
+
+  selectHome() {
+    this.selectedLabelId = null;
+    this.labelSelected.emit(null);
+  }
+
+  selectLabel(labelId: string) {
+    this.selectedLabelId = labelId;
+    this.labelSelected.emit(labelId);
+  }
+
+  onEditLabels() {
+    this.openLabelManager.emit();
   }
 }

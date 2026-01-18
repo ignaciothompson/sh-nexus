@@ -1,16 +1,26 @@
 <div class="sidebar-container">
     <div class="section-title">NOTES</div>
-    <div class="nav-item active">
+    <div class="nav-item" 
+         [class.active]="selectedLabelId === null"
+         (click)="selectHome()">
         <span class="material-symbols-outlined icon-sm">home</span>
-        <span>Home</span>
+        <span>All Notes</span>
     </div>
-    <div class="section-title">LABELS</div> @for (label of labels; track label.id) { <div class="nav-item">
-        <span class="material-symbols-outlined icon-sm">label</span>
+    
+    <div class="section-title">LABELS</div>
+    <div *ngFor="let label of labels" 
+         class="nav-item"
+         [class.active]="selectedLabelId === label.id"
+         (click)="selectLabel(label.id)">
+        <span class="label-dot" [style.background]="label.color || '#9c33ff'"></span>
         <span>{{ label.name }}</span>
-    </div> } <div class="nav-item edit-item">
+    </div>
+    
+    <div class="nav-item edit-item" (click)="onEditLabels()">
         <span class="material-symbols-outlined icon-sm">edit</span>
         <span>Edit labels</span>
     </div>
+    
     <div class="section-title">MANAGEMENT</div>
     <div class="nav-item">
         <span class="material-symbols-outlined icon-sm">archive</span>

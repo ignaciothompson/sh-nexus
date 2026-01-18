@@ -1,21 +1,43 @@
 import { Injectable } from '@angular/core';
 import { PocketbaseService } from './pocketbase.service';
-import { Note } from '../models/types';
+import { Note, NoteLabel } from '../models/types';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotesService {
   private collectionName = 'notes';
+  private labelsCollectionName = 'notes_labels';
 
   constructor(private pbService: PocketbaseService) {}
 
-  async getLabels(): Promise<any[]> {
+  // Label Management
+  async getLabels(): Promise<NoteLabel[]> {
     return await this.pbService.client
-      .collection('notes_label')
-      .getFullList({ sort: 'name', requestKey: null });
+      .collection(this.labelsCollectionName)
+      .getFullList<NoteLabel>({ sort: 'name', requestKey: null });
   }
 
+  async createLabel(data: { name: string; color?: string }): Promise<NoteLabel> {
+    return await this.pbService.client
+      .collection(this.labelsCollectionName)
+      .create<NoteLabel>(data, { requestKey: null });
+  }
+
+  async updateLabel(id: string, data: Partial<NoteLabel>): Promise<NoteLabel> {
+    return await this.pbService.client
+      .collection(this.labelsCollectionName)
+      .update<NoteLabel>(id, data, { requestKey: null });
+  }
+
+  async deleteLabel(id: string): Promise<boolean> {
+    await this.pbService.client
+      .collection(this.labelsCollectionName)
+      .delete(id, { requestKey: null });
+    return true;
+  }
+
+  // Note Management
   async create(note: Partial<Note> | FormData): Promise<Note> {
     return await this.pbService.client
       .collection(this.collectionName)
@@ -41,7 +63,6 @@ export class NotesService {
       .update<Note>(id, { is_favorite }, { requestKey: null, expand: 'label' });
   }
 
-  // Update getAll to expand labels
   async getAll(): Promise<Note[]> {
     const records = await this.pbService.client
       .collection(this.collectionName)

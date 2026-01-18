@@ -1,151 +1,116 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TasksService } from '../../services/tasks.service';
+import { PlannerService } from '../../services/planner.service';
 import { PlannerItem } from '../../models/types';
+import { PlannerHeaderComponent } from './planner-header/planner-header.component';
+import { CardModalComponent } from './card-modal/card-modal.component';
 
 interface Column {
   id: PlannerItem['status'];
   title: string;
   icon: string;
+  color: string;
   tasks: PlannerItem[];
 }
 
 @Component({
   selector: 'app-task-board',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PlannerHeaderComponent, CardModalComponent],
   templateUrl: './task-board.component.html',
   styleUrl: './task-board.component.css'
 })
 export class TaskBoardComponent implements OnInit {
   columns: Column[] = [
-    { id: 'todo', title: 'To Do', icon: '📥', tasks: [] },
-    { id: 'in_progress', title: 'In Progress', icon: '🔄', tasks: [] },
-    { id: 'done', title: 'Done', icon: '✅', tasks: [] }
+    { id: 'blocked', title: 'BLOCKED', icon: '🚫', color: '#ef4444', tasks: [] },
+    { id: 'pending', title: 'TO DO', icon: '📥', color: '#3b82f6', tasks: [] },
+    { id: 'in_progress', title: 'IN PROGRESS', icon: '⚡', color: '#f59e0b', tasks: [] },
+    { id: 'done', title: 'DONE', icon: '✅', color: '#22c55e', tasks: [] }
   ];
 
-  showModal = false;
-  editingTask: PlannerItem | null = null;
-  formData: Partial<PlannerItem> = {
-    title: '',
-    status: 'todo',
-    due_date: '',
-    order: 0,
-    description: ''
-  };
+  showCardModal = false;
+  selectedCard: PlannerItem | null = null;
+  searchQuery = '';
 
   private draggedTask: PlannerItem | null = null;
-  private isLoading = false;
 
   constructor(
-    private tasksService: TasksService,
+    private plannerService: PlannerService,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.loadTasks();
-  }
-
-  async loadTasks(): Promise<void> {
-    if (this.isLoading) return; 
-    this.isLoading = true;
-    
-    try {
-      const tasks = await this.tasksService.getAll();
-      this.distributeTasksToColumns([...tasks]);
+    this.plannerService.items$.subscribe(items => {
+      this.distributeTasksToColumns(items);
       this.cdr.detectChanges();
-    } catch (error) {
-      console.error('Error loading tasks:', error);
-    } finally {
-      this.isLoading = false;
-    }
+    });
   }
 
   private distributeTasksToColumns(tasks: PlannerItem[]): void {
     this.columns.forEach(column => {
-      column.tasks = tasks.filter(task => task.status === column.id);
+      column.tasks = tasks
+        .filter(task => task.status === column.id)
+        .filter(task => {
+          if (!this.searchQuery) return true;
+          const query = this.searchQuery.toLowerCase();
+          return task.title.toLowerCase().includes(query) ||
+                 task.description?.toLowerCase().includes(query) ||
+                 task.tags?.some(tag => tag.toLowerCase().includes(query));
+        })
+        .sort((a, b) => a.order - b.order);
     });
   }
 
-  openCreateModal(): void {
-    this.editingTask = null;
-    this.formData = {
-      title: '',
-      status: 'todo',
-      due_date: '',
-      order: 0,
-      description: ''
-    };
-    this.showModal = true;
+  onSearch(query: string): void {
+    this.searchQuery = query;
+    this.plannerService.items$.subscribe(items => {
+      this.distributeTasksToColumns(items);
+    });
   }
 
-  openEditModal(task: PlannerItem): void {
-    this.editingTask = task;
-    this.formData = {
-      title: task.title,
-      status: task.status,
-      due_date: task.due_date ? task.due_date.split('T')[0] : '',
-      order: task.order,
-      description: task.description || ''
-    };
-    this.showModal = true;
+  openNewCardModal(): void {
+    this.selectedCard = null;
+    this.showCardModal = true;
   }
 
-  closeModal(): void {
-    this.showModal = false;
-    this.editingTask = null;
-    this.formData = { title: '', status: 'todo', due_date: '', order: 0, description: '' };
+  openCardModal(card: PlannerItem): void {
+    this.selectedCard = card;
+    this.showCardModal = true;
   }
 
-  async saveTask(): Promise<void> {
-    if (!this.formData.title?.trim()) return;
-    
+  closeCardModal(): void {
+    this.showCardModal = false;
+    this.selectedCard = null;
+  }
+
+  async onCardSave(cardData: Partial<PlannerItem>): Promise<void> {
     try {
-      const taskData = { ...this.formData };
-      
-      // Ensure date is ISO string if present
-      if (taskData.due_date && !taskData.due_date.includes('T')) {
-          taskData.due_date = new Date(taskData.due_date).toISOString();
-      }
-
-      if (this.editingTask) {
-        await this.tasksService.update(this.editingTask.id, taskData);
+      if (this.selectedCard) {
+        await this.plannerService.updateItem(this.selectedCard.id, cardData);
       } else {
-        // Assign default order if new (e.g., at the end)
-        taskData.order = this.columns.find(c => c.id === taskData.status)?.tasks.length || 0;
-        await this.tasksService.create(taskData);
+        await this.plannerService.createItem(cardData);
       }
-      
-      this.closeModal();
-      await this.loadTasks();
     } catch (error) {
-      console.error('Error saving task:', error);
+      console.error('Error saving card:', error);
+    } finally {
+      // Always close modal after save attempt
+      this.closeCardModal();
     }
   }
 
-  async deleteTask(id: string): Promise<void> {
-    if (!confirm('Are you sure you want to delete this task?')) return;
-    
-    try {
-      this.columns.forEach(column => {
-        column.tasks = column.tasks.filter(t => t.id !== id);
-      });
-      this.cdr.detectChanges();
-      
-      await this.tasksService.delete(id);
-    } catch (error) {
-      console.error('Error deleting task:', error);
-      await this.loadTasks(); 
+  async deleteCard(cardId: string, event: Event): Promise<void> {
+    event.stopPropagation();
+    if (confirm('Delete this card?')) {
+      try {
+        await this.plannerService.deleteItem(cardId);
+      } catch (error) {
+        console.error('Error deleting card:', error);
+      }
     }
   }
 
-  isOverdue(task: PlannerItem): boolean {
-    if (!task.due_date || task.status === 'done') return false;
-    return new Date(task.due_date) < new Date();
-  }
-
-  // Drag and Drop handlers
+  // Drag and Drop
   onDragStart(event: DragEvent, task: PlannerItem): void {
     this.draggedTask = task;
     const element = event.target as HTMLElement;
@@ -174,25 +139,45 @@ export class TaskBoardComponent implements OnInit {
     event.preventDefault();
     
     if (this.draggedTask && this.draggedTask.status !== newStatus) {
-      const task = this.draggedTask;
-      const oldStatus = task.status;
-      
       try {
-        const oldColumn = this.columns.find(c => c.id === oldStatus);
-        const newColumn = this.columns.find(c => c.id === newStatus);
-        
-        if (oldColumn && newColumn) {
-          oldColumn.tasks = oldColumn.tasks.filter(t => t.id !== task.id);
-          task.status = newStatus;
-          newColumn.tasks = [task, ...newColumn.tasks];
-          this.cdr.detectChanges();
-        }
-        
-        await this.tasksService.updateStatus(task.id, newStatus);
+        await this.plannerService.updateItemStatus(this.draggedTask.id, newStatus);
       } catch (error) {
         console.error('Error updating task status:', error);
-        await this.loadTasks(); 
       }
     }
+  }
+
+  getCardTypeIcon(type?: string): string {
+    switch (type) {
+      case 'todo': return 'checklist';
+      case 'progress': return 'progress_activity';
+      case 'note': return 'note';
+      default: return 'description';
+    }
+  }
+
+  getPriorityColor(priority?: string): string {
+    switch (priority) {
+      case 'high': return '#ef4444';
+      case 'medium': return '#f59e0b';
+      case 'low': return '#3b82f6';
+      default: return '#71717a';
+    }
+  }
+
+  isOverdue(task: PlannerItem): boolean {
+    if (!task.due_date || task.status === 'done') return false;
+    return new Date(task.due_date) < new Date();
+  }
+
+  getTodoCompletedCount(card: PlannerItem): number {
+    if (!card.todo_items) return 0;
+    return card.todo_items.filter(item => item.completed).length;
+  }
+
+  getTodoProgress(card: PlannerItem): number {
+    if (!card.todo_items || card.todo_items.length === 0) return 0;
+    const completed = card.todo_items.filter(item => item.completed).length;
+    return Math.round((completed / card.todo_items.length) * 100);
   }
 }

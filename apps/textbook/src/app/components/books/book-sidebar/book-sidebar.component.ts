@@ -152,13 +152,14 @@ export class BookSidebarComponent implements OnInit, OnDestroy {
           icon_color: bookData.iconColor
         });
       }
-      // Close modal and reset state
-      this.showAddModal = false;
-      this.editingBook = null;
-      this.modalMode = 'create';
     } catch (error) {
       console.error('Error saving book:', error);
       alert('Failed to save book. Please try again.');
+    } finally {
+      // Always close modal and reset state
+      this.showAddModal = false;
+      this.editingBook = null;
+      this.modalMode = 'create';
     }
   }
 
@@ -259,25 +260,28 @@ export class BookSidebarComponent implements OnInit, OnDestroy {
     this.showDeleteConfirm = true;
   }
 
-  onSavePage(pageData: NewPageData): void {
-    this.booksService.createPage({
-      book: pageData.bookId,
-      title: pageData.title,
-      icon: pageData.icon,
-      content: ''
-    }).then((newPage: Page) => {
+  async onSavePage(pageData: NewPageData): Promise<void> {
+    try {
+      const newPage: Page = await this.booksService.createPage({
+        book: pageData.bookId,
+        title: pageData.title,
+        icon: pageData.icon,
+        content: ''
+      });
       console.log('Page created:', newPage);
       // Reload the book's pages
       const book = this.books.find(b => b.id === pageData.bookId);
       if (book) {
         // Force reload by resetting the flag
         book.pagesLoaded = false;
-        this.loadBookPages(book);
+        await this.loadBookPages(book);
       }
-      this.closeAddPageModal();
-    }).catch((err: any) => {
+    } catch (err: any) {
       console.error('Error creating page:', err);
-    });
+    } finally {
+      // Always close modal
+      this.closeAddPageModal();
+    }
   }
 
   private async loadBookPages(book: BookWithPages): Promise<void> {

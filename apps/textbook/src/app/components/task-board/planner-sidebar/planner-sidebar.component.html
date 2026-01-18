@@ -1,21 +1,89 @@
 <div class="sidebar-container">
-    <div class="header-area">
-        <h2>Planner</h2>
-        <button class="btn-icon">
+    <div class="sidebar-header">
+        <h2 class="sidebar-title">PROJECTS</h2>
+        <button class="btn-add" (click)="openAddModal()" title="New Project">
             <span class="material-symbols-outlined">add</span>
         </button>
     </div>
-    <div class="section-title">BOARDS</div>
-    <div class="nav-item active">
-        <span class="board-dot" style="background:var(--primary)"></span>
-        <span>Project Alpha</span>
+
+    <!-- All Projects -->
+    <div class="project-item" 
+         [class.active]="selectedProjectId === null"
+         (click)="selectAllProjects()">
+        <span class="material-symbols-outlined project-icon" style="color: #9ca3af;">dashboard</span>
+        <span class="project-name">All Projects</span>
     </div>
-    <div class="nav-item">
-        <span class="board-dot" style="background:#f59e0b"></span>
-        <span>Marketing</span>
+
+    <div class="divider"></div>
+
+    <!-- Project List -->
+    <div class="projects-list">
+        <div *ngFor="let project of projects" 
+             class="project-item"
+             [class.active]="selectedProjectId === project.id"
+             (click)="selectProject(project)">
+            <span class="material-symbols-outlined project-icon" [style.color]="project.color">
+                {{ project.icon }}
+            </span>
+            <span class="project-name">{{ project.name }}</span>
+        </div>
     </div>
-    <div class="nav-item">
-        <span class="board-dot" style="background:#3b82f6"></span>
-        <span>Personal</span>
+</div>
+
+<!-- Add Project Modal -->
+<div *ngIf="showAddModal" class="modal-overlay" (click)="closeAddModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2 class="modal-title">New Project</h2>
+            <button class="btn-close" (click)="closeAddModal()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Project Name</label>
+                <input type="text" 
+                       class="form-input" 
+                       [(ngModel)]="newProject.name"
+                       placeholder="Enter project name..."
+                       autofocus>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Icon</label>
+                <div class="icon-grid">
+                    <button *ngFor="let icon of icons"
+                            class="icon-btn"
+                            [class.selected]="newProject.icon === icon.value"
+                            (click)="newProject.icon = icon.value"
+                            [title]="icon.name">
+                        <span class="material-symbols-outlined">{{ icon.value }}</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Color</label>
+                <div class="color-grid">
+                    <button *ngFor="let color of colors"
+                            class="color-btn"
+                            [class.selected]="newProject.color === color.value"
+                            [style.background]="color.value"
+                            (click)="newProject.color = color.value"
+                            [title]="color.name">
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-cancel" (click)="closeAddModal()">Cancel</button>
+            <button class="btn-save" 
+                    [disabled]="!newProject.name.trim()"
+                    (click)="saveProject()">
+                Create Project
+            </button>
+        </div>
     </div>
 </div>
