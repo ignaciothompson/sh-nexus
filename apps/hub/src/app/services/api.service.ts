@@ -33,7 +33,7 @@ export class ApiService {
   // Production: uncomment this line
   private pb = new PocketBase('https://hub.sh-nexus.com');
   // Dev: uncomment this line
-  // private pb = new PocketBase('http://localhost:5100');
+//   private pb = new PocketBase('http://localhost:5100');
 
   constructor(private http: HttpClient) { }
 

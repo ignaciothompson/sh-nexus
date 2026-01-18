@@ -10,9 +10,9 @@ export class PocketbaseService {
   constructor() {
     // PocketBase URL - Comment/uncomment based on environment
     // Production: uncomment this line
-    const pbUrl = 'https://textbook.sh-nexus.com';
+    // const pbUrl = 'https://textbook.sh-nexus.com';
     // Dev: uncomment this line
-    // const pbUrl = 'http://localhost:5102';
+    const pbUrl = 'http://localhost:5102';
     
     this.pb = new PocketBase(pbUrl);
   }

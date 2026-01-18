@@ -180,6 +180,7 @@
                 </div>
             </div>
         </main>
+    </ng-container>
 </div>
 <!-- Modal -->
 <app-edit-app-modal *ngIf="showModal" [app]="editingItem" [sections]="sections" (saveApp)="onSaveApp($event)" (deleteApp)="onDeleteApp($event); showModal = false" (cancel)="showModal = false">
@@ -222,5 +223,4 @@
             <button class="btn-save" (click)="saveReorder()">Save Order</button>
         </div>
     </div>
-    </ng-container>
 </div>
