@@ -31,7 +31,7 @@ export interface Section {
 export class ApiService {
   // PocketBase URL - Comment/uncomment based on environment
   // Production: uncomment this line
-  private pb = new PocketBase('https://hub.sh-nexus.com');
+  private pb = new PocketBase('https://dashboard.sh-nexus.com');
   // Dev: uncomment this line
 //   private pb = new PocketBase('http://localhost:5100');
 
