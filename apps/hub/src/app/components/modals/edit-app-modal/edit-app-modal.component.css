@@ -137,6 +137,7 @@
     padding: 0.625rem 0.875rem;
     font-size: 0.9rem;
     transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
 }
 
 .form-control:focus,

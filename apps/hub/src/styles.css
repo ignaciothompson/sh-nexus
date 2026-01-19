@@ -1,336 +1,179 @@
-/* ================================
-   SH-Nexus Hub Design System
-   New Glassmorphism Theme
-   ================================ */
+/* Import SH-Skin Component Library (must be before Tailwind) */
+@import './css/main.css';
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom global styles */
 :root {
-    /* Primary Colors */
-    --primary: #359EFF;
-    --primary-light: rgba(53, 158, 255, 0.2);
-    --primary-glow: rgba(53, 158, 255, 0.5);
-    
-    /* Background Colors - Ultra Dark */
-    --bg-dark: #0f0f0f;
-    --bg: #161616;
-    --bg-light: #1c1c1e;
-    --bg-elevated: #232323;
-    --sidebar-bg: #161618;
-    
-    /* Text Colors */
-    --text: #ffffff;
-    --text-secondary: #e2e8f0;
-    --text-muted: #9ca3af;
-    
-    /* Border Colors */
-    --border: rgba(255, 255, 255, 0.08);
-    --border-muted: rgba(255, 255, 255, 0.05);
-    
-    /* Status Colors */
-    --success: #22c55e;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-    --info: #3b82f6;
-    
-    /* Category Colors */
-    --color-media: #a855f7;
-    --color-system: #3b82f6;
-    --color-automation: #22c55e;
+  --primary-color: #6366f1;
+  --background: #0f172a;
+  --surface: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  
+  /* Modal theming variables */
+  --primary: #359EFF;
+  --primary-hover: #2986e0;
+  --primary-light: rgba(53, 158, 255, 0.2);
+  --primary-glow: rgba(53, 158, 255, 0.4);
+  --bg: #1c1c1e;
+  --bg-dark: #161618;
+  --bg-light: #2c2c2e;
+  --border: rgba(255, 255, 255, 0.1);
+  --text-muted: #6b7280;
 }
 
-/* Global Styles */
 * {
-    box-sizing: border-box;
-}
-
-html, html.dark {
-    color-scheme: dark;
-    background-color: #0f0f0f !important;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    background-color: #0f0f0f !important;
-    color: var(--text) !important;
-    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    margin: 0;
-    min-height: 100vh;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-/* Override any app-root or main background */
-app-root {
-    display: flex;
-    width: 100%;
-    height: 100vh;
-    background-color: #0f0f0f !important;
-}
-
-app-dashboard {
-    display: flex;
-    width: 100%;
-    height: 100vh;
-    background-color: #0f0f0f !important;
-}
-
-/* Selection */
-::selection {
-    background-color: var(--primary);
-    color: white;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-    width: 6px;
-}
-::-webkit-scrollbar-track {
-    background: #0f0f0f;
-}
-::-webkit-scrollbar-thumb {
-    background: #28392e;
-    border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: var(--primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--background);
+  color: var(--text-primary);
 }
 
 /* ================================
-   GLASSMORPHISM UTILITIES
+   MODAL BASE STYLES
    ================================ */
 
-.glass-panel {
-    background: rgba(22, 22, 22, 0.4);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+/* Modal Overlay */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1050;
+  display: none;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-.glass-pill {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all 0.3s ease;
+.modal.show {
+  display: block;
 }
 
-.glass-pill:hover {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: rgba(53, 158, 255, 0.3);
-    box-shadow: 0 0 15px -5px rgba(53, 158, 255, 0.2);
+.modal.d-block {
+  display: block;
 }
 
-/* ================================
-   NAVIGATION STYLES
-   ================================ */
-
-.nav-item-active {
-    background: rgba(53, 158, 255, 0.15);
-    color: #359EFF;
-    border-right: 2px solid #359EFF;
+.modal.fade {
+  opacity: 1;
 }
 
-.nav-item:hover:not(.nav-item-active) {
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
+/* Modal Dialog */
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 1.75rem auto;
+  max-width: 500px;
+  pointer-events: none;
 }
 
-/* ================================
-   APP CARD STYLES
-   ================================ */
-
-.app-card {
-    background-color: #1c1c1e;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+.modal-dialog-centered {
+  display: flex;
+  align-items: center;
+  min-height: calc(100% - 3.5rem);
 }
 
-.app-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+.modal-lg {
+  max-width: 700px;
 }
 
-/* ================================
-   MODAL STYLES
-   ================================ */
-
+/* Modal Content */
 .modal-content {
-    background-color: var(--bg);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  color: white;
 }
 
-.modal-header, .modal-footer {
-    border-color: var(--border);
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
 }
 
-.form-control, .form-select {
-    background-color: var(--bg-dark);
-    border-color: var(--border-muted);
-    color: var(--text);
-    border-radius: 0.5rem;
+.modal-title {
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: white;
+  margin: 0;
 }
 
-.form-control:focus, .form-select:focus {
-    background-color: var(--bg-dark);
-    color: var(--text);
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px var(--primary-light);
+.modal-body {
+  position: relative;
+  flex: 1 1 auto;
+  padding: 1.5rem;
 }
 
-.form-control::placeholder {
-    color: var(--text-muted);
+.modal-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  gap: 0.5rem;
 }
 
-/* ================================
-   BUTTON STYLES
-   ================================ */
-
-.btn-primary {
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-weight: 500;
+/* Close Button */
+.btn-close {
+  box-sizing: content-box;
+  width: 1em;
+  height: 1em;
+  padding: 0.25em;
+  color: white;
+  background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+  border: 0;
+  border-radius: 0.375rem;
+  opacity: 0.5;
+  cursor: pointer;
 }
 
-.btn-primary:hover {
-    background-color: #2b8ad9;
-    transform: translateY(-1px);
+.btn-close:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.btn-secondary {
-    background-color: var(--bg-elevated);
-    color: var(--text);
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
+/* Utility classes */
+.me-auto {
+  margin-right: auto;
 }
 
-.btn-secondary:hover {
-    background-color: var(--bg-light);
+.me-1 {
+  margin-right: 0.25rem;
 }
 
-.btn-outline-light {
-    border: 1px solid var(--border);
-    color: var(--text);
-    background: transparent;
-    border-radius: 0.5rem;
-    transition: all 0.2s ease;
+.mt-2 {
+  margin-top: 0.5rem;
 }
 
-.btn-outline-light:hover {
-    background-color: var(--bg-elevated);
-    border-color: var(--border);
-    color: var(--text);
+/* Custom component styles */
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors;
+  }
+  
+  .card {
+    @apply bg-surface rounded-lg shadow-lg p-6;
+  }
+  
+  .input-field {
+    @apply w-full px-3 py-2 bg-background border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary;
+  }
 }
 
-.btn-outline-primary {
-    background-color: var(--primary);
-    color: white;
-    border: 2px solid var(--primary);
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-weight: 500;
-    padding: 0.4rem 0.85rem;
-}
-
-.btn-outline-primary:hover {
-    background-color: #2b8ad9;
-    border-color: #2b8ad9;
-    box-shadow: 0 0 12px rgba(53, 158, 255, 0.4);
-}
-
-.btn-outline-secondary {
-    background-color: rgba(35, 47, 72, 0.6);
-    color: var(--text);
-    border: 1px solid rgba(100, 120, 150, 0.5);
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-weight: 500;
-    padding: 0.4rem 0.85rem;
-}
-
-.btn-outline-secondary:hover {
-    background-color: var(--bg-elevated);
-    border-color: rgba(150, 170, 200, 0.6);
-    color: var(--text);
-}
-
-.btn-edit-delete {
-    color: var(--text-muted);
-    border: none;
-    background: transparent;
-    padding: 0.25rem;
-    transition: all 0.2s ease;
-}
-
-.btn-edit-delete:hover {
-    color: var(--text);
-    background: var(--bg-elevated);
-    border-radius: 0.25rem;
-}
-
-/* Icon Button (circular) */
-.btn-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 9999px;
-    background: var(--bg-elevated);
-    color: var(--text);
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.btn-icon:hover {
-    background: var(--primary);
-    color: white;
-}
-
-/* Card styles */
-.card-dark {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 0.75rem;
-}
-
-/* Glassmorphism utility */
-.glass {
-    background: rgba(16, 22, 34, 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-}
-
-/* ================================
-   ANIMATIONS
-   ================================ */
-
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.animate-fade-in-down {
-    animation: fadeInDown 0.5s ease-out;
-}
-
-/* Material Symbols sizing */
-.material-symbols-outlined {
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-}

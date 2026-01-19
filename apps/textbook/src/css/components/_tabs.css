@@ -1,0 +1,133 @@
+/* ================================
+   SH-SKIN TABS
+   Tab navigation and content
+   ================================ */
+
+/* Tab Container */
+.sh-skin .sh-tabs {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tab List */
+.sh-skin .sh-tab-list {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--sh-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.sh-skin .sh-tab-list::-webkit-scrollbar {
+  display: none;
+}
+
+/* Tab Item */
+.sh-skin .sh-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--sh-text-secondary);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--sh-transition-normal);
+  white-space: nowrap;
+}
+
+.sh-skin .sh-tab:hover {
+  color: var(--sh-text);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.sh-skin .sh-tab.active {
+  color: var(--sh-primary);
+  border-bottom-color: var(--sh-primary);
+}
+
+/* Tab Icon */
+.sh-skin .sh-tab-icon {
+  font-size: 1.125rem;
+}
+
+/* Tab Badge */
+.sh-skin .sh-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.375rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: white;
+  background: var(--sh-accent-red);
+  border-radius: var(--sh-radius-full);
+}
+
+/* Tab Content */
+.sh-skin .sh-tab-content {
+  padding: 1.5rem 0;
+}
+
+.sh-skin .sh-tab-panel {
+  display: none;
+}
+
+.sh-skin .sh-tab-panel.active {
+  display: block;
+}
+
+/* Pill Tabs (Alternative Style) */
+.sh-skin .sh-tab-list-pills {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  background: var(--sh-bg-elevated);
+  border-radius: var(--sh-radius-lg);
+  border: none;
+}
+
+.sh-skin .sh-tab-list-pills .sh-tab {
+  padding: 0.5rem 1rem;
+  border-radius: var(--sh-radius-md);
+  border-bottom: none;
+}
+
+.sh-skin .sh-tab-list-pills .sh-tab.active {
+  color: var(--sh-text);
+  background: var(--sh-primary);
+  border-bottom: none;
+}
+
+/* Vertical Tabs */
+.sh-skin .sh-tabs-vertical {
+  flex-direction: row;
+}
+
+.sh-skin .sh-tabs-vertical .sh-tab-list {
+  flex-direction: column;
+  border-bottom: none;
+  border-right: 1px solid var(--sh-border);
+  min-width: 200px;
+}
+
+.sh-skin .sh-tabs-vertical .sh-tab {
+  border-bottom: none;
+  border-right: 2px solid transparent;
+  justify-content: flex-start;
+}
+
+.sh-skin .sh-tabs-vertical .sh-tab.active {
+  border-right-color: var(--sh-primary);
+  border-bottom: none;
+}
+
+.sh-skin .sh-tabs-vertical .sh-tab-content {
+  flex: 1;
+  padding: 0 0 0 1.5rem;
+}

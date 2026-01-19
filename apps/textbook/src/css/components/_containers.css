@@ -1,0 +1,164 @@
+/* ================================
+   SH-SKIN CONTAINERS
+   Cards, panels, and layout boxes
+   ================================ */
+
+/* Base Card */
+.sh-skin .sh-card {
+  background: var(--sh-bg-surface);
+  border: 1px solid var(--sh-border);
+  border-radius: var(--sh-radius-lg);
+  overflow: hidden;
+}
+
+.sh-skin .sh-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--sh-border);
+}
+
+.sh-skin .sh-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--sh-text);
+  margin: 0;
+}
+
+.sh-skin .sh-card-body {
+  padding: 1.25rem;
+}
+
+.sh-skin .sh-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--sh-border);
+}
+
+/* Glass Panel */
+.sh-skin .sh-glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--sh-border);
+  border-radius: var(--sh-radius-lg);
+}
+
+/* Elevated Panel */
+.sh-skin .sh-elevated {
+  background: var(--sh-bg-elevated);
+  border: 1px solid var(--sh-border);
+  border-radius: var(--sh-radius-lg);
+  box-shadow: var(--sh-shadow-md);
+}
+
+/* Section Container */
+.sh-skin .sh-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sh-skin .sh-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sh-skin .sh-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--sh-text);
+  margin: 0;
+}
+
+/* Grid Layouts */
+.sh-skin .sh-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.sh-skin .sh-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.sh-skin .sh-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.sh-skin .sh-grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.sh-skin .sh-grid-auto {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+/* Flex Layouts */
+.sh-skin .sh-flex {
+  display: flex;
+}
+
+.sh-skin .sh-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sh-skin .sh-flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sh-skin .sh-flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Divider */
+.sh-skin .sh-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--sh-border);
+  margin: 1rem 0;
+}
+
+.sh-skin .sh-divider-vertical {
+  width: 1px;
+  height: 100%;
+  background: var(--sh-border);
+  margin: 0 1rem;
+}
+
+/* Scrollable Container */
+.sh-skin .sh-scrollable {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sh-border) transparent;
+}
+
+.sh-skin .sh-scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sh-skin .sh-scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sh-skin .sh-scrollable::-webkit-scrollbar-thumb {
+  background: var(--sh-border);
+  border-radius: 3px;
+}
+
+.sh-skin .sh-scrollable::-webkit-scrollbar-thumb:hover {
+  background: var(--sh-text-muted);
+}

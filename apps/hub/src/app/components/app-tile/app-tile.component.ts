@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppItem } from '../../services/api.service';
+import { AppItem } from '../../models/types';
 import { IntegrationService, AppStatus } from '../../services/integration.service';
 import { Subscription } from 'rxjs';
 

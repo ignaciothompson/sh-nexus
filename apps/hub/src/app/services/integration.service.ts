@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, catchError, map, BehaviorSubject } from 'rxjs';
-import { AppItem } from './api.service';
+import { AppItem } from '../models/types';
 
 export interface StatusResponse {
   online: boolean;

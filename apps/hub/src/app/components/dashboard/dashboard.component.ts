@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ApiService, AppItem, Section } from '../../services/api.service';
+import { AppsService } from '../../services/apps.service';
+import { SectionsService } from '../../services/sections.service';
+import { AppItem, Section } from '../../models/types';
 import { AppTileComponent } from '../app-tile/app-tile.component';
-import { EditAppModalComponent } from '../edit-app-modal/edit-app-modal.component';
-import { SettingsModalComponent } from '../settings-modal/settings-modal.component';
-import { SidebarComponent } from '../sidebar/sidebar.component';
-import { WelcomeComponent } from '../welcome/welcome.component';
+import { EditAppModalComponent } from '../modals/edit-app-modal/edit-app-modal.component';
+import { SettingsModalComponent } from '../modals/settings-modal/settings-modal.component';
+
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -18,8 +19,6 @@ import { ToastrService } from 'ngx-toastr';
     AppTileComponent, 
     EditAppModalComponent,
     SettingsModalComponent,
-    SidebarComponent,
-    WelcomeComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
@@ -31,14 +30,11 @@ export class DashboardComponent implements OnInit {
   
   showModal = false;
   showSettingsModal = false;
-  showSidebar = false;
-  showWelcome = false;
   isInitializing = true;
   editingItem: AppItem = { name: '', url: '' };
 
   hostStats: any = null;
   bookmarks: AppItem[] = [];
-  searchQuery = '';
 
   // Pagination state - track current page per section
   sectionPages: Map<string, number> = new Map();
@@ -50,25 +46,21 @@ export class DashboardComponent implements OnInit {
   reorderItems: AppItem[] = [];
   reorderSectionId: string | null = null; // null = bookmarks
 
-  constructor(private api: ApiService, private toastr: ToastrService) {}
+  constructor(
+    private appsService: AppsService,
+    private sectionsService: SectionsService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {
-    // Check if PocketBase is initialized
-    this.checkPocketBaseHealth();
-    
     this.loadSections();
     // NOTE: Host stats disabled - no backend server in unified container
     // this.loadStats();
     
-    // Clock tick
+    // Clock tick for time display
     setInterval(() => {
-        this.currentTime = new Date();
+      this.currentTime = new Date();
     }, 1000);
-    
-    // Stats polling disabled - uncomment if you add a stats backend
-    // setInterval(() => {
-    //     this.loadStats();
-    // }, 5000);
   }
 
   // Host stats disabled - no backend server in unified container architecture
@@ -83,15 +75,16 @@ export class DashboardComponent implements OnInit {
   }
 
   loadSections() {
-    this.api.getDashboardData().subscribe({
-      next: (sections) => {
-          this.sections = sections;
-          // Initialize pagination for each section
-          sections.forEach(s => {
-              if (s.id && !this.sectionPages.has(s.id)) {
-                  this.sectionPages.set(s.id, 0);
-              }
-          });
+    this.appsService.getDashboardData().subscribe({
+      next: (data) => {
+        this.sections = data.sections;
+        // Initialize pagination for each section
+        data.sections.forEach(s => {
+            if (s.id && !this.sectionPages.has(s.id)) {
+                this.sectionPages.set(s.id, 0);
+            }
+        });
+        this.isInitializing = false; // Assuming this is the intended property for isLoading
       },
       error: (err) => this.toastr.error('Failed to load sections')
     });
@@ -99,14 +92,10 @@ export class DashboardComponent implements OnInit {
   }
 
   loadBookmarks() {
-      this.api.getBookmarks().subscribe({
+      this.appsService.getBookmarks().subscribe({
           next: (bookmarks) => this.bookmarks = bookmarks,
           error: (err) => console.error('Failed to load bookmarks', err)
       });
-  }
-
-  toggleSidebar() {
-    this.showSidebar = !this.showSidebar;
   }
 
   // --- PAGINATION ---
@@ -227,7 +216,7 @@ export class DashboardComponent implements OnInit {
 
   deleteSection(section: Section) {
       if(confirm(`Delete section "${section.title}" and all its apps?`)) {
-          if (section.id) this.api.deleteSection(section.id).subscribe(() => this.loadSections());
+          if (section.id) this.sectionsService.delete(section.id).subscribe(() => this.loadSections());
       }
   }
 
@@ -248,7 +237,7 @@ export class DashboardComponent implements OnInit {
     }
 
     if (app.id) {
-      this.api.updateApp(app.id, app, file).subscribe(() => {
+      this.appsService.update(app.id, app, file).subscribe(() => {
         this.loadSections();
         this.loadBookmarks();
         this.showModal = false;
@@ -259,7 +248,7 @@ export class DashboardComponent implements OnInit {
           // Ensure bookmark doesn't have SectionId
           app.section = undefined;
           app.order = this.bookmarks.length;
-          this.api.addApp(app, file).subscribe(() => {
+          this.appsService.create(app, file).subscribe(() => {
             this.loadBookmarks();
             this.showModal = false;
             this.toastr.success('Bookmark added');
@@ -267,7 +256,7 @@ export class DashboardComponent implements OnInit {
       } else {
         if (!app.section && this.sections.length === 0) {
             // Create default section
-            this.api.addSection({ title: 'Main', order: 0 }).subscribe(sec => {
+            this.sectionsService.create({ title: 'Main', order: 0 }).subscribe((sec: Section) => {
                 app.section = sec.id;
                 app.order = 0;
                 this.createApp(app, file);
@@ -281,7 +270,7 @@ export class DashboardComponent implements OnInit {
   }
 
   createApp(app: AppItem, file?: File) {
-      this.api.addApp(app, file).subscribe(() => {
+      this.appsService.create(app, file).subscribe(() => {
         this.loadSections();
         this.showModal = false;
         this.toastr.success('Item added');
@@ -290,7 +279,7 @@ export class DashboardComponent implements OnInit {
 
   onDeleteApp(app: AppItem) {
      if (app.id) {
-       this.api.deleteApp(app.id).subscribe(() => {
+       this.appsService.delete(app.id).subscribe(() => {
          this.loadSections();
          this.loadBookmarks();
          this.toastr.info('Item deleted');
@@ -300,12 +289,6 @@ export class DashboardComponent implements OnInit {
 
   trackById(index: number, item: any): string | number {
     return item.id || index;
-  }
-
-  performSearch() {
-    if (this.searchQuery.trim()) {
-      window.open(`https://www.google.com/search?q=${encodeURIComponent(this.searchQuery)}`, '_blank');
-    }
   }
 
   // --- REORDER MODAL ---
@@ -344,7 +327,7 @@ export class DashboardComponent implements OnInit {
     this.reorderItems.forEach((item, idx) => {
       item.order = idx;
       if (item.id) {
-        this.api.updateApp(item.id, item).subscribe();
+        this.appsService.update(item.id, item).subscribe();
       }
     });
 
@@ -362,36 +345,5 @@ export class DashboardComponent implements OnInit {
   closeReorderModal() {
     this.showReorderModal = false;
   }
-
-  // --- WELCOME / HEALTH CHECK ---
-  checkPocketBaseHealth() {
-    this.api.checkHealth().subscribe({
-      next: (isHealthy) => {
-        if (isHealthy) {
-          this.showWelcome = false;
-          this.isInitializing = false;
-        } else {
-          this.showWelcome = true;
-          this.isInitializing = false;
-        }
-      },
-      error: () => {
-        this.showWelcome = true;
-        this.isInitializing = false;
-      }
-    });
-  }
-
-  onSetupComplete() {
-    // User clicked "Done" - recheck health after a small delay
-    this.isInitializing = true;
-    setTimeout(() => {
-      this.checkPocketBaseHealth();
-      if (!this.showWelcome) {
-        // Setup successful, load data
-        this.loadSections();
-        this.loadBookmarks();
-      }
-    }, 1000);
-  }
 }
+

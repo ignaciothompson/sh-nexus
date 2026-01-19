@@ -1,0 +1,139 @@
+/* ================================
+   SH-SKIN MODALS
+   Dialog and modal styles
+   ================================ */
+
+/* Modal Overlay */
+.sh-skin .sh-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--sh-bg-overlay);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+/* Modal Container */
+.sh-skin .sh-modal {
+  background: var(--sh-bg-surface);
+  border: 1px solid var(--sh-border);
+  border-radius: var(--sh-radius-xl);
+  box-shadow: var(--sh-shadow-xl);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sh-skin .sh-modal-sm {
+  max-width: 400px;
+}
+
+.sh-skin .sh-modal-lg {
+  max-width: 700px;
+}
+
+.sh-skin .sh-modal-xl {
+  max-width: 900px;
+}
+
+.sh-skin .sh-modal-full {
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100vh - 2rem);
+}
+
+/* Modal Header */
+.sh-skin .sh-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--sh-border);
+  flex-shrink: 0;
+}
+
+.sh-skin .sh-modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--sh-text);
+  margin: 0;
+}
+
+.sh-skin .sh-modal-close {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--sh-radius-md);
+  color: var(--sh-text-muted);
+  cursor: pointer;
+  transition: all var(--sh-transition-normal);
+}
+
+.sh-skin .sh-modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--sh-text);
+}
+
+/* Modal Body */
+.sh-skin .sh-modal-body {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+/* Modal Footer */
+.sh-skin .sh-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--sh-border);
+  flex-shrink: 0;
+}
+
+.sh-skin .sh-modal-footer-between {
+  justify-content: space-between;
+}
+
+/* Confirmation Dialog */
+.sh-skin .sh-dialog {
+  text-align: center;
+  padding: 2rem;
+}
+
+.sh-skin .sh-dialog-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.sh-skin .sh-dialog-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--sh-text);
+  margin-bottom: 0.5rem;
+}
+
+.sh-skin .sh-dialog-message {
+  color: var(--sh-text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.sh-skin .sh-dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}

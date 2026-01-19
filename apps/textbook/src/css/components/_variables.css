@@ -1,0 +1,68 @@
+/* ================================
+   SH-SKIN VARIABLES
+   Color palette and theming
+   ================================ */
+
+.sh-skin {
+        /* Background Colors */
+        --sh-bg-base: #000000;          /* Pitch Black */
+        --sh-bg-elevated: #09090b;       /* Very dark gray for sidebars */
+        --sh-bg-card: #121212;          /* Standard Material Dark card */
+        --sh-bg-card-hover: #1e1e1e;    /* Slightly lighter on hover */
+      
+        /* Accent Colors */
+        --sh-primary: #9c33ff;           /* Vivid Purple */
+        --sh-primary-hover: #b05bff;     /* Lighter Purple */
+        --sh-primary-light: rgba(156, 51, 255, 0.15);
+        --sh-primary-glow: rgba(156, 51, 255, 0.4);
+        
+        --sh-color-accent: #9c33ff;      /* Purple accent for textbook */
+        --sh-color-accent-rgb: 156, 51, 255;
+      
+        /* Other Accents */
+        --sh-blue: #3b82f6;
+        --sh-green: #22c55e;
+        --sh-red: #ef4444;
+        --sh-yellow: #eab308;
+        --sh-orange: #f97316;
+      
+        /* Text Colors */
+        --sh-text-primary: #f2f2f2;
+        --sh-text-secondary: #a1a1aa;
+        --sh-text-muted: #71717a; /* Neutral gray, less blue */
+        --sh-text-subtle: #52525b;
+        --sh-text-faint: #3f3f46;
+      
+        /* Border Colors */
+        --sh-border-default: rgba(255, 255, 255, 0.1);
+        --sh-border-hover: rgba(255, 255, 255, 0.2);
+        --sh-border-active: #9c33ff;
+        --sh-border-subtle: #262626;
+      
+        /* Spacing */
+        --sh-space-1: 0.25rem;   /* 4px */
+        --sh-space-2: 0.5rem;    /* 8px */
+        --sh-space-3: 0.75rem;   /* 12px */
+        --sh-space-4: 1rem;      /* 16px */
+        --sh-space-5: 1.25rem;   /* 20px */
+        --sh-space-6: 1.5rem;    /* 24px */
+        --sh-space-8: 2rem;      /* 32px */
+      
+        /* Radius */
+        --sh-radius-sm: 0.25rem;   /* 4px */
+        --sh-radius-md: 0.5rem;    /* 8px */
+        --sh-radius-lg: 0.75rem;   /* 12px */
+        --sh-radius-xl: 1rem;      /* 16px */
+        --sh-radius-full: 9999px;
+      
+        /* Transitions */
+        --sh-transition-fast: 0.15s ease;
+        --sh-transition-base: 0.2s ease;
+        --sh-transition-slow: 0.3s ease;
+      
+        /* Shadows */
+        --sh-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+        --sh-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+        --sh-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+        --sh-shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.6);
+}

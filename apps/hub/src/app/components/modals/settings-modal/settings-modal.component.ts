@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ApiService, Section } from '../../services/api.service';
+import { SectionsService } from '../../../services/sections.service';
+import { Section } from '../../../models/types';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-settings-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, DragDropModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './settings-modal.component.html',
   styleUrls: ['./settings-modal.component.css']
 })
@@ -30,21 +30,16 @@ export class SettingsModalComponent {
   inputModalValue = '';
   inputModalCallback: ((value: string) => void) | null = null;
 
-  constructor(private api: ApiService, private toastr: ToastrService) {}
+  constructor(private sectionsService: SectionsService, private toastr: ToastrService) {}
 
   setTab(tab: 'sections' | 'appearance' | 'about') {
     this.activeTab = tab;
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.sections, event.previousIndex, event.currentIndex);
-    this.saveOrder();
-  }
-
   saveOrder() {
     this.sections.forEach((sec, index) => {
         sec.order = index;
-        if (sec.id) this.api.updateSection(sec.id, sec).subscribe();
+        if (sec.id) this.sectionsService.update(sec.id, sec).subscribe();
     });
     this.sectionsUpdated.emit();
   }
@@ -73,7 +68,7 @@ export class SettingsModalComponent {
   addSection() {
     this.openInputModal('New Section Title', '', (title) => {
       const newSec: Section = { title, order: this.sections.length };
-      this.api.addSection(newSec).subscribe(() => {
+      this.sectionsService.create(newSec).subscribe(() => {
         this.toastr.success('Section added');
         this.sectionsUpdated.emit();
       });
@@ -84,7 +79,7 @@ export class SettingsModalComponent {
     this.openInputModal('Rename Section', section.title, (newTitle) => {
       if (newTitle !== section.title && section.id) {
         section.title = newTitle;
-        this.api.updateSection(section.id, section).subscribe(() => {
+        this.sectionsService.update(section.id, section).subscribe(() => {
           this.toastr.success('Section renamed');
           this.sectionsUpdated.emit();
         });
@@ -95,7 +90,7 @@ export class SettingsModalComponent {
   deleteSection(section: Section) {
     if (confirm(`Delete section "${section.title}" and all its apps?`)) {
         if (section.id) {
-            this.api.deleteSection(section.id).subscribe(() => {
+            this.sectionsService.delete(section.id).subscribe(() => {
                 this.toastr.info('Section deleted');
                 this.sectionsUpdated.emit();
             });
@@ -105,14 +100,20 @@ export class SettingsModalComponent {
 
   moveUp(index: number) {
       if(index > 0) {
-          moveItemInArray(this.sections, index, index - 1);
+          // Swap items manually
+          const temp = this.sections[index];
+          this.sections[index] = this.sections[index - 1];
+          this.sections[index - 1] = temp;
           this.saveOrder();
       }
   }
 
   moveDown(index: number) {
       if(index < this.sections.length - 1) {
-          moveItemInArray(this.sections, index, index + 1);
+          // Swap items manually
+          const temp = this.sections[index];
+          this.sections[index] = this.sections[index + 1];
+          this.sections[index + 1] = temp;
           this.saveOrder();
       }
   }

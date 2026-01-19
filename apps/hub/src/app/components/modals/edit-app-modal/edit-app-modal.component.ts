@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ApiService, AppItem } from '../../services/api.service';
-import { APP_TEMPLATES, AppTemplate, ConfigField, getTemplateById } from '../../models/app-templates';
-import { FilterPipe } from '../../pipes/filter.pipe';
+import { AppItem, Section } from '../../../models/types';
+import { APP_TEMPLATES, AppTemplate, ConfigField, getTemplateById } from '../../../models/app-templates';
+import { FilterPipe } from '../../../pipes/filter.pipe';
 
 @Component({
   selector: 'app-edit-app-modal',
@@ -14,7 +14,7 @@ import { FilterPipe } from '../../pipes/filter.pipe';
 })
 export class EditAppModalComponent implements OnInit {
   @Input() app: AppItem = { name: '', url: '' };
-  @Input() sections: import('../../services/api.service').Section[] = [];
+  @Input() sections: Section[] = [];
   @Output() saveApp = new EventEmitter<{ app: AppItem, file?: File }>();
   @Output() deleteApp = new EventEmitter<AppItem>();
   @Output() cancel = new EventEmitter<void>();
@@ -51,7 +51,7 @@ export class EditAppModalComponent implements OnInit {
     'portainer', 'traefik', 'caddy', 'pihole', 'adguard-home', 'wireguard', 'tailscale'
   ];
 
-  constructor(private api: ApiService) {}
+  constructor() {}
 
   ngOnInit() {
     // Load existing app type
