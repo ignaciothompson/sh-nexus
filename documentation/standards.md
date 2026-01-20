@@ -234,10 +234,10 @@ src/app/components/
 │   ├── main-layout/        # Main application layout wrapper
 │   ├── header/             # Top navigation/header
 │   ├── sidebar/            # Side navigation
-│   └── welcome/            # First-time setup screen
 ├── modals/
 │   ├── edit-*-modal/       # Edit modals for entities
 │   └── settings-modal/     # Application settings
+│── welcome/                # First-time setup screen
 └── [feature-components]/   # Feature-specific components (dashboard, books, etc.)
 ```
 

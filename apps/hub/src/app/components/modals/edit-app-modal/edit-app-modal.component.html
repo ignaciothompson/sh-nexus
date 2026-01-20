@@ -25,9 +25,9 @@
                         <form (ngSubmit)="save()" #f="ngForm">
                             <!-- Template Selector -->
                             <div class="form-group" *ngIf="!app.id">
-                                <label class="form-label">
+                                <label class="sh-label">
                                     <i class="bi bi-grid-3x3-gap-fill me-1"></i> Use Template </label>
-                                <select class="form-select" [ngModel]="selectedTemplate?.id || ''" (ngModelChange)="onTemplateSelect($event)" name="template">
+                                <select class="sh-input sh-select" [ngModel]="selectedTemplate?.id || ''" (ngModelChange)="onTemplateSelect($event)" name="template">
                                     <option value="">Custom App (No Template)</option>
                                     <optgroup label="Media">
                                         <option *ngFor="let t of templates | filter:'category':'media'" [value]="t.id">{{t.name}}</option>
@@ -45,34 +45,34 @@
                             </div>
                             <!-- Basic Info -->
                             <div class="form-group">
-                                <label class="form-label">Name</label>
-                                <input type="text" class="form-control" [(ngModel)]="app.name" name="name" placeholder="My App" required>
+                                <label class="sh-label">Name</label>
+                                <input type="text" class="sh-input" [(ngModel)]="app.name" name="name" placeholder="My App" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">URL</label>
-                                <input type="url" class="form-control" [(ngModel)]="app.url" name="url" placeholder="https://example.com" required>
+                                <label class="sh-label">URL</label>
+                                <input type="url" class="sh-input" [(ngModel)]="app.url" name="url" placeholder="https://example.com" required>
                             </div>
                             <!-- Type Selection -->
                             <div class="form-group">
-                                <label class="form-label">Type</label>
-                                <div class="btn-group-toggle">
-                                    <button type="button" class="toggle-btn" [class.active]="appType === 'app'" (click)="appType = 'app'">
+                                <label class="sh-label">Type</label>
+                                <div class="sh-btn-group-toggle">
+                                    <button type="button" class="sh-toggle-btn" [class.active]="appType === 'app'" (click)="appType = 'app'">
                                         <i class="bi bi-grid-fill"></i> Standard App </button>
-                                    <button type="button" class="toggle-btn" [class.active]="appType === 'bookmark'" (click)="appType = 'bookmark'">
+                                    <button type="button" class="sh-toggle-btn" [class.active]="appType === 'bookmark'" (click)="appType = 'bookmark'">
                                         <i class="bi bi-lightning-charge-fill"></i> Fast Access </button>
                                 </div>
                             </div>
                             <!-- Section Selection -->
                             <div class="form-group" *ngIf="appType === 'app'">
-                                <label class="form-label">Section</label>
-                                <select class="form-select" [(ngModel)]="app.section" name="sectionId" required>
+                                <label class="sh-label">Section</label>
+                                <select class="sh-input sh-select" [(ngModel)]="app.section" name="sectionId" required>
                                     <option [ngValue]="undefined" disabled>Select a section</option>
                                     <option *ngFor="let section of sections" [ngValue]="section.id">{{section.title}}</option>
                                 </select>
                             </div>
                             <!-- Health Check Toggle -->
                             <div class="form-group">
-                                <label class="form-label">Status Monitoring</label>
+                                <label class="sh-label">Status Monitoring</label>
                                 <div class="health-check-toggle">
                                     <label class="toggle-switch">
                                         <input type="checkbox" [(ngModel)]="app.healthCheck" name="healthCheck" [ngModelOptions]="{standalone: true}">
@@ -84,18 +84,18 @@
                             </div>
                             <!-- Icon Selection (only show if no template, or template without icon) -->
                             <div class="form-group" *ngIf="iconType !== 'template'">
-                                <label class="form-label">Icon</label>
-                                <div class="btn-group-toggle icon-type-toggle">
-                                    <button type="button" class="toggle-btn" [class.active]="iconType === 'dashboard'" (click)="iconType = 'dashboard'; onIconTypeChange()">
+                                <label class="sh-label">Icon</label>
+                                <div class="sh-btn-group-toggle icon-type-toggle">
+                                    <button type="button" class="sh-toggle-btn" [class.active]="iconType === 'dashboard'" (click)="iconType = 'dashboard'; onIconTypeChange()">
                                         <i class="bi bi-collection-fill"></i> Library </button>
-                                    <button type="button" class="toggle-btn" [class.active]="iconType === 'url'" (click)="iconType = 'url'">
+                                    <button type="button" class="sh-toggle-btn" [class.active]="iconType === 'url'" (click)="iconType = 'url'">
                                         <i class="bi bi-link-45deg"></i> URL </button>
-                                    <button type="button" class="toggle-btn" [class.active]="iconType === 'file'" (click)="iconType = 'file'">
+                                    <button type="button" class="sh-toggle-btn" [class.active]="iconType === 'file'" (click)="iconType = 'file'">
                                         <i class="bi bi-upload"></i> Upload </button>
                                 </div>
                                 <!-- Dashboard Icons Search -->
                                 <div *ngIf="iconType === 'dashboard'" class="icon-search-section">
-                                    <input type="text" class="form-control" [(ngModel)]="iconSearchQuery" (input)="onIconSearch()" placeholder="Search icons (e.g., youtube, plex, github)" name="iconSearch">
+                                    <input type="text" class="sh-input" [(ngModel)]="iconSearchQuery" (input)="onIconSearch()" placeholder="Search icons (e.g., youtube, plex, github)" name="iconSearch">
                                     <div *ngIf="isLoadingIcons" class="icon-loading">
                                         <div class="spinner-border spinner-border-sm"></div>
                                         <span>Searching...</span>
@@ -110,7 +110,7 @@
                                 </div>
                                 <!-- URL Input -->
                                 <div *ngIf="iconType === 'url'" class="mt-2">
-                                    <input type="text" class="form-control" [(ngModel)]="app.icon" name="icon" placeholder="https://example.com/icon.png" (input)="iconError = false">
+                                    <input type="text" class="sh-input" [(ngModel)]="app.icon" name="icon" placeholder="https://example.com/icon.png" (input)="iconError = false">
                                 </div>
                                 <!-- File Upload -->
                                 <div *ngIf="iconType === 'file'" class="mt-2">
@@ -127,8 +127,8 @@
                                     <i class="bi bi-sliders me-1"></i> {{selectedTemplate?.name}} Configuration </label>
                                 <div class="config-fields">
                                     <div *ngFor="let field of selectedTemplate?.configFields" class="config-field">
-                                        <label class="config-label">{{field.label}}</label>
-                                        <input [type]="field.type" class="form-control" [(ngModel)]="appConfig[field.key]" [name]="'config_' + field.key" [placeholder]="field.placeholder || ''" [required]="field.required || false">
+                                        <label class="sh-label">{{field.label}}</label>
+                                        <input [type]="field.type" class="sh-input" [(ngModel)]="appConfig[field.key]" [name]="'config_' + field.key" [placeholder]="field.placeholder || ''" [required]="field.required || false">
                                         <small *ngIf="field.description" class="config-description">{{field.description}}</small>
                                     </div>
                                 </div>
@@ -138,11 +138,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button *ngIf="app.id" type="button" class="btn btn-danger me-auto" (click)="onDelete()">
-                    <i class="bi bi-trash3-fill me-1"></i> Delete </button>
-                <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
-                <button type="button" class="btn btn-primary" (click)="save()" [disabled]="!app.name || !app.url || uploading">
-                    <i class="bi bi-check-lg me-1"></i> Save </button>
+                <button *ngIf="app.id" type="button" class="sh-btn sh-btn-danger me-auto" (click)="onDelete()">Delete </button>
+                <button type="button" class="sh-btn sh-btn-secondary" (click)="close()">Cancel</button>
+                <button type="button" class="sh-btn sh-btn-primary" (click)="save()" [disabled]="!app.name || !app.url || uploading"> Save </button>
             </div>
         </div>
     </div>

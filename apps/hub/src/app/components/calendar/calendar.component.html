@@ -1,0 +1,94 @@
+<div class="page-container">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="header-title">
+        <span class="material-symbols-outlined header-icon text-blue">calendar_month</span>
+        <h1>Calendar</h1>
+      </div>
+      <button class="sh-btn sh-btn-primary" (click)="goToToday()">
+        <span class="material-symbols-outlined">today</span>
+        Today
+      </button>
+    </div>
+  </header>
+
+  <div class="calendar-layout">
+    <!-- Calendar View -->
+    <section class="calendar-section">
+      <div class="sh-card calendar-card">
+        <!-- Calendar Header -->
+        <div class="calendar-header">
+          <button class="sh-btn sh-btn-ghost" (click)="previousMonth()">
+            <span class="material-symbols-outlined">chevron_left</span>
+          </button>
+          <h2 class="calendar-month">{{currentMonthYear}}</h2>
+          <button class="sh-btn sh-btn-ghost" (click)="nextMonth()">
+            <span class="material-symbols-outlined">chevron_right</span>
+          </button>
+        </div>
+
+        <!-- Weekday Headers -->
+        <div class="calendar-grid">
+          <div class="calendar-weekday">Sun</div>
+          <div class="calendar-weekday">Mon</div>
+          <div class="calendar-weekday">Tue</div>
+          <div class="calendar-weekday">Wed</div>
+          <div class="calendar-weekday">Thu</div>
+          <div class="calendar-weekday">Fri</div>
+          <div class="calendar-weekday">Sat</div>
+
+          <!-- Calendar Days -->
+          <div *ngFor="let day of calendarDays" 
+               class="calendar-day"
+               [class.other-month]="!day.isCurrentMonth"
+               [class.today]="day.isToday"
+               [class.has-events]="day.hasEvents">
+            <span class="day-number">{{day.day}}</span>
+            <span *ngIf="day.hasEvents" class="event-dot"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upcoming Events Sidebar -->
+    <aside class="events-sidebar">
+      <div class="sh-card events-card">
+        <h3 class="events-title">Upcoming Events</h3>
+        
+        <div class="events-list">
+          <div *ngFor="let event of upcomingEvents" class="event-item">
+            <div class="event-icon" [ngClass]="getEventTypeColor(event.type)">
+              <span class="material-symbols-outlined">{{getEventTypeIcon(event.type)}}</span>
+            </div>
+            <div class="event-details">
+              <h4 class="event-name">{{event.title}}</h4>
+              <p class="event-time">{{event.date | date:'MMM d, h:mm a'}}</p>
+              <p class="event-desc" *ngIf="event.description">{{event.description}}</p>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div *ngIf="upcomingEvents.length === 0" class="events-empty">
+            <span class="material-symbols-outlined">event_available</span>
+            <p>No upcoming events</p>
+          </div>
+        </div>
+
+        <button class="sh-btn sh-btn-primary btn-block">
+          <span class="material-symbols-outlined">add</span>
+          Add Event
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Coming Soon Notice -->
+  <div class="sh-alert sh-alert-info">
+    <span class="material-symbols-outlined">info</span>
+    <div>
+      <strong>Calendar Integration Coming Soon</strong>
+      <p>Full calendar functionality with event creation, reminders, and integration with external calendars (Google Calendar, Outlook, etc.) will be available in a future update.</p>
+    </div>
+  </div>
+</div>

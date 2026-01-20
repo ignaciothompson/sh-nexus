@@ -63,12 +63,7 @@ export class AddPageModalComponent {
         title: this.title.trim(),
         icon: this.selectedIcon
       });
-    }
-  }
-
-  onBackdropClick(event: MouseEvent): void {
-    if (event.target === event.currentTarget) {
-      this.onClose();
+      // Don't auto-reset - let parent handle closing
     }
   }
 }

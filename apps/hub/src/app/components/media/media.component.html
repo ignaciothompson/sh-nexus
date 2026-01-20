@@ -1,0 +1,117 @@
+<div class="page-container">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="header-title">
+        <span class="material-symbols-outlined header-icon text-purple">smart_display</span>
+        <h1>Media Library</h1>
+      </div>
+    </div>
+  </header>
+
+  <!-- Stats Row -->
+  <section class="stats-grid">
+    <div class="sh-card stat-card">
+      <div class="stat-icon text-blue">
+        <span class="material-symbols-outlined">movie</span>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{stats.movies}}</h3>
+        <p class="stat-label">Movies</p>
+      </div>
+    </div>
+
+    <div class="sh-card stat-card">
+      <div class="stat-icon text-purple">
+        <span class="material-symbols-outlined">tv</span>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{stats.tvShows}}</h3>
+        <p class="stat-label">TV Shows</p>
+      </div>
+    </div>
+
+    <div class="sh-card stat-card">
+      <div class="stat-icon text-green">
+        <span class="material-symbols-outlined">library_music</span>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{stats.music}}</h3>
+        <p class="stat-label">Albums</p>
+      </div>
+    </div>
+
+    <div class="sh-card stat-card">
+      <div class="stat-icon text-orange">
+        <span class="material-symbols-outlined">storage</span>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{stats.storage}}</h3>
+        <p class="stat-label">Total Storage</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Media Services -->
+  <section class="content-section">
+    <div class="section-header">
+      <h2>Media Services</h2>
+    </div>
+
+    <div class="services-grid">
+      <div *ngFor="let service of services" 
+           class="sh-card service-card"
+           (click)="openService(service.url)"
+           [class.clickable]="service.url">
+        <div class="service-header">
+          <span class="material-symbols-outlined service-icon">{{service.icon}}</span>
+          <span class="sh-status-dot" 
+                [class.online]="service.status === 'online'"
+                [class.offline]="service.status === 'offline'">
+            {{service.status}}
+          </span>
+        </div>
+        <h3 class="service-name">{{service.name}}</h3>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Media -->
+  <section class="content-section">
+    <div class="section-header">
+      <h2>Recently Added</h2>
+    </div>
+
+    <div class="media-grid">
+      <div *ngFor="let item of recentMedia" class="sh-card media-card">
+        <div class="media-thumbnail">
+          <span class="material-symbols-outlined">
+            {{item.type === 'movie' ? 'movie' : item.type === 'tv' ? 'tv' : 'album'}}
+          </span>
+        </div>
+        <div class="media-info">
+          <h3 class="media-title">{{item.title}}</h3>
+          <p class="media-meta">
+            <span *ngIf="item.year">{{item.year}}</span>
+            <span *ngIf="item.season">Season {{item.season}}</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="recentMedia.length === 0" class="sh-card empty-state">
+        <span class="material-symbols-outlined">video_library</span>
+        <p>No recent media</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coming Soon Notice -->
+  <div class="sh-alert sh-alert-info">
+    <span class="material-symbols-outlined">info</span>
+    <div>
+      <strong>Media Integration Coming Soon</strong>
+      <p>Full integration with Plex, Jellyfin, Emby, and *arr apps (Radarr, Sonarr, etc.) will be available in a future update. This will include library browsing, playback controls, and download management.</p>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,5 @@
-<div class="modal-overlay" (click)="onBackdropClick($event)">
-    <div class="modal-container">
+<div class="modal-overlay">
+    <div class="modal-container" (click)="$event.stopPropagation()">
         <div class="modal-header">
             <h2 class="modal-title">New Page</h2>
             <button class="btn-close" (click)="onClose()">

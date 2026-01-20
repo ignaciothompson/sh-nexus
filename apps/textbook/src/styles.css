@@ -10,7 +10,12 @@
 /* Import Material Symbols */
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
 
+/* Import SH-Skin Component Library (must be before Tailwind) */
 @import './css/main.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* CSS Variables */
 

@@ -3,19 +3,13 @@
    Tab navigation and content
    ================================ */
 
-/* Tab Container */
-.sh-skin .sh-tabs {
-  display: flex;
-  flex-direction: column;
-}
-
 /* Tab List */
 .sh-skin .sh-tab-list {
-  display: flex;
-  gap: 0;
-  border-bottom: 1px solid var(--sh-border);
-  overflow-x: auto;
-  scrollbar-width: none;
+    flex: 1;
+    padding: 1rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 }
 
 .sh-skin .sh-tab-list::-webkit-scrollbar {
@@ -24,38 +18,38 @@
 
 /* Tab Item */
 .sh-skin .sh-tab {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 1.25rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--sh-text-secondary);
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid transparent;
-  cursor: pointer;
-  transition: all var(--sh-transition-normal);
-  white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    width: 100%;
 }
 
 .sh-skin .sh-tab:hover {
-  color: var(--sh-text);
-  background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
 }
 
 .sh-skin .sh-tab.active {
-  color: var(--sh-primary);
-  border-bottom-color: var(--sh-primary);
+    background: rgba(53, 158, 255, 0.15);
+    color: #359EFF;
 }
 
 /* Tab Icon */
-.sh-skin .sh-tab-icon {
+.sh-skin .sh-tab .tab-icon {
   font-size: 1.125rem;
 }
 
 /* Tab Badge */
-.sh-skin .sh-tab-badge {
+.sh-skin .sh-tab .tab-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -70,20 +64,20 @@
 }
 
 /* Tab Content */
-.sh-skin .sh-tab-content {
+.sh-skin .sh-tab .tab-content {
   padding: 1.5rem 0;
 }
 
-.sh-skin .sh-tab-panel {
+.sh-skin .sh-tab .tab-panel {
   display: none;
 }
 
-.sh-skin .sh-tab-panel.active {
+.sh-skin .sh-tab .tab-panel.active {
   display: block;
 }
 
 /* Pill Tabs (Alternative Style) */
-.sh-skin .sh-tab-list-pills {
+.sh-skin .sh-tab-list .tab-list-pills {
   display: flex;
   gap: 0.5rem;
   padding: 0.25rem;
@@ -92,42 +86,42 @@
   border: none;
 }
 
-.sh-skin .sh-tab-list-pills .sh-tab {
+.sh-skin .sh-tab-list .tab-list-pills .sh-tab {
   padding: 0.5rem 1rem;
   border-radius: var(--sh-radius-md);
   border-bottom: none;
 }
 
-.sh-skin .sh-tab-list-pills .sh-tab.active {
+.sh-skin .sh-tab-list .tab-list-pills .sh-tab.active {
   color: var(--sh-text);
   background: var(--sh-primary);
   border-bottom: none;
 }
 
 /* Vertical Tabs */
-.sh-skin .sh-tabs-vertical {
+.sh-skin .sh-tab-list .tabs-vertical {
   flex-direction: row;
 }
 
-.sh-skin .sh-tabs-vertical .sh-tab-list {
+.sh-skin .sh-tab-list .tabs-vertical .sh-tab-list {
   flex-direction: column;
   border-bottom: none;
   border-right: 1px solid var(--sh-border);
   min-width: 200px;
 }
 
-.sh-skin .sh-tabs-vertical .sh-tab {
+.sh-skin .sh-tab-list .tabs-vertical .sh-tab {
   border-bottom: none;
   border-right: 2px solid transparent;
   justify-content: flex-start;
 }
 
-.sh-skin .sh-tabs-vertical .sh-tab.active {
+.sh-skin .sh-tab-list .tabs-vertical .sh-tab.active {
   border-right-color: var(--sh-primary);
   border-bottom: none;
 }
 
-.sh-skin .sh-tabs-vertical .sh-tab-content {
+.sh-skin .sh-tab-list .tabs-vertical .sh-tab-content {
   flex: 1;
   padding: 0 0 0 1.5rem;
 }

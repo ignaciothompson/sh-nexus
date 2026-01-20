@@ -1,6 +1,10 @@
 <div class="app-container">
     <ng-container>
-        <app-sidebar (openSettings)="openSettingsModal()"></app-sidebar>
+        <app-sidebar 
+            [activeRoute]="activeRoute"
+            (navigate)="onNavigate($event)"
+            (openSettings)="openSettingsModal()">
+        </app-sidebar>
         <div class="content-wrapper">
             <app-header></app-header>
             <main class="main-content">

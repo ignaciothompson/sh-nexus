@@ -157,3 +157,43 @@
 .sh-skin .sh-btn-group .sh-btn:not(:last-child) {
   border-right-color: rgba(255, 255, 255, 0.1);
 }
+
+
+/* Toggle Button Groups */
+.sh-skin .sh-btn-group-toggle {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.sh-skin .sh-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+    justify-content: center;
+}
+
+.sh-skin .sh-toggle-btn:hover {
+    background: var(--bg-light);
+    border-color: var(--primary-glow);
+    color: white;
+}
+
+.sh-skin .sh-toggle-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.sh-skin .sh-toggle-btn i {
+    font-size: 0.875rem;
+}

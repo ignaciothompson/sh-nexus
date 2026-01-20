@@ -68,44 +68,6 @@
     margin: 0;
 }
 
-.settings-nav {
-    flex: 1;
-    padding: 1rem 0.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.nav-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-    background: transparent;
-    border: none;
-    color: #9ca3af;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: left;
-    width: 100%;
-}
-
-.nav-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
-}
-
-.nav-item.active {
-    background: rgba(53, 158, 255, 0.15);
-    color: #359EFF;
-}
-
-.nav-item .material-symbols-outlined {
-    font-size: 1.25rem;
-}
-
 .settings-version {
     padding: 1rem 1.5rem;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -179,32 +141,6 @@
     color: #6b7280;
     font-size: 0.875rem;
     margin: 0;
-}
-
-.btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.625rem 1rem;
-    border-radius: 0.5rem;
-    border: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.btn-primary {
-    background: #359EFF;
-    color: white;
-}
-
-.btn-primary:hover {
-    background: #2b8ae6;
-}
-
-.btn .material-symbols-outlined {
-    font-size: 1.125rem;
 }
 
 .section-list {

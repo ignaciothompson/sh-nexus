@@ -25,10 +25,4 @@ export class ConfirmDialogComponent {
   onCancel(): void {
     this.cancel.emit();
   }
-
-  onBackdropClick(event: MouseEvent): void {
-    if (event.target === event.currentTarget) {
-      this.onCancel();
-    }
-  }
 }

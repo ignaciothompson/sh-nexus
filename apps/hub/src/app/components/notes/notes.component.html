@@ -1,0 +1,125 @@
+<div class="page-container">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="header-title">
+        <span class="material-symbols-outlined header-icon text-purple">edit_note</span>
+        <h1>Notes & Planner</h1>
+      </div>
+      <button class="sh-btn sh-btn-primary" (click)="openTextbookApp()">
+        <span class="material-symbols-outlined">open_in_new</span>
+        Open Textbook App
+      </button>
+    </div>
+  </header>
+
+  <!-- Stats Row -->
+  <section class="stats-grid">
+    <div class="sh-card stat-card">
+      <div class="stat-icon text-blue">
+        <span class="material-symbols-outlined">description</span>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{stats.totalNotes}}</h3>
+        <p class="stat-label">Total Notes</p>
+      </div>
+    </div>
+
+    <div class="sh-card stat-card">
+      <div class="stat-icon text-yellow">
+        <span class="material-symbols-outlined">star</span>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{stats.favoriteNotes}}</h3>
+        <p class="stat-label">Favorites</p>
+      </div>
+    </div>
+
+    <div class="sh-card stat-card">
+      <div class="stat-icon text-purple">
+        <span class="material-symbols-outlined">task_alt</span>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{stats.plannerItems}}</h3>
+        <p class="stat-label">Planner Items</p>
+      </div>
+    </div>
+
+    <div class="sh-card stat-card">
+      <div class="stat-icon text-green">
+        <span class="material-symbols-outlined">check_circle</span>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{stats.completedTasks}}</h3>
+        <p class="stat-label">Completed</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Access Cards -->
+  <section class="quick-access-section">
+    <div class="section-header">
+      <h2>Quick Access</h2>
+    </div>
+
+    <div class="quick-grid">
+      <div class="sh-card quick-card" (click)="openNotes()">
+        <div class="quick-icon text-blue">
+          <span class="material-symbols-outlined">sticky_note_2</span>
+        </div>
+        <h3 class="quick-title">Notes</h3>
+        <p class="quick-desc">View and manage your notes</p>
+        <span class="material-symbols-outlined quick-arrow">arrow_forward</span>
+      </div>
+
+      <div class="sh-card quick-card" (click)="openPlanner()">
+        <div class="quick-icon text-purple">
+          <span class="material-symbols-outlined">view_kanban</span>
+        </div>
+        <h3 class="quick-title">Planner</h3>
+        <p class="quick-desc">Manage tasks and projects</p>
+        <span class="material-symbols-outlined quick-arrow">arrow_forward</span>
+      </div>
+
+      <div class="sh-card quick-card" (click)="openBooks()">
+        <div class="quick-icon text-orange">
+          <span class="material-symbols-outlined">menu_book</span>
+        </div>
+        <h3 class="quick-title">Books</h3>
+        <p class="quick-desc">Access your knowledge base</p>
+        <span class="material-symbols-outlined quick-arrow">arrow_forward</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Notes -->
+  <section class="content-section">
+    <div class="section-header">
+      <h2>Recent Notes</h2>
+      <button class="sh-btn sh-btn-ghost" (click)="openNotes()">
+        View All
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </button>
+    </div>
+
+    <div class="notes-list">
+      <div *ngFor="let note of recentNotes" class="sh-card note-card" (click)="openNotes()">
+        <div class="note-header">
+          <h3 class="note-title">{{note.title}}</h3>
+          <span *ngIf="note.isFavorite" class="material-symbols-outlined note-favorite">star</span>
+        </div>
+        <p class="note-preview">{{note.preview}}</p>
+        <p class="note-meta">Updated {{note.updated | date:'MMM d, yyyy'}}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Info Notice -->
+  <div class="sh-alert sh-alert-info">
+    <span class="material-symbols-outlined">info</span>
+    <div>
+      <strong>Integrated with Textbook App</strong>
+      <p>Notes, Planner, and Books are powered by the Textbook app. Click the buttons above to access the full features in a dedicated workspace.</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,124 @@
+<div class="page-container">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="header-title">
+        <span class="material-symbols-outlined header-icon text-green">code</span>
+        <h1>Development</h1>
+      </div>
+    </div>
+  </header>
+
+  <!-- Stats Row -->
+  <section class="stats-grid">
+    <div class="sh-card stat-card">
+      <div class="stat-icon text-blue">
+        <span class="material-symbols-outlined">folder</span>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{stats.repositories}}</h3>
+        <p class="stat-label">Repositories</p>
+      </div>
+    </div>
+
+    <div class="sh-card stat-card">
+      <div class="stat-icon text-green">
+        <span class="material-symbols-outlined">construction</span>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{stats.activeProjects}}</h3>
+        <p class="stat-label">Active Projects</p>
+      </div>
+    </div>
+
+    <div class="sh-card stat-card">
+      <div class="stat-icon text-orange">
+        <span class="material-symbols-outlined">bug_report</span>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{stats.issues}}</h3>
+        <p class="stat-label">Open Issues</p>
+      </div>
+    </div>
+
+    <div class="sh-card stat-card">
+      <div class="stat-icon text-purple">
+        <span class="material-symbols-outlined">merge</span>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{stats.pullRequests}}</h3>
+        <p class="stat-label">Pull Requests</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dev Tools -->
+  <section class="content-section">
+    <div class="section-header">
+      <h2>Development Tools</h2>
+    </div>
+
+    <div class="tools-grid">
+      <div *ngFor="let tool of devTools" 
+           class="sh-card tool-card"
+           [class.clickable]="tool.url"
+           (click)="openTool(tool.url)">
+        <div class="tool-icon text-primary">
+          <span class="material-symbols-outlined">{{tool.icon}}</span>
+        </div>
+        <div class="tool-info">
+          <h3 class="tool-name">{{tool.name}}</h3>
+          <p class="tool-desc">{{tool.description}}</p>
+        </div>
+        <span *ngIf="tool.url" class="material-symbols-outlined tool-arrow">arrow_forward</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Repositories -->
+  <section class="content-section">
+    <div class="section-header">
+      <h2>Recent Repositories</h2>
+      <button class="sh-btn sh-btn-ghost">
+        View All
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </button>
+    </div>
+
+    <div class="repos-list">
+      <div *ngFor="let repo of recentRepos" class="sh-card repo-card">
+        <div class="repo-header">
+          <span class="material-symbols-outlined repo-icon">folder</span>
+          <h3 class="repo-name">{{repo.name}}</h3>
+        </div>
+        <p class="repo-desc">{{repo.description}}</p>
+        <div class="repo-meta">
+          <span class="repo-language">
+            <span class="language-dot" [style.background-color]="getLanguageColor(repo.language)"></span>
+            {{repo.language}}
+          </span>
+          <span class="repo-stars">
+            <span class="material-symbols-outlined">star</span>
+            {{repo.stars}}
+          </span>
+          <span class="repo-updated">Updated {{repo.updated | date:'MMM d'}}</span>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="recentRepos.length === 0" class="sh-card empty-state">
+        <span class="material-symbols-outlined">folder_off</span>
+        <p>No repositories found</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coming Soon Notice -->
+  <div class="sh-alert sh-alert-info">
+    <span class="material-symbols-outlined">info</span>
+    <div>
+      <strong>Development Tools Integration Coming Soon</strong>
+      <p>Full integration with GitHub, GitLab, CI/CD pipelines, and container management will be available in a future update. This will include repository browsing, issue tracking, and deployment monitoring.</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,103 @@
+<div class="page-container">
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="header-content">
+      <div class="header-title">
+        <span class="material-symbols-outlined header-icon text-orange">router</span>
+        <h1>Network Overview</h1>
+      </div>
+      <button class="sh-btn sh-btn-primary" (click)="refreshDevices()">
+        <span class="material-symbols-outlined">refresh</span>
+        Refresh
+      </button>
+    </div>
+  </header>
+
+  <!-- Stats Row -->
+  <section class="stats-grid">
+    <div class="sh-card stat-card">
+      <div class="stat-icon text-blue">
+        <span class="material-symbols-outlined">devices</span>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{stats.totalDevices}}</h3>
+        <p class="stat-label">Total Devices</p>
+      </div>
+    </div>
+
+    <div class="sh-card stat-card">
+      <div class="stat-icon text-green">
+        <span class="material-symbols-outlined">check_circle</span>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{stats.onlineDevices}}</h3>
+        <p class="stat-label">Online</p>
+      </div>
+    </div>
+
+    <div class="sh-card stat-card">
+      <div class="stat-icon text-purple">
+        <span class="material-symbols-outlined">speed</span>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{stats.bandwidth}}</h3>
+        <p class="stat-label">Bandwidth</p>
+      </div>
+    </div>
+
+    <div class="sh-card stat-card">
+      <div class="stat-icon text-yellow">
+        <span class="material-symbols-outlined">signal_cellular_alt</span>
+      </div>
+      <div class="stat-content">
+        <h3 class="stat-value">{{stats.latency}}</h3>
+        <p class="stat-label">Latency</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Devices List -->
+  <section class="content-section">
+    <div class="section-header">
+      <h2>Connected Devices</h2>
+      <span class="sh-badge sh-badge-primary">{{devices.length}} devices</span>
+    </div>
+
+    <div class="devices-grid">
+      <div *ngFor="let device of devices" class="sh-card device-card">
+        <div class="device-header">
+          <span class="material-symbols-outlined device-icon" 
+                [class.text-green]="device.status === 'online'"
+                [class.text-gray]="device.status === 'offline'">
+            {{getDeviceIcon(device.type)}}
+          </span>
+          <span class="sh-status-dot" 
+                [class.online]="device.status === 'online'"
+                [class.offline]="device.status === 'offline'">
+            {{device.status}}
+          </span>
+        </div>
+        <div class="device-info">
+          <h3 class="device-name">{{device.name}}</h3>
+          <p class="device-detail">IP: {{device.ip}}</p>
+          <p class="device-detail">MAC: {{device.mac}}</p>
+        </div>
+      </div>
+
+      <!-- Placeholder -->
+      <div *ngIf="devices.length === 0" class="sh-card empty-state">
+        <span class="material-symbols-outlined">wifi_off</span>
+        <p>No devices detected</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coming Soon Notice -->
+  <div class="sh-alert sh-alert-info">
+    <span class="material-symbols-outlined">info</span>
+    <div>
+      <strong>Network Monitoring Coming Soon</strong>
+      <p>Real-time device scanning, bandwidth monitoring, and network topology visualization will be available in a future update.</p>
+    </div>
+  </div>
+</div>

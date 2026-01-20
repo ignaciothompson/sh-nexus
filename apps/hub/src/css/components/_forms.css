@@ -2,6 +2,15 @@
    SH-SKIN FORMS
    Form controls and inputs
    ================================ */
+/* Input Label */
+.sh-skin .sh-label {
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: var(--sh-text);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
 
 /* Input Base */
 .sh-skin .sh-input {

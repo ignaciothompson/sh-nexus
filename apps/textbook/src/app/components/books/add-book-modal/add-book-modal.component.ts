@@ -149,16 +149,8 @@ export class AddBookModalComponent implements OnInit {
         icon: this.selectedIcon,
         iconColor: this.selectedColor
       });
-      // Reset after a short delay
-      setTimeout(() => {
-        this.isSaving = false;
-      }, 1000);
-    }
-  }
-
-  onBackdropClick(event: MouseEvent): void {
-    if (event.target === event.currentTarget) {
-      this.onClose();
+      // Don't auto-reset - let parent handle closing
+      // The parent will close the modal which will destroy this component
     }
   }
 }
