@@ -1,19 +1,19 @@
-<div class="modal-overlay">
-    <div class="modal-container" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-            <h2 class="modal-title">{{ modalTitle }}</h2>
-            <button class="btn-close" (click)="onClose()">
+<div class="sh-modal-overlay">
+    <div class="sh-modal">
+        <div class="sh-modal-header">
+            <h2 class="sh-modal-title">{{ modalTitle }}</h2>
+            <button class="sh-modal-close" (click)="onClose()">
                 <span class="material-symbols-outlined">close</span>
             </button>
         </div>
 
-        <div class="modal-body">
+        <div class="sh-modal-body">
             <!-- Title Input -->
             <div class="form-group">
-                <label class="form-label">Book Title</label>
+                <label class="sh-label">Book Title</label>
                 <input 
                     type="text" 
-                    class="form-input"
+                    class="sh-input"
                     placeholder="Enter book title..."
                     [(ngModel)]="title"
                     autofocus />
@@ -21,10 +21,10 @@
 
             <!-- Icon Selection -->
             <div class="form-group">
-                <label class="form-label">Select Icon</label>
+                <label class="sh-label">Select Icon</label>
                 <input 
                     type="text" 
-                    class="search-input"
+                    class="sh-input"
                     placeholder="Search icons..."
                     [(ngModel)]="iconSearchQuery" />
                 <div class="icon-grid">
@@ -42,10 +42,10 @@
 
             <!-- Color Selection -->
             <div class="form-group">
-                <label class="form-label">Select Color</label>
+                <label class="sh-label">Select Color</label>
                 <input 
                     type="text" 
-                    class="search-input"
+                    class="sh-input mb-2"
                     placeholder="Search colors..."
                     [(ngModel)]="colorSearchQuery" />
                 <div class="color-grid">
@@ -63,7 +63,7 @@
 
             <!-- Preview -->
             <div class="preview-section">
-                <label class="form-label">Preview</label>
+                <label class="sh-label">Preview</label>
                 <div class="preview-book">
                     <span class="material-symbols-outlined preview-icon" [ngClass]="selectedColor">
                         {{ selectedIcon }}
@@ -73,12 +73,12 @@
             </div>
         </div>
 
-        <div class="modal-footer">
-            <button class="btn-cancel" (click)="onClose()">Cancel</button>
+        <div class="sh-modal-footer">
+            <button class="sh-btn sh-btn-secondary" (click)="$event.stopPropagation(); onClose()">Cancel</button>
             <button 
-                class="btn-save" 
+                class="sh-btn sh-btn-primary" 
                 [disabled]="!title.trim() || isSaving"
-                (click)="onSave()">
+                (click)="$event.stopPropagation(); onSave()">
                 {{ isSaving ? 'Saving...' : saveButtonText }}
             </button>
         </div>

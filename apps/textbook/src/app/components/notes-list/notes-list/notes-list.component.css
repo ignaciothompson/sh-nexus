@@ -5,17 +5,14 @@
 :host {
   display: block;
   min-height: 100vh;
-  background: #0f0f0f;
-  --bg-dark: #0f0f0f;
-  --text: #f2f2f2;
-  --border-subtle: rgba(255, 255, 255, 0.08);
+  background: var(--sh-bg-base);
 }
 
 /* Notes Container */
 .notes-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 var(--space-6) var(--space-8);
+  padding: 0 var(--sh-space-6) var(--sh-space-8);
   min-height: 100vh; 
 }
 
@@ -30,8 +27,8 @@
 .take-note-bar {
   width: 100%;
   max-width: 600px;
-  background: #1a1a1a;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--sh-bg-card);
+  border: 1px solid var(--sh-border-default);
   border-radius: 8px;
   padding: 10px 16px;
   display: flex;
@@ -43,8 +40,8 @@
 }
 
 .take-note-bar:hover {
-  background: #1e1e1e;
-  border-color: rgba(255, 255, 255, 0.15);
+  background: var(--sh-bg-card-hover);
+  border-color: var(--sh-border-default);
   box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.4);
 }
 
@@ -87,8 +84,8 @@
 .note-card {
   break-inside: avoid;
   margin-bottom: 16px;
-  background: #161616;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--sh-bg-card);
+  border: 1px solid var(--sh-border-default);
   border-radius: 8px;
   padding: 16px;
   cursor: pointer;
@@ -100,14 +97,14 @@
 }
 
 .note-card:hover {
-  background: #1a1a1a;
-  border-color: rgba(255, 255, 255, 0.12);
+  background: var(--sh-bg-card-hover);
+  border-color: var(--sh-border-default);
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 .note-card:hover {
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--sh-border-hover);
   box-shadow: 0 4px 6px rgba(0,0,0,0.3);
   transform: translateY(-2px);
 }
@@ -121,21 +118,21 @@
   margin: -16px -16px 0 -16px;
   max-height: 250px;
   object-fit: cover;
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--sh-border-default);
   display: block;
 }
 
 .note-title {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--sh-text-primary);
   margin: 0;
   line-height: 1.4;
 }
 
 .note-preview {
   font-size: 0.875rem;
-  color: #d4d4d8; /* Very Light Gray */
+  color: var(--sh-text-primary); /* Very Light Gray */
   line-height: 1.5;
   margin: 0;
   white-space: pre-wrap; /* Preserve formatting */
@@ -157,7 +154,7 @@
 .label-chip {
   background: rgba(255, 255, 255, 0.05); /* Very subtle fill */
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-secondary);
+  color: var(--sh-text-secondary);
   font-size: 0.7rem;
   padding: 2px 8px;
   border-radius: 12px; /* Pill shape */
@@ -183,21 +180,21 @@
   border-radius: 50%;
   border: none;
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--sh-text-secondary);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .btn-icon:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-primary);
+  background: var(--sh-border-default);
+  color: var(--sh-text-primary);
 }
 
 .pin-btn.active {
-    color: var(--text-primary);
+    color: var(--sh-text-primary);
     fill: currentColor;
     /* Optional: Glow for pin? kept simple for black theme */
-    background: rgba(255, 255, 255, 0.1); 
+    background: var(--sh-border-default); 
 }
 
 /* ================================
@@ -207,7 +204,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: var(--sh-bg-card);
   backdrop-filter: blur(8px);
   z-index: 1000;
   display: flex;

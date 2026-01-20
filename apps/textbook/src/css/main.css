@@ -7,13 +7,13 @@
 @import './components/_variables.css';
 
 /* Components */
+@import './components/_alerts.css';
 @import './components/_buttons.css';
 @import './components/_containers.css';
+@import './components/_forms.css';
+@import './components/_labels.css';
 @import './components/_modals.css';
 @import './components/_tabs.css';
-@import './components/_alerts.css';
-@import './components/_labels.css';
-@import './components/_forms.css';
 
 /* ================================
    HOW TO USE

@@ -1,17 +1,17 @@
-<div class="modal-overlay">
-    <div class="modal-container" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-            <h2 class="modal-title">New Page</h2>
-            <button class="btn-close" (click)="onClose()">
+<div class="sh-modal-overlay">
+    <div class="sh-modal">
+        <div class="sh-modal-header">
+            <h2 class="sh-modal-title">New Page</h2>
+            <button class="sh-modal-close" (click)="onClose()">
                 <span class="material-symbols-outlined">close</span>
             </button>
         </div>
 
-        <div class="modal-body">
+        <div class="sh-modal-body">
             <!-- Book Selection -->
             <div class="form-group">
-                <label class="form-label">Select Book</label>
-                <select class="form-select" [(ngModel)]="bookId">
+                <label class="sh-label">Select Book</label>
+                <select class="sh-select" [(ngModel)]="bookId">
                     <option value="">Choose a book...</option>
                     <option *ngFor="let book of books" [value]="book.id">
                         {{ book.title }}
@@ -21,10 +21,10 @@
 
             <!-- Page Title -->
             <div class="form-group">
-                <label class="form-label">Page Title</label>
+                <label class="sh-label">Page Title</label>
                 <input 
                     type="text" 
-                    class="form-input"
+                    class="sh-input"
                     placeholder="Enter page title..."
                     [(ngModel)]="title"
                     autofocus />
@@ -32,7 +32,7 @@
 
             <!-- Icon Selection -->
             <div class="form-group">
-                <label class="form-label">Select Icon</label>
+                <label class="sh-label">Select Icon</label>
                 <div class="icon-grid">
                     <button
                         *ngFor="let iconOption of iconOptions"
@@ -48,7 +48,7 @@
 
             <!-- Preview -->
             <div class="preview-section">
-                <label class="form-label">Preview</label>
+                <label class="sh-label">Preview</label>
                 <div class="preview-page">
                     <span class="material-symbols-outlined preview-icon text-accent">
                         {{ selectedIcon }}
@@ -58,12 +58,12 @@
             </div>
         </div>
 
-        <div class="modal-footer">
-            <button class="btn-cancel" (click)="onClose()">Cancel</button>
+        <div class="sh-modal-footer">
+            <button class="sh-btn sh-btn-secondary" (click)="$event.stopPropagation(); onClose()">Cancel</button>
             <button 
-                class="btn-save" 
+                class="sh-btn sh-btn-primary" 
                 [disabled]="!title.trim() || !bookId"
-                (click)="onSave()">
+                (click)="$event.stopPropagation(); onSave()">
                 Create Page
             </button>
         </div>

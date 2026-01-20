@@ -5,10 +5,11 @@
 
 .sh-skin {
         /* Background Colors */
-        --sh-bg-base: #000000;          /* Pitch Black */
+        --sh-bg-base: #0f0f0f;          /* Pitch Black */
         --sh-bg-elevated: #09090b;       /* Very dark gray for sidebars */
         --sh-bg-card: #121212;          /* Standard Material Dark card */
         --sh-bg-card-hover: #1e1e1e;    /* Slightly lighter on hover */
+        --sh-bg-modal: #1c1c1e;          /* Standard Material Dark card */
       
         /* Accent Colors */
         --sh-primary: #9c33ff;           /* Vivid Purple */

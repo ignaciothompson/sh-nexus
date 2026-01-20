@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { PlannerSidebarComponent } from './planner-sidebar/planner-sidebar.component';
-import { TaskBoardComponent } from './task-board.component';
+import { PlannerSidebarComponent } from '../planner-sidebar/planner-sidebar.component';
+import { TaskBoardComponent } from '../task-board/task-board.component';
 
 @Component({
   selector: 'app-planner-shell',

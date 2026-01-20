@@ -1,15 +1,14 @@
 <div class="planner-header">
     <div class="header-center">
         <div class="search-wrapper">
-            <span class="material-symbols-outlined search-icon">search</span>
             <input 
                 type="text" 
-                class="search-input" 
+                class="sh-input" 
                 placeholder="Search cards..."
                 [(ngModel)]="searchQuery"
                 (input)="onSearchChange()">
             <button *ngIf="searchQuery" 
-                    class="btn-clear-search" 
+                    class="sh-btn sh-btn-secondary" 
                     (click)="clearSearch()">
                 <span class="material-symbols-outlined">close</span>
             </button>
@@ -18,7 +17,7 @@
 
     <div class="header-right">
         <div class="filter-container">
-            <button class="btn-filter" (click)="toggleFilterMenu()">
+            <button class="sh-btn sh-btn-secondary" (click)="toggleFilterMenu()">
                 <span class="material-symbols-outlined">filter_list</span>
                 <span>Filter</span>
             </button>
@@ -49,7 +48,7 @@
             </div>
         </div>
 
-        <button class="btn-new-card" (click)="onNewCard()">
+        <button class="sh-btn sh-btn-primary" (click)="onNewCard()">
             <span class="material-symbols-outlined">add</span>
             New Card
         </button>

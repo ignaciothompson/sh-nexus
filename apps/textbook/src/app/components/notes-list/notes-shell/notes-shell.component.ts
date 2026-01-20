@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { NotesSidebarComponent } from './notes-sidebar/notes-sidebar.component';
-import { NotesListComponent } from './notes-list.component';
+import { NotesSidebarComponent } from '../notes-sidebar/notes-sidebar.component';
+import { NotesListComponent } from '../notes-list/notes-list.component';
 
 @Component({
   selector: 'app-notes-shell',

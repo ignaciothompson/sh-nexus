@@ -2,32 +2,48 @@
    SH-SKIN FORMS
    Form controls and inputs
    ================================ */
-
-/* Input Base */
-.sh-skin .sh-input {
-  width: 100%;
-  padding: 0.625rem 0.875rem;
-  font-family: var(--sh-font);
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: var(--sh-text);
-  background: var(--sh-bg-surface);
-  border: 1px solid var(--sh-border);
-  border-radius: var(--sh-radius-md);
-  transition: all var(--sh-transition-normal);
+/* Input Label */
+.sh-skin .sh-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #d1d5db;
+    margin-bottom: 0.5rem;
 }
 
-.sh-skin .sh-input::placeholder {
+
+/* Input Base */
+.sh-skin .sh-input,
+.sh-skin .sh-select,
+.sh-skin .sh-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0.5rem;
+    color: white;
+    font-size: 0.875rem;
+    outline: none;
+    transition: all 0.2s;
+    margin-bottom: 1rem;
+}
+
+.sh-skin .sh-input::placeholder,
+.sh-skin .sh-select::placeholder,
+.sh-skin .sh-textarea::placeholder {
   color: var(--sh-text-muted);
 }
 
-.sh-skin .sh-input:focus {
-  outline: none;
-  border-color: var(--sh-primary);
-  box-shadow: 0 0 0 3px var(--sh-primary-light);
+.sh-skin .sh-input:focus,
+.sh-skin .sh-select:focus,
+.sh-skin .sh-textarea:focus {
+    border-color: var(--sh-color-accent);
+    background: rgba(156, 51, 255, 0.05);
 }
 
-.sh-skin .sh-input:disabled {
+.sh-skin .sh-input:disabled,
+.sh-skin .sh-select:disabled,
+.sh-skin .sh-textarea:disabled {
   background: var(--sh-bg-elevated);
   color: var(--sh-text-disabled);
   cursor: not-allowed;

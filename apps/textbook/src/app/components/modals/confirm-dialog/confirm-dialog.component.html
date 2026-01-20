@@ -1,0 +1,24 @@
+<div class="sh-modal-overlay">
+    <div class="sh-modal" (click)="$event.stopPropagation()">
+        <div class="sh-modal-header">
+            <span class="sh-modal-icon" [class.danger]="isDanger">
+                <span class="material-symbols-outlined">{{ isDanger ? 'warning' : 'info' }}</span>
+            </span>
+        </div>
+        <div class="sh-modal-body">
+            <h2 class="sh-modal-title">{{ title }}</h2>
+            <p class="sh-modal-message">{{ message }}</p>
+        </div>
+        <div class="sh-modal-footer">
+            <button class="sh-btn sh-btn-secondary" (click)="onCancel()">
+                {{ cancelText }}
+            </button>
+            <button 
+                class="sh-btn sh-btn-primary" 
+                [class.danger]="isDanger"
+                (click)="onConfirm()">
+                {{ confirmText }}
+            </button>
+        </div>
+    </div>
+</div>

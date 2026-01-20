@@ -91,11 +91,14 @@ export class EditorComponent implements OnInit, OnDestroy {
     // Auto-save with debounce
     this.subscription.add(
       this.contentChangeSubject.pipe(
-        debounceTime(1000),
+        debounceTime(2000), // Increased debounce to 2 seconds for better performance
         distinctUntilChanged()
       ).subscribe((content) => {
-        if (this.currentPage && content !== this.currentPage.content) {
-          this.savePageContent(content);
+        if (this.currentPage) {
+          // Only save if content has actually changed from what's in the database
+          if (content !== this.currentPage.content) {
+            this.savePageContent(content);
+          }
         }
       })
     );
@@ -149,7 +152,9 @@ export class EditorComponent implements OnInit, OnDestroy {
 
     try {
       await this.booksService.updatePage(this.currentPage.id, { content });
-      console.log('Page content saved');
+      // Update the current page content to prevent re-saving the same content
+      this.currentPage.content = content;
+      console.log('Page content auto-saved');
     } catch (error) {
       console.error('Error saving page:', error);
     }

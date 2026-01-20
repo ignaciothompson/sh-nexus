@@ -17,8 +17,8 @@ export class BooksService {
   public currentPage$ = this.currentPageSubject.asObservable();
 
   constructor(private pb: PocketbaseService) {
-    // Auto-load books on initialization
-    this.loadBooks();
+    // Don't auto-load books on initialization
+    // Let components control when to load data
   }
 
   /**
@@ -27,9 +27,10 @@ export class BooksService {
   async loadBooks(): Promise<void> {
     try {
       const books = await this.pb.client.collection('books').getFullList<Book>({
-        sort: '-created' // Sort by newest first, change to 'created' for oldest first
+        sort: '-created', // Sort by newest first, change to 'created' for oldest first
         // Note: Can't expand pages here since it's a reverse relation
         // Pages will be loaded separately per book
+        requestKey: 'load_books' // Prevent auto-cancellation
       });
       this.booksSubject.next(books);
     } catch (error) {

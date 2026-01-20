@@ -1,10 +1,10 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PlannerService } from '../../services/planner.service';
-import { PlannerItem } from '../../models/types';
-import { PlannerHeaderComponent } from './planner-header/planner-header.component';
-import { CardModalComponent } from './card-modal/card-modal.component';
+import { PlannerService } from '../../../services/planner.service';
+import { PlannerItem } from '../../../models/types';
+import { PlannerHeaderComponent } from '../planner-header/planner-header.component';
+import { CardModalComponent } from '../../modals/card-modal/card-modal.component';
 
 interface Column {
   id: PlannerItem['status'];
@@ -41,7 +41,7 @@ export class TaskBoardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.plannerService.items$.subscribe(items => {
+    this.plannerService.items$.subscribe((items: PlannerItem[]) => {
       this.distributeTasksToColumns(items);
       this.cdr.detectChanges();
     });
@@ -56,7 +56,7 @@ export class TaskBoardComponent implements OnInit {
           const query = this.searchQuery.toLowerCase();
           return task.title.toLowerCase().includes(query) ||
                  task.description?.toLowerCase().includes(query) ||
-                 task.tags?.some(tag => tag.toLowerCase().includes(query));
+                 task.tags?.some((tag: string) => tag.toLowerCase().includes(query));
         })
         .sort((a, b) => a.order - b.order);
     });
@@ -64,7 +64,7 @@ export class TaskBoardComponent implements OnInit {
 
   onSearch(query: string): void {
     this.searchQuery = query;
-    this.plannerService.items$.subscribe(items => {
+    this.plannerService.items$.subscribe((items: PlannerItem[]) => {
       this.distributeTasksToColumns(items);
     });
   }
@@ -172,12 +172,12 @@ export class TaskBoardComponent implements OnInit {
 
   getTodoCompletedCount(card: PlannerItem): number {
     if (!card.todo_items) return 0;
-    return card.todo_items.filter(item => item.completed).length;
+    return card.todo_items.filter((item: any) => item.completed).length;
   }
 
   getTodoProgress(card: PlannerItem): number {
     if (!card.todo_items || card.todo_items.length === 0) return 0;
-    const completed = card.todo_items.filter(item => item.completed).length;
+    const completed = card.todo_items.filter((item: any) => item.completed).length;
     return Math.round((completed / card.todo_items.length) * 100);
   }
 }

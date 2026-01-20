@@ -3,13 +3,13 @@
     flex-direction: column;
     height: 100%;
     position: relative;
-    color: var(--text-primary);
+    color: var(--sh-text-primary);
 }
 
 /* Header Styles */
 .editor-header {
     height: 3.5rem;
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--sh-border-default);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -72,12 +72,12 @@
 }
 
 .bg-gray-400 { background-color: #9ca3af; }
-.bg-accent { background-color: var(--color-accent); }
+.bg-accent { background-color: var(--sh-color-accent); }
 
 .divider-vertical {
     width: 1px;
     height: 1rem;
-    background: var(--border-subtle);
+    background: var(--sh-border-default);
     margin: 0 0.5rem;
 }
 
@@ -103,11 +103,11 @@
 
 .btn-icon-header .material-symbols-outlined.icon-filled {
     font-variation-settings: 'FILL' 1;
-    color: var(--color-accent);
+    color: var(--sh-color-accent);
 }
 
 .btn-publish {
-    background: var(--color-accent);
+    background: var(--sh-color-accent);
     color: white;
     font-size: 0.75rem;
     padding: 0.375rem 0.75rem;
@@ -174,7 +174,7 @@
     transform: translateX(-50%);
     z-index: 30;
     background: #161616;
-    border: 1px solid var(--border-subtle);
+    border: 1px solid var(--sh-border-default);
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
     border-radius: 0.75rem;
     padding: 0.5rem;
@@ -217,7 +217,7 @@
 
 .toolbar-btn:hover {
     background: rgba(255, 255, 255, 0.05);
-    color: var(--color-accent);
+    color: var(--sh-color-accent);
 }
 
 .toolbar-btn.active {
@@ -255,7 +255,7 @@
     width: 100%;
     border-radius: 1rem;
     background: linear-gradient(to bottom right, rgba(156, 51, 255, 0.2), rgba(168, 85, 247, 0.1));
-    border: 1px solid var(--border-subtle);
+    border: 1px solid var(--sh-border-default);
     margin-bottom: 3rem;
     position: relative;
     overflow: hidden;
@@ -346,7 +346,7 @@
 
 .tag {
     background: rgba(156, 51, 255, 0.1);
-    color: var(--color-accent);
+    color: var(--sh-color-accent);
     padding: 0.125rem 0.5rem;
     border-radius: 0.25rem;
     border: 1px solid rgba(156, 51, 255, 0.2);
@@ -442,7 +442,7 @@
 
 ::ng-deep .tiptap-wrapper .ProseMirror code {
     background: rgba(156, 51, 255, 0.1);
-    color: var(--color-accent);
+    color: var(--sh-color-accent);
     padding: 0.125rem 0.375rem;
     border-radius: 0.25rem;
     font-family: 'Courier New', monospace;
@@ -451,7 +451,7 @@
 
 ::ng-deep .tiptap-wrapper .ProseMirror pre {
     background: #0a0a0a;
-    border: 1px solid var(--border-subtle);
+    border: 1px solid var(--sh-border-default);
     border-radius: 0.5rem;
     padding: 1rem;
     overflow-x: auto;
@@ -477,7 +477,7 @@
 }
 
 ::ng-deep .tiptap-wrapper .ProseMirror blockquote {
-    border-left: 3px solid var(--color-accent);
+    border-left: 3px solid var(--sh-color-accent);
     padding-left: 1rem;
     margin: 1rem 0;
     color: #9ca3af;
@@ -486,7 +486,7 @@
 
 ::ng-deep .tiptap-wrapper .ProseMirror hr {
     border: none;
-    border-top: 1px solid var(--border-subtle);
+    border-top: 1px solid var(--sh-border-default);
     margin: 2rem 0;
 }
 

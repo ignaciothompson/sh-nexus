@@ -149,8 +149,10 @@ export class AddBookModalComponent implements OnInit {
         icon: this.selectedIcon,
         iconColor: this.selectedColor
       });
-      // Don't auto-reset - let parent handle closing
-      // The parent will close the modal which will destroy this component
+      // Reset isSaving flag after a short delay to allow parent to close modal
+      setTimeout(() => {
+        this.isSaving = false;
+      }, 500);
     }
   }
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AddBookModalComponent, NewBookData } from '../add-book-modal/add-book-modal.component';
-import { AddPageModalComponent, NewPageData } from '../add-page-modal/add-page-modal.component';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { AddBookModalComponent, NewBookData } from '../../modals/add-book-modal/add-book-modal.component';
+import { AddPageModalComponent, NewPageData } from '../../modals/add-page-modal/add-page-modal.component';
+import { ConfirmDialogComponent } from '../../modals/confirm-dialog/confirm-dialog.component';
 import { BooksService } from '../../../services/books.service';
 import { Book, Page } from '../../../models/types';
 import { Subscription } from 'rxjs';
@@ -46,6 +46,9 @@ export class BookSidebarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // Load books explicitly on initialization
+    this.booksService.loadBooks();
+    
     // Subscribe to books from service
     this.subscription.add(
       this.booksService.books$.subscribe((books) => {
@@ -104,8 +107,8 @@ export class BookSidebarComponent implements OnInit, OnDestroy {
     
     book.expanded = !book.expanded;
     
-    // Lazy load pages when expanding for the first time
-    if (book.expanded && !book.pagesLoaded) {
+    // Load pages when expanding (always reload to ensure fresh data)
+    if (book.expanded) {
       try {
         const pages = await this.booksService.getBookPages(book.id);
         book.pages = pages;

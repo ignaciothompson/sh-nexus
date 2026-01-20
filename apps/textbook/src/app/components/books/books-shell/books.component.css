@@ -15,7 +15,7 @@
 .book-sidebar {
     width: 300px;
     flex-shrink: 0;
-    border-right: 1px solid var(--border-subtle);
+    border-right: 1px solid var(--sh-border-default);
     background: #121212; /* surface-darker */
     overflow: hidden;
 }
@@ -32,7 +32,7 @@
 .toc-sidebar {
     width: 280px;
     flex-shrink: 0;
-    border-left: 1px solid var(--border-subtle);
+    border-left: 1px solid var(--sh-border-default);
     background: #161616; /* surface-dark */
     overflow: hidden;
 }

@@ -13,11 +13,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--space-4) 0;
+  padding: var(--sh-space-4) 0;
 }
 
 .logo-area {
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--sh-space-6);
   height: 48px;
   display: flex;
   align-items: center;
@@ -27,8 +27,8 @@
 .logo-icon {
   width: 40px;
   height: 40px;
-  background: var(--primary);
-  border-radius: var(--radius-md);
+  background: var(--sh-primary);
+  border-radius: var(--sh-radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,7 +38,7 @@
 .nav-group {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--sh-space-4);
   width: 100%;
   align-items: center;
 }
@@ -49,8 +49,8 @@
   justify-content: center;
   width: 48px;
   height: 48px;
-  border-radius: var(--radius-md); /* Rounded square look */
-  color: var(--text-muted);
+  border-radius: var(--sh-radius-md); /* Rounded square look */
+  color: var(--sh-text-muted);
   text-decoration: none;
   transition: all 0.2s;
   border: none;
@@ -60,13 +60,13 @@
 
 .nav-item:hover {
   background: rgba(255, 255, 255, 0.05);
-  color: var(--text-primary);
+  color: var(--sh-text-primary);
 }
 
 .nav-item.active {
-  background: var(--primary-light);
-  color: var(--primary);
-  box-shadow: 0 0 0 1px var(--primary-glow);
+  background: var(--sh-primary-light);
+  color: var(--sh-primary);
+  box-shadow: 0 0 0 1px var(--sh-primary-glow);
 }
 
 .spacer {
