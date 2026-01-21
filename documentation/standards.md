@@ -97,18 +97,111 @@ Each app customizes the color palette by overriding these variables:
 <div class="sh-elevated">Elevated panel with shadow</div>
 ```
 
-**Modals:**
+**Modals (CDK Dialog):**
+
+Modals use **Angular CDK Dialog** (`@angular/cdk/dialog`) with a custom `DialogService` wrapper.
+
+**Installation:**
+```bash
+npm install @angular/cdk
+```
+
+**DialogService** ([hub example](file:///c:/sh-nexus/apps/hub/src/app/services/dialog.service.ts)):
+```typescript
+import { Injectable, Type } from '@angular/core';
+import { Dialog, DialogRef, DialogConfig } from '@angular/cdk/dialog';
+
+export type DialogSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
+
+export interface DialogOptions<D = unknown> {
+  data?: D;
+  size?: DialogSize;
+  config?: Partial<DialogConfig<D>>;
+}
+
+@Injectable({ providedIn: 'root' })
+export class DialogService {
+  constructor(private dialog: Dialog) {}
+
+  open<R = unknown, D = unknown, C = unknown>(
+    component: Type<C>,
+    options?: DialogOptions<D> | D
+  ): DialogRef<R, C> {
+    // ... see full implementation in dialog.service.ts
+  }
+}
+```
+
+**Opening a Modal:**
+```typescript
+// With size and data
+this.dialogService.open<ResultType, DataType, ModalComponent>(
+  MyModalComponent,
+  { 
+    data: { item: this.selectedItem },
+    size: 'lg'  // 'sm' | 'md' | 'lg' | 'xl' | 'full'
+  }
+);
+
+// Legacy format (data only, defaults to 'md')
+this.dialogService.open(MyModalComponent, { item: this.selectedItem });
+```
+
+**Modal Component Structure:**
+
+Modal components use `DIALOG_DATA` injection and `DialogRef` for communication:
+
+```typescript
+import { Component, inject } from '@angular/core';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
+
+export interface MyDialogData { /* ... */ }
+export interface MyDialogResult { /* ... */ }
+
+@Component({ /* ... */ })
+export class MyModalComponent {
+  private dialogRef = inject(DialogRef<MyDialogResult>);
+  private data = inject<MyDialogData>(DIALOG_DATA);
+
+  close() {
+    this.dialogRef.close();
+  }
+
+  save() {
+    this.dialogRef.close({ action: 'save', item: this.editedItem });
+  }
+}
+```
+
+**Modal HTML Template (no wrapper div needed):**
 ```html
-<div class="sh-modal-overlay">
-  <div class="sh-modal sh-modal-lg">
-    <div class="sh-modal-header">
-      <h2 class="sh-modal-title">Title</h2>
-      <button class="sh-modal-close">×</button>
-    </div>
-    <div class="sh-modal-body">Content</div>
-    <div class="sh-modal-footer">Actions</div>
-  </div>
+<div class="sh-modal-header">
+  <h2 class="sh-modal-title">Title</h2>
+  <button class="sh-modal-close" (click)="close()">
+    <span class="material-symbols-outlined">close</span>
+  </button>
 </div>
+<div class="sh-modal-body">Content</div>
+<div class="sh-modal-footer">
+  <button class="sh-btn sh-btn-secondary" (click)="close()">Cancel</button>
+  <button class="sh-btn sh-btn-primary" (click)="save()">Save</button>
+</div>
+```
+
+**Size Classes (defined in `_modals.css`):**
+| Class | Width |
+|-------|-------|
+| `.sh-modal-sm` | 300px |
+| `.sh-modal-md` | 500px (default) |
+| `.sh-modal-lg` | 700px |
+| `.sh-modal-xl` | 900px |
+| `.sh-modal-full` | 100vw - 2rem |
+
+**CDK Overlay Styles (add to `_modals.css`):**
+```css
+.cdk-overlay-container { z-index: 1000; }
+.cdk-overlay-backdrop { background: rgba(0, 0, 0, 0.6); }
+.cdk-overlay-dark-backdrop { background: rgba(0, 0, 0, 0.8); }
 ```
 
 **Forms:**
