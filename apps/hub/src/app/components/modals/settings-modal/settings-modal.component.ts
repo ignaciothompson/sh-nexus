@@ -1,9 +1,20 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { SectionsService } from '../../../services/sections.service';
 import { Section } from '../../../models/types';
 import { ToastrService } from 'ngx-toastr';
+
+/** Data passed to the SettingsModal dialog */
+export interface SettingsDialogData {
+  sections: Section[];
+}
+
+/** Result returned when the dialog closes */
+export interface SettingsDialogResult {
+  sectionsUpdated: boolean;
+}
 
 @Component({
   selector: 'app-settings-modal',
@@ -13,9 +24,10 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./settings-modal.component.css']
 })
 export class SettingsModalComponent {
-  @Input() sections: Section[] = [];
-  @Output() close = new EventEmitter<void>();
-  @Output() sectionsUpdated = new EventEmitter<void>();
+  private dialogRef = inject(DialogRef<SettingsDialogResult>);
+  private data = inject<SettingsDialogData>(DIALOG_DATA);
+
+  sections: Section[] = [];
 
   // Tab state
   activeTab: 'sections' | 'appearance' | 'about' = 'sections';
@@ -30,7 +42,12 @@ export class SettingsModalComponent {
   inputModalValue = '';
   inputModalCallback: ((value: string) => void) | null = null;
 
-  constructor(private sectionsService: SectionsService, private toastr: ToastrService) {}
+  private sectionsUpdated = false;
+
+  constructor(private sectionsService: SectionsService, private toastr: ToastrService) {
+    // Initialize from dialog data
+    this.sections = [...this.data.sections];
+  }
 
   setTab(tab: 'sections' | 'appearance' | 'about') {
     this.activeTab = tab;
@@ -41,7 +58,7 @@ export class SettingsModalComponent {
         sec.order = index;
         if (sec.id) this.sectionsService.update(sec.id, sec).subscribe();
     });
-    this.sectionsUpdated.emit();
+    this.sectionsUpdated = true;
   }
 
   // --- INPUT MODAL ---
@@ -68,9 +85,10 @@ export class SettingsModalComponent {
   addSection() {
     this.openInputModal('New Section Title', '', (title) => {
       const newSec: Section = { title, order: this.sections.length };
-      this.sectionsService.create(newSec).subscribe(() => {
+      this.sectionsService.create(newSec).subscribe((created) => {
+        this.sections.push(created);
         this.toastr.success('Section added');
-        this.sectionsUpdated.emit();
+        this.sectionsUpdated = true;
       });
     });
   }
@@ -81,7 +99,7 @@ export class SettingsModalComponent {
         section.title = newTitle;
         this.sectionsService.update(section.id, section).subscribe(() => {
           this.toastr.success('Section renamed');
-          this.sectionsUpdated.emit();
+          this.sectionsUpdated = true;
         });
       }
     });
@@ -91,8 +109,9 @@ export class SettingsModalComponent {
     if (confirm(`Delete section "${section.title}" and all its apps?`)) {
         if (section.id) {
             this.sectionsService.delete(section.id).subscribe(() => {
+                this.sections = this.sections.filter(s => s.id !== section.id);
                 this.toastr.info('Section deleted');
-                this.sectionsUpdated.emit();
+                this.sectionsUpdated = true;
             });
         }
     }
@@ -116,5 +135,9 @@ export class SettingsModalComponent {
           this.sections[index + 1] = temp;
           this.saveOrder();
       }
+  }
+
+  close() {
+    this.dialogRef.close({ sectionsUpdated: this.sectionsUpdated });
   }
 }

@@ -1,8 +1,14 @@
-import { Component, EventEmitter, Input, OnInit, Output, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { PlannerItem, PlannerCardType, TodoItem, PlannerProject } from '../../../models/types';
 import { PlannerService } from '../../../services/planner.service';
+
+/** Data passed to the CardModal dialog */
+export interface CardDialogData {
+  card: PlannerItem | null;
+}
 
 @Component({
   selector: 'app-card-modal',
@@ -12,9 +18,10 @@ import { PlannerService } from '../../../services/planner.service';
   styleUrls: ['./card-modal.component.css']
 })
 export class CardModalComponent implements OnInit {
-  @Input() card: PlannerItem | null = null;
-  @Output() save = new EventEmitter<Partial<PlannerItem>>();
-  @Output() close = new EventEmitter<void>();
+  private dialogRef = inject(DialogRef<Partial<PlannerItem> | undefined>);
+  private data = inject<CardDialogData>(DIALOG_DATA);
+
+  card: PlannerItem | null = null;
 
   formData: Partial<PlannerItem> = {
     title: '',
@@ -40,6 +47,8 @@ export class CardModalComponent implements OnInit {
   constructor(private plannerService: PlannerService) {}
 
   ngOnInit(): void {
+    this.card = this.data.card;
+    
     if (this.card) {
       this.formData = {
         title: this.card.title,
@@ -144,11 +153,11 @@ export class CardModalComponent implements OnInit {
       this.formData.due_date = new Date(this.formData.due_date).toISOString();
     }
 
-    this.save.emit(this.formData);
+    this.dialogRef.close(this.formData);
   }
 
   onClose(): void {
-    this.close.emit();
+    this.dialogRef.close();
   }
 
   // Card Type Changes

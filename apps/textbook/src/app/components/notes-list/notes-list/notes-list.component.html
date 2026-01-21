@@ -10,7 +10,6 @@
             </div>
         </div>
     </div>
-
     <!-- Notes Grid -->
     <div class="notes-grid">
         <div *ngFor="let note of filteredNotes" class="note-card" (click)="openEditModal(note)">
@@ -19,49 +18,30 @@
                 <span class="material-symbols-outlined">image</span>
                 <span class="image-count">{{ note.images.length }}</span>
             </div>
-
             <h3 class="note-title">{{ note.title || 'Untitled' }}</h3>
-            
             <!-- Text Note Preview -->
-            <p *ngIf="note.note_type === 'text' || !note.note_type" class="note-preview">
-                {{ note.content }}
-            </p>
-
+            <p *ngIf="note.note_type === 'text' || !note.note_type" class="note-preview"> {{ note.content }} </p>
             <!-- Todo Note Preview -->
             <div *ngIf="note.note_type === 'todo' && note.todo_items" class="todo-preview">
                 <div *ngFor="let item of note.todo_items.slice(0, 3)" class="todo-preview-item">
-                    <span class="material-symbols-outlined checkbox-icon" [class.checked]="item.completed">
-                        {{ item.completed ? 'check_box' : 'check_box_outline_blank' }}
-                    </span>
+                    <span class="material-symbols-outlined checkbox-icon" [class.checked]="item.completed"> {{ item.completed ? 'check_box' : 'check_box_outline_blank' }} </span>
                     <span [class.completed]="item.completed">{{ item.text }}</span>
                 </div>
-                <div *ngIf="note.todo_items.length > 3" class="todo-more">
-                    +{{ note.todo_items.length - 3 }} more
-                </div>
+                <div *ngIf="note.todo_items.length > 3" class="todo-more"> +{{ note.todo_items.length - 3 }} more </div>
                 <div *ngIf="note.todo_items.length > 0" class="todo-progress-small">
                     <div class="progress-bar-mini">
                         <div class="progress-fill-mini" [style.width.%]="getTodoProgress(note)"></div>
                     </div>
-                    <span class="progress-text-mini">
-                        {{ getTodoCompletedCount(note) }}/{{ note.todo_items.length }}
-                    </span>
+                    <span class="progress-text-mini"> {{ getTodoCompletedCount(note) }}/{{ note.todo_items.length }} </span>
                 </div>
             </div>
-
             <!-- Labels -->
             <div *ngIf="note.expand?.label" class="note-labels">
-                <span class="label-chip" [style.background]="getLabelColor(note) + '20'" 
-                      [style.color]="getLabelColor(note)" 
-                      [style.border-color]="getLabelColor(note)">
-                    {{ getLabelName(note) }}
-                </span>
+                <span class="label-chip" [style.background]="getLabelColor(note) + '20'" [style.color]="getLabelColor(note)" [style.border-color]="getLabelColor(note)"> {{ getLabelName(note) }} </span>
             </div>
-
             <!-- Actions -->
             <div class="note-actions">
-                <button class="btn-icon pin-btn" 
-                        [class.active]="note.is_favorite" 
-                        (click)="$event.stopPropagation(); togglePin(note)">
+                <button class="btn-icon pin-btn" [class.active]="note.is_favorite" (click)="$event.stopPropagation(); togglePin(note)">
                     <span class="material-symbols-outlined icon-sm" [class.icon-filled]="note.is_favorite">favorite</span>
                 </button>
                 <button class="btn-icon" (click)="$event.stopPropagation(); deleteNote(note.id)">
@@ -70,23 +50,3 @@
             </div>
         </div>
     </div>
-</div>
-
-<!-- Note Create/Edit Modal -->
-<app-note-create-modal
-    *ngIf="showModal"
-    [note]="editingNote"
-    [labels]="labels"
-    (save)="onSaveNote($event)"
-    (createLabel)="onCreateLabel($event)"
-    (close)="closeModal()">
-</app-note-create-modal>
-
-<!-- Label Manager Modal -->
-<app-label-manager-modal
-    *ngIf="showLabelManagerModal"
-    [labels]="labels"
-    (createLabel)="onCreateLabel($event)"
-    (deleteLabel)="onDeleteLabel($event)"
-    (close)="closeLabelManager()">
-</app-label-manager-modal>

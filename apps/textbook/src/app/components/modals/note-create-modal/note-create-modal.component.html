@@ -1,155 +1,78 @@
-<div class="sh-modal-overlay">
-    <div class="sh-modal sh-modal-lg">
-        <div class="sh-modal-header">
-            <!-- Note Type Selector -->
-            <div class="note-type-tabs">
-                <button class="type-tab" 
-                        [class.active]="formData.note_type === 'text' || !formData.note_type"
-                        (click)="$event.stopPropagation(); formData.note_type = 'text'"
-                        type="button">
-                    <span class="material-symbols-outlined">description</span>
-                    Text
-                </button>
-                <button class="type-tab" 
-                        [class.active]="formData.note_type === 'todo'"
-                        (click)="$event.stopPropagation(); formData.note_type = 'todo'"
-                        type="button">
-                    <span class="material-symbols-outlined">checklist</span>
-                    Todo
-                </button>
-            </div>
-
-            <div class="header-right-actions">
-                <!-- Label Selector with Create Option -->
-                <div class="label-selector-wrapper">
-                    <select class="label-select" [(ngModel)]="formData.label" (click)="$event.stopPropagation()">
-                        <option [ngValue]="undefined">No Label</option>
-                        <option *ngFor="let label of labels" [value]="label.id">
-                            {{ label.name }}
-                        </option>
-                    </select>
-                    <button class="btn-add-label" 
-                            title="Create Label"
-                            (click)="$event.stopPropagation(); toggleInlineLabelCreate()"
-                            type="button">
-                        <span class="material-symbols-outlined">add</span>
-                    </button>
-                </div>
-
-                <button class="btn-icon pin-btn" 
-                        [class.active]="formData.is_favorite" 
-                        (click)="$event.stopPropagation(); formData.is_favorite = !formData.is_favorite"
-                        type="button">
-                    <span class="material-symbols-outlined" [class.icon-filled]="formData.is_favorite">favorite</span>
-                </button>
-
-                <!-- Close Button -->
-                <button class="sh-modal-close" (click)="$event.stopPropagation(); onClose()" type="button">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
+<div class="sh-modal-header">
+    <!-- Note Type Selector -->
+    <div class="note-type-tabs">
+        <button class="type-tab" [class.active]="formData.note_type === 'text' || !formData.note_type" (click)="$event.stopPropagation(); formData.note_type = 'text'" type="button">
+            <span class="material-symbols-outlined">description</span> Text </button>
+        <button class="type-tab" [class.active]="formData.note_type === 'todo'" (click)="$event.stopPropagation(); formData.note_type = 'todo'" type="button">
+            <span class="material-symbols-outlined">checklist</span> Todo </button>
+    </div>
+    <div class="header-right-actions">
+        <!-- Label Selector with Create Option -->
+        <div class="label-selector-wrapper">
+            <select class="label-select" [(ngModel)]="formData.label" (click)="$event.stopPropagation()">
+                <option [ngValue]="undefined">No Label</option>
+                <option *ngFor="let label of labels" [value]="label.id"> {{ label.name }} </option>
+            </select>
+            <button class="btn-add-label" title="Create Label" (click)="$event.stopPropagation(); toggleInlineLabelCreate()" type="button">
+                <span class="material-symbols-outlined">add</span>
+            </button>
         </div>
-
-        <!-- Inline Label Creation (appears below header when toggled) -->
-        <div *ngIf="showInlineLabelCreate" class="inline-label-create" (click)="$event.stopPropagation()">
-            <input type="text" 
-                   class="inline-label-input" 
-                   placeholder="Label name..."
-                   [(ngModel)]="newLabelName"
-                   (keyup.enter)="onCreateLabel()"
-                   (click)="$event.stopPropagation()">
-            
-            <div class="inline-color-picker">
-                <button *ngFor="let color of labelColors"
-                        class="color-dot"
-                        [class.selected]="newLabelColor === color.value"
-                        [style.background]="color.value"
-                        [title]="color.name"
-                        (click)="$event.stopPropagation(); newLabelColor = color.value"
-                        type="button">
-                </button>
-            </div>
-
-            <div class="inline-actions">
-                <button class="btn-cancel-inline" (click)="$event.stopPropagation(); toggleInlineLabelCreate()" type="button">
-                    Cancel
-                </button>
-                <button class="btn-create-inline" 
-                        [disabled]="!newLabelName.trim()"
-                        (click)="$event.stopPropagation(); onCreateLabel()"
-                        type="button">
-                    <span class="material-symbols-outlined">add</span>
-                    Create
-                </button>
-            </div>
+        <button class="btn-icon pin-btn" [class.active]="formData.is_favorite" (click)="$event.stopPropagation(); formData.is_favorite = !formData.is_favorite" type="button">
+            <span class="material-symbols-outlined" [class.icon-filled]="formData.is_favorite">favorite</span>
+        </button>
+        <!-- Close Button -->
+        <button class="sh-modal-close" (click)="$event.stopPropagation(); onClose()" type="button">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+    </div>
+</div>
+<!-- Inline Label Creation (appears below header when toggled) -->
+<div *ngIf="showInlineLabelCreate" class="inline-label-create" (click)="$event.stopPropagation()">
+    <input type="text" class="inline-label-input" placeholder="Label name..." [(ngModel)]="newLabelName" (keyup.enter)="onCreateLabel()" (click)="$event.stopPropagation()">
+    <div class="inline-color-picker">
+        <button *ngFor="let color of labelColors" class="color-dot" [class.selected]="newLabelColor === color.value" [style.background]="color.value" [title]="color.name" (click)="$event.stopPropagation(); newLabelColor = color.value" type="button">
+        </button>
+    </div>
+    <div class="inline-actions">
+        <button class="btn-cancel-inline" (click)="$event.stopPropagation(); toggleInlineLabelCreate()" type="button"> Cancel </button>
+        <button class="btn-create-inline" [disabled]="!newLabelName.trim()" (click)="$event.stopPropagation(); onCreateLabel()" type="button">
+            <span class="material-symbols-outlined">add</span> Create </button>
+    </div>
+</div>
+<div class="sh-modal-body">
+    <input #titleInput type="text" class="modal-title-input" placeholder="Title" [(ngModel)]="formData.title">
+    <!-- Text Note Content -->
+    <textarea *ngIf="formData.note_type === 'text' || !formData.note_type" class="modal-text-area" placeholder="Write something..." [(ngModel)]="formData.content">
+    </textarea>
+    <!-- Todo List Content -->
+    <div *ngIf="formData.note_type === 'todo'" class="todo-list-editor">
+        <div *ngFor="let item of formData.todo_items" class="todo-item-editor">
+            <input type="checkbox" [checked]="item.completed" (change)="toggleTodoItem(item)" class="todo-checkbox">
+            <span class="todo-text" [class.completed]="item.completed"> {{ item.text }} </span>
+            <button class="btn-remove-todo" (click)="removeTodoItem(item.id)" type="button">
+                <span class="material-symbols-outlined">close</span>
+            </button>
         </div>
-
-        <div class="sh-modal-body">
-            <input #titleInput 
-                   type="text" 
-                   class="modal-title-input" 
-                   placeholder="Title" 
-                   [(ngModel)]="formData.title">
-
-            <!-- Text Note Content -->
-            <textarea *ngIf="formData.note_type === 'text' || !formData.note_type"
-                      class="modal-text-area" 
-                      placeholder="Write something..." 
-                      [(ngModel)]="formData.content">
-            </textarea>
-
-            <!-- Todo List Content -->
-            <div *ngIf="formData.note_type === 'todo'" class="todo-list-editor">
-                <div *ngFor="let item of formData.todo_items" class="todo-item-editor">
-                    <input type="checkbox" 
-                           [checked]="item.completed"
-                           (change)="toggleTodoItem(item)"
-                           class="todo-checkbox">
-                    <span class="todo-text" [class.completed]="item.completed">
-                        {{ item.text }}
-                    </span>
-                    <button class="btn-remove-todo" (click)="removeTodoItem(item.id)" type="button">
-                        <span class="material-symbols-outlined">close</span>
-                    </button>
-                </div>
-
-                <div class="todo-input-wrapper">
-                    <input type="text" 
-                           class="todo-input" 
-                           placeholder="Add a task..."
-                           [(ngModel)]="newTodoText"
-                           (keyup.enter)="addTodoItem()">
-                    <button class="btn-add-todo" (click)="addTodoItem()" type="button">
-                        <span class="material-symbols-outlined">add</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Image Preview (Icons with Count) -->
-            <div *ngIf="(selectedFile || (formData.images && formData.images.length > 0))" class="images-summary">
-                <span class="material-symbols-outlined">image</span>
-                <span class="images-count">
-                    {{ (selectedFile ? 1 : 0) + (formData.images?.length || 0) }} 
-                    {{ (selectedFile ? 1 : 0) + (formData.images?.length || 0) === 1 ? 'image' : 'images' }}
-                </span>
-                <span *ngIf="selectedFile" class="new-image-badge">New</span>
-            </div>
-        </div>
-
-        <div class="sh-modal-footer sh-modal-footer-between">
-            <div class="left-actions">
-                <button class="btn-icon" title="Add Image" (click)="$event.stopPropagation(); fileInputModal.click()" type="button">
-                    <span class="material-symbols-outlined">image</span>
-                </button>
-                <input #fileInputModal 
-                       type="file" 
-                       style="display: none" 
-                       (change)="onFileSelected($event)" 
-                       accept="image/*">
-            </div>
-            <button class="sh-btn sh-btn-primary" (click)="$event.stopPropagation(); onSave()" [disabled]="isSaving" type="button">
-                {{ isSaving ? 'Saving...' : 'Save' }}
+        <div class="todo-input-wrapper">
+            <input type="text" class="todo-input" placeholder="Add a task..." [(ngModel)]="newTodoText" (keyup.enter)="addTodoItem()">
+            <button class="btn-add-todo" (click)="addTodoItem()" type="button">
+                <span class="material-symbols-outlined">add</span>
             </button>
         </div>
     </div>
+    <!-- Image Preview (Icons with Count) -->
+    <div *ngIf="(selectedFile || (formData.images && formData.images.length > 0))" class="images-summary">
+        <span class="material-symbols-outlined">image</span>
+        <span class="images-count"> {{ (selectedFile ? 1 : 0) + (formData.images?.length || 0) }} {{ (selectedFile ? 1 : 0) + (formData.images?.length || 0) === 1 ? 'image' : 'images' }} </span>
+        <span *ngIf="selectedFile" class="new-image-badge">New</span>
+    </div>
+</div>
+<div class="sh-modal-footer sh-modal-footer-between">
+    <div class="left-actions">
+        <button class="btn-icon" title="Add Image" (click)="$event.stopPropagation(); fileInputModal.click()" type="button">
+            <span class="material-symbols-outlined">image</span>
+        </button>
+        <input #fileInputModal type="file" style="display: none" (change)="onFileSelected($event)" accept="image/*">
+    </div>
+    <button class="sh-btn sh-btn-primary" (click)="$event.stopPropagation(); onSave()" [disabled]="isSaving" type="button"> {{ isSaving ? 'Saving...' : 'Save' }} </button>
 </div>

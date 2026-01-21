@@ -1,12 +1,20 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Book } from '../../../models/types';
 
 export interface NewPageData {
   bookId: string;
   title: string;
   icon: string;
+}
+
+/** Data passed to the AddPageModal dialog */
+export interface AddPageDialogData {
+  books: Book[];
+  selectedBookId?: string;
+  suggestedTitle?: string;
 }
 
 @Component({
@@ -16,14 +24,11 @@ export interface NewPageData {
   templateUrl: './add-page-modal.component.html',
   styleUrls: ['./add-page-modal.component.css']
 })
-export class AddPageModalComponent {
-  @Input() books: Book[] = [];
-  @Input() selectedBookId?: string;
-  @Input() suggestedTitle?: string;
-  
-  @Output() close = new EventEmitter<void>();
-  @Output() save = new EventEmitter<NewPageData>();
+export class AddPageModalComponent implements OnInit {
+  private dialogRef = inject(DialogRef<NewPageData | undefined>);
+  private data = inject<AddPageDialogData>(DIALOG_DATA);
 
+  books: Book[] = [];
   bookId = '';
   title = '';
   selectedIcon = 'description';
@@ -40,11 +45,14 @@ export class AddPageModalComponent {
   ];
 
   ngOnInit(): void {
-    if (this.selectedBookId) {
-      this.bookId = this.selectedBookId;
+    // Initialize from dialog data
+    this.books = this.data.books;
+    
+    if (this.data.selectedBookId) {
+      this.bookId = this.data.selectedBookId;
     }
-    if (this.suggestedTitle) {
-      this.title = this.suggestedTitle;
+    if (this.data.suggestedTitle) {
+      this.title = this.data.suggestedTitle;
     }
   }
 
@@ -53,17 +61,16 @@ export class AddPageModalComponent {
   }
 
   onClose(): void {
-    this.close.emit();
+    this.dialogRef.close();
   }
 
   onSave(): void {
     if (this.bookId && this.title.trim()) {
-      this.save.emit({
+      this.dialogRef.close({
         bookId: this.bookId,
         title: this.title.trim(),
         icon: this.selectedIcon
       });
-      // Don't auto-reset - let parent handle closing
     }
   }
 }

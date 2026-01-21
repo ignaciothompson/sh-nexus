@@ -1,9 +1,6 @@
 <div class="app-container">
     <ng-container>
-        <app-sidebar 
-            [activeRoute]="activeRoute"
-            (navigate)="onNavigate($event)"
-            (openSettings)="openSettingsModal()">
+        <app-sidebar [activeRoute]="activeRoute" (navigate)="onNavigate($event)" (openSettings)="openSettingsModal()">
         </app-sidebar>
         <div class="content-wrapper">
             <app-header></app-header>
@@ -16,6 +13,3 @@
         </div>
     </ng-container>
 </div>
-<!-- Settings Modal (at layout level so sidebar can trigger it) -->
-<app-settings-modal *ngIf="showSettingsModal" [sections]="sections" (close)="onSettingsModalClose()" (sectionsUpdated)="onSectionsUpdated()">
-</app-settings-modal>

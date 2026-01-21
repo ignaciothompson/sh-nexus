@@ -1,53 +1,25 @@
-<div class="sh-modal-overlay" (click)="onClose()">
-    <div class="sh-modal sh-modal-sm" (click)="$event.stopPropagation()">
-        <div class="sh-modal-header">
-            <h2 class="sh-modal-title">New Project</h2>
-            <button class="sh-modal-close" (click)="$event.stopPropagation(); onClose()" type="button">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-
-        <div class="sh-modal-body">
-            <label class="sh-label">Project Name</label>
-            <input type="text" 
-                    class="sh-input" 
-                    [(ngModel)]="newProject.name"
-                    placeholder="Enter project name..."
-                    autofocus>
-
-            <label class="sh-label">Icon</label>
-            <div class="icon-grid">
-                <button *ngFor="let icon of icons"
-                        class="icon-btn"
-                        [class.selected]="newProject.icon === icon.value"
-                        (click)="$event.stopPropagation(); newProject.icon = icon.value"
-                        [title]="icon.name"
-                        type="button">
-                    <span class="material-symbols-outlined">{{ icon.value }}</span>
-                </button>
-            </div>
-
-            <label class="sh-label">Color</label>
-            <div class="color-grid">
-                <button *ngFor="let color of colors"
-                        class="color-btn"
-                        [class.selected]="newProject.color === color.value"
-                        [style.background]="color.value"
-                        (click)="$event.stopPropagation(); newProject.color = color.value"
-                        [title]="color.name"
-                        type="button">
-                </button>
-            </div>
-        </div>
-
-        <div class="sh-modal-footer">
-            <button class="sh-btn sh-btn-secondary" (click)="$event.stopPropagation(); onClose()" type="button">Cancel</button>
-            <button class="sh-btn sh-btn-primary" 
-                    [disabled]="!newProject.name.trim()"
-                    (click)="$event.stopPropagation(); onSave()"
-                    type="button">
-                Create Project
-            </button>
-        </div>
+<div class="sh-modal-header">
+    <h2 class="sh-modal-title">New Project</h2>
+    <button class="sh-modal-close" (click)="$event.stopPropagation(); onClose()" type="button">
+        <span class="material-symbols-outlined">close</span>
+    </button>
+</div>
+<div class="sh-modal-body">
+    <label class="sh-label">Project Name</label>
+    <input type="text" class="sh-input" [(ngModel)]="newProject.name" placeholder="Enter project name..." autofocus>
+    <label class="sh-label">Icon</label>
+    <div class="icon-grid">
+        <button *ngFor="let icon of icons" class="icon-btn" [class.selected]="newProject.icon === icon.value" (click)="$event.stopPropagation(); newProject.icon = icon.value" [title]="icon.name" type="button">
+            <span class="material-symbols-outlined">{{ icon.value }}</span>
+        </button>
     </div>
+    <label class="sh-label">Color</label>
+    <div class="color-grid">
+        <button *ngFor="let color of colors" class="color-btn" [class.selected]="newProject.color === color.value" [style.background]="color.value" (click)="$event.stopPropagation(); newProject.color = color.value" [title]="color.name" type="button">
+        </button>
+    </div>
+</div>
+<div class="sh-modal-footer">
+    <button class="sh-btn sh-btn-secondary" (click)="$event.stopPropagation(); onClose()" type="button">Cancel</button>
+    <button class="sh-btn sh-btn-primary" [disabled]="!newProject.name.trim()" (click)="$event.stopPropagation(); onSave()" type="button"> Create Project </button>
 </div>

@@ -1,9 +1,23 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { AppItem, Section } from '../../../models/types';
 import { APP_TEMPLATES, AppTemplate, ConfigField, getTemplateById } from '../../../models/app-templates';
 import { FilterPipe } from '../../../pipes/filter.pipe';
+
+/** Data passed to the EditAppModal dialog */
+export interface EditAppDialogData {
+  app: AppItem;
+  sections: Section[];
+}
+
+/** Result returned when the dialog closes */
+export interface EditAppDialogResult {
+  action: 'save' | 'delete';
+  app: AppItem;
+  file?: File;
+}
 
 @Component({
   selector: 'app-edit-app-modal',
@@ -13,11 +27,11 @@ import { FilterPipe } from '../../../pipes/filter.pipe';
   styleUrls: ['./edit-app-modal.component.css']
 })
 export class EditAppModalComponent implements OnInit {
-  @Input() app: AppItem = { name: '', url: '' };
-  @Input() sections: Section[] = [];
-  @Output() saveApp = new EventEmitter<{ app: AppItem, file?: File }>();
-  @Output() deleteApp = new EventEmitter<AppItem>();
-  @Output() cancel = new EventEmitter<void>();
+  private dialogRef = inject(DialogRef<EditAppDialogResult>);
+  private data = inject<EditAppDialogData>(DIALOG_DATA);
+
+  app: AppItem = { name: '', url: '' };
+  sections: Section[] = [];
 
   selectedFile: File | undefined;
 
@@ -51,9 +65,11 @@ export class EditAppModalComponent implements OnInit {
     'portainer', 'traefik', 'caddy', 'pihole', 'adguard-home', 'wireguard', 'tailscale'
   ];
 
-  constructor() {}
-
   ngOnInit() {
+    // Initialize from dialog data
+    this.app = { ...this.data.app };
+    this.sections = this.data.sections;
+
     // Load existing app type
     if (this.app.type) {
       this.appType = this.app.type;
@@ -214,7 +230,7 @@ export class EditAppModalComponent implements OnInit {
   }
 
   close() {
-    this.cancel.emit();
+    this.dialogRef.close();
   }
 
   save() {
@@ -235,13 +251,13 @@ export class EditAppModalComponent implements OnInit {
         this.app.templateId = this.selectedTemplate.id;
       }
       
-      this.saveApp.emit({ app: this.app, file: this.selectedFile });
+      this.dialogRef.close({ action: 'save', app: this.app, file: this.selectedFile });
     }
   }
 
   onDelete() {
     if (this.app.id && confirm(`Are you sure you want to delete "${this.app.name}"?`)) {
-      this.deleteApp.emit(this.app);
+      this.dialogRef.close({ action: 'delete', app: this.app });
     }
   }
 

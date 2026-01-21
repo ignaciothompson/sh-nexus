@@ -2,9 +2,10 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PlannerService } from '../../../services/planner.service';
+import { DialogService } from '../../../services/dialog.service';
 import { PlannerItem } from '../../../models/types';
 import { PlannerHeaderComponent } from '../planner-header/planner-header.component';
-import { CardModalComponent } from '../../modals/card-modal/card-modal.component';
+import { CardModalComponent, CardDialogData } from '../../modals/card-modal/card-modal.component';
 
 interface Column {
   id: PlannerItem['status'];
@@ -17,7 +18,7 @@ interface Column {
 @Component({
   selector: 'app-task-board',
   standalone: true,
-  imports: [CommonModule, FormsModule, PlannerHeaderComponent, CardModalComponent],
+  imports: [CommonModule, FormsModule, PlannerHeaderComponent],
   templateUrl: './task-board.component.html',
   styleUrl: './task-board.component.css'
 })
@@ -29,14 +30,13 @@ export class TaskBoardComponent implements OnInit {
     { id: 'done', title: 'DONE', icon: '✅', color: '#22c55e', tasks: [] }
   ];
 
-  showCardModal = false;
-  selectedCard: PlannerItem | null = null;
   searchQuery = '';
 
   private draggedTask: PlannerItem | null = null;
 
   constructor(
     private plannerService: PlannerService,
+    private dialogService: DialogService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -70,32 +70,37 @@ export class TaskBoardComponent implements OnInit {
   }
 
   openNewCardModal(): void {
-    this.selectedCard = null;
-    this.showCardModal = true;
+    this.openCardDialog(null);
   }
 
   openCardModal(card: PlannerItem): void {
-    this.selectedCard = card;
-    this.showCardModal = true;
+    this.openCardDialog(card);
   }
 
-  closeCardModal(): void {
-    this.showCardModal = false;
-    this.selectedCard = null;
+  private openCardDialog(card: PlannerItem | null): void {
+    const dialogRef = this.dialogService.open<Partial<PlannerItem> | undefined, CardDialogData, CardModalComponent>(
+      CardModalComponent,{
+        data: { card },
+        size: 'xl'
+      }
+    );
+
+    dialogRef.closed.subscribe(result => {
+      if (result) {
+        this.onCardSave(result, card);
+      }
+    });
   }
 
-  async onCardSave(cardData: Partial<PlannerItem>): Promise<void> {
+  async onCardSave(cardData: Partial<PlannerItem>, existingCard: PlannerItem | null): Promise<void> {
     try {
-      if (this.selectedCard) {
-        await this.plannerService.updateItem(this.selectedCard.id, cardData);
+      if (existingCard) {
+        await this.plannerService.updateItem(existingCard.id, cardData);
       } else {
         await this.plannerService.createItem(cardData);
       }
     } catch (error) {
       console.error('Error saving card:', error);
-    } finally {
-      // Always close modal after save attempt
-      this.closeCardModal();
     }
   }
 

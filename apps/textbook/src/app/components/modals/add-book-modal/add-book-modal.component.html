@@ -1,86 +1,46 @@
-<div class="sh-modal-overlay">
-    <div class="sh-modal">
-        <div class="sh-modal-header">
-            <h2 class="sh-modal-title">{{ modalTitle }}</h2>
-            <button class="sh-modal-close" (click)="onClose()">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-
-        <div class="sh-modal-body">
-            <!-- Title Input -->
-            <div class="form-group">
-                <label class="sh-label">Book Title</label>
-                <input 
-                    type="text" 
-                    class="sh-input"
-                    placeholder="Enter book title..."
-                    [(ngModel)]="title"
-                    autofocus />
-            </div>
-
-            <!-- Icon Selection -->
-            <div class="form-group">
-                <label class="sh-label">Select Icon</label>
-                <input 
-                    type="text" 
-                    class="sh-input"
-                    placeholder="Search icons..."
-                    [(ngModel)]="iconSearchQuery" />
-                <div class="icon-grid">
-                    <button
-                        *ngFor="let iconOption of filteredIcons"
-                        class="icon-option"
-                        [class.selected]="selectedIcon === iconOption.icon"
-                        (click)="selectIcon(iconOption.icon, iconOption.name)"
-                        [title]="iconOption.name"
-                        type="button">
-                        <span class="material-symbols-outlined">{{ iconOption.icon }}</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Color Selection -->
-            <div class="form-group">
-                <label class="sh-label">Select Color</label>
-                <input 
-                    type="text" 
-                    class="sh-input mb-2"
-                    placeholder="Search colors..."
-                    [(ngModel)]="colorSearchQuery" />
-                <div class="color-grid">
-                    <button
-                        *ngFor="let colorOption of filteredColors"
-                        class="color-option"
-                        [class.selected]="selectedColor === colorOption.class"
-                        (click)="selectColor(colorOption.class, colorOption.name)"
-                        type="button">
-                        <div class="color-circle" [style.background-color]="colorOption.hex"></div>
-                        <span class="color-name">{{ colorOption.name }}</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Preview -->
-            <div class="preview-section">
-                <label class="sh-label">Preview</label>
-                <div class="preview-book">
-                    <span class="material-symbols-outlined preview-icon" [ngClass]="selectedColor">
-                        {{ selectedIcon }}
-                    </span>
-                    <span class="preview-title">{{ title || 'Book Title' }}</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="sh-modal-footer">
-            <button class="sh-btn sh-btn-secondary" (click)="$event.stopPropagation(); onClose()">Cancel</button>
-            <button 
-                class="sh-btn sh-btn-primary" 
-                [disabled]="!title.trim() || isSaving"
-                (click)="$event.stopPropagation(); onSave()">
-                {{ isSaving ? 'Saving...' : saveButtonText }}
+<div class="sh-modal-header">
+    <h2 class="sh-modal-title">{{ modalTitle }}</h2>
+    <button class="sh-modal-close" (click)="onClose()">
+        <span class="material-symbols-outlined">close</span>
+    </button>
+</div>
+<div class="sh-modal-body">
+    <!-- Title Input -->
+    <div class="form-group">
+        <label class="sh-label">Book Title</label>
+        <input type="text" class="sh-input" placeholder="Enter book title..." [(ngModel)]="title" autofocus />
+    </div>
+    <!-- Icon Selection -->
+    <div class="form-group">
+        <label class="sh-label">Select Icon</label>
+        <input type="text" class="sh-input" placeholder="Search icons..." [(ngModel)]="iconSearchQuery" />
+        <div class="icon-grid">
+            <button *ngFor="let iconOption of filteredIcons" class="icon-option" [class.selected]="selectedIcon === iconOption.icon" (click)="selectIcon(iconOption.icon, iconOption.name)" [title]="iconOption.name" type="button">
+                <span class="material-symbols-outlined">{{ iconOption.icon }}</span>
             </button>
         </div>
     </div>
+    <!-- Color Selection -->
+    <div class="form-group">
+        <label class="sh-label">Select Color</label>
+        <input type="text" class="sh-input mb-2" placeholder="Search colors..." [(ngModel)]="colorSearchQuery" />
+        <div class="color-grid">
+            <button *ngFor="let colorOption of filteredColors" class="color-option" [class.selected]="selectedColor === colorOption.class" (click)="selectColor(colorOption.class, colorOption.name)" type="button">
+                <div class="color-circle" [style.background-color]="colorOption.hex"></div>
+                <span class="color-name">{{ colorOption.name }}</span>
+            </button>
+        </div>
+    </div>
+    <!-- Preview -->
+    <div class="preview-section">
+        <label class="sh-label">Preview</label>
+        <div class="preview-book">
+            <span class="material-symbols-outlined preview-icon" [ngClass]="selectedColor"> {{ selectedIcon }} </span>
+            <span class="preview-title">{{ title || 'Book Title' }}</span>
+        </div>
+    </div>
+</div>
+<div class="sh-modal-footer">
+    <button class="sh-btn sh-btn-secondary" (click)="$event.stopPropagation(); onClose()">Cancel</button>
+    <button class="sh-btn sh-btn-primary" [disabled]="!title.trim() || isSaving" (click)="$event.stopPropagation(); onSave()"> {{ isSaving ? 'Saving...' : saveButtonText }} </button>
 </div>

@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AppsService } from '../../services/apps.service';
 import { SectionsService } from '../../services/sections.service';
+import { DialogService } from '../../services/dialog.service';
 import { AppItem, Section } from '../../models/types';
 import { AppTileComponent } from '../app-tile/app-tile.component';
-import { EditAppModalComponent } from '../modals/edit-app-modal/edit-app-modal.component';
-import { SettingsModalComponent } from '../modals/settings-modal/settings-modal.component';
+import { EditAppModalComponent, EditAppDialogData, EditAppDialogResult } from '../modals/edit-app-modal/edit-app-modal.component';
+import { SettingsModalComponent, SettingsDialogData, SettingsDialogResult } from '../modals/settings-modal/settings-modal.component';
 
 import { ToastrService } from 'ngx-toastr';
 
@@ -17,8 +18,6 @@ import { ToastrService } from 'ngx-toastr';
     CommonModule,
     FormsModule,
     AppTileComponent, 
-    EditAppModalComponent,
-    SettingsModalComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
@@ -28,10 +27,7 @@ export class DashboardComponent implements OnInit {
   editMode = false;
   currentTime = new Date();
   
-  showModal = false;
-  showSettingsModal = false;
   isInitializing = true;
-  editingItem: AppItem = { name: '', url: '' };
 
   hostStats: any = null;
   bookmarks: AppItem[] = [];
@@ -49,6 +45,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private appsService: AppsService,
     private sectionsService: SectionsService,
+    private dialogService: DialogService,
     private toastr: ToastrService
   ) {}
 
@@ -185,62 +182,55 @@ export class DashboardComponent implements OnInit {
       window.open(url, '_blank');
   }
 
-  // --- ACTIONS ---
+  // --- DIALOG ACTIONS ---
   openAddModal() {
-    this.editingItem = { name: '', url: '' };
+    const editingItem: AppItem = { name: '', url: '' };
     // Default to first section
     if (this.sections.length > 0) {
-        this.editingItem.section = this.sections[0].id;
+        editingItem.section = this.sections[0].id;
     }
-    this.showModal = true;
+    this.openEditAppDialog(editingItem);
   }
 
   openAddModalForSection(section: Section) {
-      this.editingItem = { name: '', url: '', section: section.id };
-      this.showModal = true;
+    const editingItem: AppItem = { name: '', url: '', section: section.id };
+    this.openEditAppDialog(editingItem);
   }
 
   openAddBookmarkModal() {
-      this.editingItem = { name: '', url: '', type: 'bookmark' };
-      this.showModal = true;
-  }
-
-  openSettingsModal() {
-      this.showSettingsModal = true;
-  }
-
-  onSettingsClose() {
-      this.showSettingsModal = false;
-      this.loadSections(); // Refresh in case reordered/renamed/deleted
-  }
-
-  deleteSection(section: Section) {
-      if(confirm(`Delete section "${section.title}" and all its apps?`)) {
-          if (section.id) this.sectionsService.delete(section.id).subscribe(() => this.loadSections());
-      }
+    const editingItem: AppItem = { name: '', url: '', type: 'bookmark' };
+    this.openEditAppDialog(editingItem);
   }
 
   openEditModal(item: AppItem) {
-    this.editingItem = { ...item };
-    this.showModal = true;
+    this.openEditAppDialog({ ...item });
   }
 
-  onSaveApp(event: any) {
-    let app: AppItem;
-    let file: File | undefined;
+  private openEditAppDialog(app: AppItem) {
+    const dialogRef = this.dialogService.open<EditAppDialogResult, EditAppDialogData, EditAppModalComponent>(
+      EditAppModalComponent,
+      { 
+        data: { app, sections: this.sections },
+        size: 'lg' 
+      }
+    );
+    dialogRef.closed.subscribe(result => {
+      if (result?.action === 'save') {
+        this.onSaveApp(result);
+      } else if (result?.action === 'delete') {
+        this.onDeleteApp(result.app);
+      }
+    });
+  }
 
-    if (event.app) {
-        app = event.app;
-        file = event.file;
-    } else {
-        app = event;
-    }
+  onSaveApp(result: EditAppDialogResult) {
+    const app = result.app;
+    const file = result.file;
 
     if (app.id) {
       this.appsService.update(app.id, app, file).subscribe(() => {
         this.loadSections();
         this.loadBookmarks();
-        this.showModal = false;
         this.toastr.success('Item updated');
       });
     } else {
@@ -250,7 +240,6 @@ export class DashboardComponent implements OnInit {
           app.order = this.bookmarks.length;
           this.appsService.create(app, file).subscribe(() => {
             this.loadBookmarks();
-            this.showModal = false;
             this.toastr.success('Bookmark added');
           });
       } else {
@@ -272,7 +261,6 @@ export class DashboardComponent implements OnInit {
   createApp(app: AppItem, file?: File) {
       this.appsService.create(app, file).subscribe(() => {
         this.loadSections();
-        this.showModal = false;
         this.toastr.success('Item added');
       });
   }
@@ -346,4 +334,3 @@ export class DashboardComponent implements OnInit {
     this.showReorderModal = false;
   }
 }
-

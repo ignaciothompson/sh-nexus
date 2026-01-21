@@ -1,7 +1,23 @@
-import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { Note, NoteLabel, TodoItem, NoteType } from '../../../models/types';
+
+/** Data passed to the NoteCreateModal dialog */
+export interface NoteCreateDialogData {
+  note: Note | null;
+  labels: NoteLabel[];
+}
+
+/** Result returned from the NoteCreateModal dialog */
+export interface NoteCreateDialogResult {
+  action: 'save' | 'createLabel';
+  note?: Partial<Note>;
+  file?: File;
+  labelName?: string;
+  labelColor?: string;
+}
 
 @Component({
   selector: 'app-note-create-modal',
@@ -10,21 +26,14 @@ import { Note, NoteLabel, TodoItem, NoteType } from '../../../models/types';
   templateUrl: './note-create-modal.component.html',
   styleUrls: ['./note-create-modal.component.css']
 })
-export class NoteCreateModalComponent implements OnInit, OnChanges {
-  @Input() note: Note | null = null; // If provided, we're editing
-  @Input() set labels(value: NoteLabel[]) {
-    this._labels = value;
-  }
-  get labels(): NoteLabel[] {
-    return this._labels;
-  }
-  private _labels: NoteLabel[] = [];
-  
-  @Output() save = new EventEmitter<{ note: Partial<Note>; file?: File }>();
-  @Output() close = new EventEmitter<void>();
-  @Output() createLabel = new EventEmitter<{ name: string; color: string }>();
+export class NoteCreateModalComponent implements OnInit {
+  private dialogRef = inject(DialogRef<NoteCreateDialogResult | undefined>);
+  private data = inject<NoteCreateDialogData>(DIALOG_DATA);
 
   @ViewChild('titleInput') titleInput!: ElementRef;
+
+  note: Note | null = null;
+  labels: NoteLabel[] = [];
 
   formData: Partial<Note> = {
     title: '',
@@ -42,7 +51,6 @@ export class NoteCreateModalComponent implements OnInit, OnChanges {
   newLabelName = '';
   newLabelColor = '#9c33ff';
   newTodoText = '';
-  pendingLabelName: string | null = null; // Track label being created to auto-select it
 
   labelColors = [
     { name: 'Purple', value: '#9c33ff' },
@@ -58,6 +66,9 @@ export class NoteCreateModalComponent implements OnInit, OnChanges {
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
+    this.note = this.data.note;
+    this.labels = this.data.labels;
+
     if (this.note) {
       // Editing existing note
       this.formData = {
@@ -77,20 +88,9 @@ export class NoteCreateModalComponent implements OnInit, OnChanges {
     }, 100);
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    // Auto-select newly created label
-    if (changes['labels'] && this.pendingLabelName && this.labels.length > 0) {
-      const newLabel = this.labels.find(l => l.name === this.pendingLabelName);
-      if (newLabel) {
-        this.formData.label = newLabel.id;
-        this.pendingLabelName = null;
-      }
-    }
-  }
-
   onClose(): void {
     if (this.isSaving) return;
-    this.close.emit();
+    this.dialogRef.close();
   }
 
   onFileSelected(event: any): void {
@@ -116,12 +116,11 @@ export class NoteCreateModalComponent implements OnInit, OnChanges {
     }
 
     this.isSaving = true;
-    this.save.emit({ note: this.formData, file: this.selectedFile || undefined });
-    
-    // Reset saving state after a delay (parent will close modal on success)
-    setTimeout(() => {
-      this.isSaving = false;
-    }, 500);
+    this.dialogRef.close({ 
+      action: 'save', 
+      note: this.formData, 
+      file: this.selectedFile || undefined 
+    });
   }
 
   toggleInlineLabelCreate(): void {
@@ -134,15 +133,11 @@ export class NoteCreateModalComponent implements OnInit, OnChanges {
 
   onCreateLabel(): void {
     if (!this.newLabelName.trim()) return;
-    const labelName = this.newLabelName.trim();
-    this.pendingLabelName = labelName; // Track for auto-selection
-    this.createLabel.emit({
-      name: labelName,
-      color: this.newLabelColor
+    this.dialogRef.close({
+      action: 'createLabel',
+      labelName: this.newLabelName.trim(),
+      labelColor: this.newLabelColor
     });
-    this.showInlineLabelCreate = false;
-    this.newLabelName = '';
-    this.newLabelColor = '#9c33ff';
   }
 
   addTodoItem(): void {

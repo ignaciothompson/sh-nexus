@@ -1,54 +1,29 @@
-<div class="sh-modal-overlay" (click)="onClose()">
-    <div class="sh-modal sh-modal-sm" (click)="$event.stopPropagation()">
-        <div class="sh-modal-header">
-            <h2 class="sh-modal-title">Manage Labels</h2>
-            <button class="sh-modal-close" (click)="$event.stopPropagation(); onClose()" type="button">
-                <span class="material-symbols-outlined">close</span>
+<div class="sh-modal-header">
+    <h2 class="sh-modal-title">Manage Labels</h2>
+    <button class="sh-modal-close" (click)="$event.stopPropagation(); onClose()" type="button">
+        <span class="material-symbols-outlined">close</span>
+    </button>
+</div>
+<div class="sh-modal-body">
+    <!-- Create New Label -->
+    <div class="label-create-section">
+        <input type="text" class="label-input" placeholder="Label name..." [(ngModel)]="newLabelName" (keyup.enter)="onCreateLabel()">
+        <div class="color-picker">
+            <button *ngFor="let color of labelColors" class="color-option" [class.selected]="newLabelColor === color.value" [style.background]="color.value" [title]="color.name" (click)="$event.stopPropagation(); newLabelColor = color.value" type="button">
             </button>
         </div>
-
-        <div class="sh-modal-body">
-            <!-- Create New Label -->
-            <div class="label-create-section">
-                <input type="text" 
-                       class="label-input" 
-                       placeholder="Label name..."
-                       [(ngModel)]="newLabelName"
-                       (keyup.enter)="onCreateLabel()">
-                
-                <div class="color-picker">
-                    <button *ngFor="let color of labelColors"
-                            class="color-option"
-                            [class.selected]="newLabelColor === color.value"
-                            [style.background]="color.value"
-                            [title]="color.name"
-                            (click)="$event.stopPropagation(); newLabelColor = color.value"
-                            type="button">
-                    </button>
-                </div>
-
-                <button class="sh-btn sh-btn-primary sh-btn-sm" 
-                        [disabled]="!newLabelName.trim()"
-                        (click)="$event.stopPropagation(); onCreateLabel()"
-                        type="button">
-                    <span class="material-symbols-outlined">add</span>
-                    Create Label
-                </button>
-            </div>
-
-            <!-- Existing Labels -->
-            <div class="labels-list">
-                <div *ngFor="let label of labels" class="label-item">
-                    <span class="label-color-dot" [style.background]="label.color || '#9c33ff'"></span>
-                    <span class="label-name">{{ label.name }}</span>
-                    <button class="btn-delete-label" (click)="$event.stopPropagation(); onDeleteLabel(label.id)" type="button">
-                        <span class="material-symbols-outlined">delete</span>
-                    </button>
-                </div>
-                <div *ngIf="labels.length === 0" class="empty-labels">
-                    No labels yet. Create one above!
-                </div>
-            </div>
+        <button class="sh-btn sh-btn-primary sh-btn-sm" [disabled]="!newLabelName.trim()" (click)="$event.stopPropagation(); onCreateLabel()" type="button">
+            <span class="material-symbols-outlined">add</span> Create Label </button>
+    </div>
+    <!-- Existing Labels -->
+    <div class="labels-list">
+        <div *ngFor="let label of labels" class="label-item">
+            <span class="label-color-dot" [style.background]="label.color || '#9c33ff'"></span>
+            <span class="label-name">{{ label.name }}</span>
+            <button class="btn-delete-label" (click)="$event.stopPropagation(); onDeleteLabel(label.id)" type="button">
+                <span class="material-symbols-outlined">delete</span>
+            </button>
         </div>
+        <div *ngIf="labels.length === 0" class="empty-labels"> No labels yet. Create one above! </div>
     </div>
 </div>

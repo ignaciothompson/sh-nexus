@@ -4,25 +4,26 @@ import { Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { WelcomeComponent } from '../../welcome/welcome.component';
-import { SettingsModalComponent } from '../../modals/settings-modal/settings-modal.component';
+import { SettingsModalComponent, SettingsDialogData, SettingsDialogResult } from '../../modals/settings-modal/settings-modal.component';
 import { SectionsService } from '../../../services/sections.service';
+import { DialogService } from '../../../services/dialog.service';
 import { Section } from '../../../models/types';
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent, SidebarComponent, WelcomeComponent, SettingsModalComponent],
+  imports: [CommonModule, RouterOutlet, HeaderComponent, SidebarComponent, WelcomeComponent],
   templateUrl: './main-layout.component.html',
   styleUrls: ['./main-layout.component.css']
 })
 export class MainLayoutComponent implements OnInit {
   showWelcome = false;
-  showSettingsModal = false;
   sections: Section[] = [];
   activeRoute = 'home';
   
   constructor(
     private sectionsService: SectionsService,
+    private dialogService: DialogService,
     private router: Router
   ) {}
   
@@ -49,15 +50,17 @@ export class MainLayoutComponent implements OnInit {
   }
   
   openSettingsModal() {
-    this.showSettingsModal = true;
-  }
-  
-  onSettingsModalClose() {
-    this.showSettingsModal = false;
-  }
-  
-  onSectionsUpdated() {
-    this.loadSections();
+    const dialogRef = this.dialogService.open<SettingsDialogResult, SettingsDialogData, SettingsModalComponent>(
+      SettingsModalComponent,{
+        data: { sections: this.sections },
+        size: 'xl'
+      }
+    );
+
+    dialogRef.closed.subscribe(result => {
+      if (result?.sectionsUpdated) {
+        this.loadSections();
+      }
+    });
   }
 }
-

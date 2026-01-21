@@ -1,71 +1,42 @@
-<div class="sh-modal-overlay">
-    <div class="sh-modal">
-        <div class="sh-modal-header">
-            <h2 class="sh-modal-title">New Page</h2>
-            <button class="sh-modal-close" (click)="onClose()">
-                <span class="material-symbols-outlined">close</span>
-            </button>
-        </div>
-
-        <div class="sh-modal-body">
-            <!-- Book Selection -->
-            <div class="form-group">
-                <label class="sh-label">Select Book</label>
-                <select class="sh-select" [(ngModel)]="bookId">
-                    <option value="">Choose a book...</option>
-                    <option *ngFor="let book of books" [value]="book.id">
-                        {{ book.title }}
-                    </option>
-                </select>
-            </div>
-
-            <!-- Page Title -->
-            <div class="form-group">
-                <label class="sh-label">Page Title</label>
-                <input 
-                    type="text" 
-                    class="sh-input"
-                    placeholder="Enter page title..."
-                    [(ngModel)]="title"
-                    autofocus />
-            </div>
-
-            <!-- Icon Selection -->
-            <div class="form-group">
-                <label class="sh-label">Select Icon</label>
-                <div class="icon-grid">
-                    <button
-                        *ngFor="let iconOption of iconOptions"
-                        class="icon-option"
-                        [class.selected]="selectedIcon === iconOption.icon"
-                        (click)="selectIcon(iconOption.icon)"
-                        [title]="iconOption.name"
-                        type="button">
-                        <span class="material-symbols-outlined">{{ iconOption.icon }}</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Preview -->
-            <div class="preview-section">
-                <label class="sh-label">Preview</label>
-                <div class="preview-page">
-                    <span class="material-symbols-outlined preview-icon text-accent">
-                        {{ selectedIcon }}
-                    </span>
-                    <span class="preview-title">{{ title || 'Page Title' }}</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="sh-modal-footer">
-            <button class="sh-btn sh-btn-secondary" (click)="$event.stopPropagation(); onClose()">Cancel</button>
-            <button 
-                class="sh-btn sh-btn-primary" 
-                [disabled]="!title.trim() || !bookId"
-                (click)="$event.stopPropagation(); onSave()">
-                Create Page
+<div class="sh-modal-header">
+    <h2 class="sh-modal-title">New Page</h2>
+    <button class="sh-modal-close" (click)="onClose()">
+        <span class="material-symbols-outlined">close</span>
+    </button>
+</div>
+<div class="sh-modal-body">
+    <!-- Book Selection -->
+    <div class="form-group">
+        <label class="sh-label">Select Book</label>
+        <select class="sh-select" [(ngModel)]="bookId">
+            <option value="">Choose a book...</option>
+            <option *ngFor="let book of books" [value]="book.id"> {{ book.title }} </option>
+        </select>
+    </div>
+    <!-- Page Title -->
+    <div class="form-group">
+        <label class="sh-label">Page Title</label>
+        <input type="text" class="sh-input" placeholder="Enter page title..." [(ngModel)]="title" autofocus />
+    </div>
+    <!-- Icon Selection -->
+    <div class="form-group">
+        <label class="sh-label">Select Icon</label>
+        <div class="icon-grid">
+            <button *ngFor="let iconOption of iconOptions" class="icon-option" [class.selected]="selectedIcon === iconOption.icon" (click)="selectIcon(iconOption.icon)" [title]="iconOption.name" type="button">
+                <span class="material-symbols-outlined">{{ iconOption.icon }}</span>
             </button>
         </div>
     </div>
+    <!-- Preview -->
+    <div class="preview-section">
+        <label class="sh-label">Preview</label>
+        <div class="preview-page">
+            <span class="material-symbols-outlined preview-icon text-accent"> {{ selectedIcon }} </span>
+            <span class="preview-title">{{ title || 'Page Title' }}</span>
+        </div>
+    </div>
+</div>
+<div class="sh-modal-footer">
+    <button class="sh-btn sh-btn-secondary" (click)="$event.stopPropagation(); onClose()">Cancel</button>
+    <button class="sh-btn sh-btn-primary" [disabled]="!title.trim() || !bookId" (click)="$event.stopPropagation(); onSave()"> Create Page </button>
 </div>

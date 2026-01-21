@@ -1,4 +1,20 @@
 
+/* Modal Body Split Layout */
+.sh-modal-body {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.left-container {
+    flex: 1;
+    min-width: 0;
+}
+
+.right-container {
+    flex: 1;
+    min-width: 0;
+}
+
 /* Card Type Selector */
 .card-type-selector {
     display: grid;

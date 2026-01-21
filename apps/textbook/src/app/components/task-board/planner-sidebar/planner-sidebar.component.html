@@ -5,34 +5,16 @@
             <span class="material-symbols-outlined">add</span>
         </button>
     </div>
-
     <!-- All Projects -->
-    <div class="project-item" 
-         [class.active]="selectedProjectId === null"
-         (click)="selectAllProjects()">
+    <div class="project-item" [class.active]="selectedProjectId === null" (click)="selectAllProjects()">
         <span class="material-symbols-outlined project-icon" style="color: #9ca3af;">dashboard</span>
         <span class="project-name">All Projects</span>
     </div>
-
     <div class="divider"></div>
-
     <!-- Project List -->
     <div class="projects-list">
-        <div *ngFor="let project of projects" 
-             class="project-item"
-             [class.active]="selectedProjectId === project.id"
-             (click)="selectProject(project)">
-            <span class="material-symbols-outlined project-icon" [style.color]="project.color">
-                {{ project.icon }}
-            </span>
+        <div *ngFor="let project of projects" class="project-item" [class.active]="selectedProjectId === project.id" (click)="selectProject(project)">
+            <span class="material-symbols-outlined project-icon" [style.color]="project.color"> {{ project.icon }} </span>
             <span class="project-name">{{ project.name }}</span>
         </div>
     </div>
-</div>
-
-<!-- Add Project Modal -->
-<app-planner-card-create-modal
-    *ngIf="showAddModal"
-    (save)="onSaveProject($event)"
-    (close)="closeAddModal()">
-</app-planner-card-create-modal>

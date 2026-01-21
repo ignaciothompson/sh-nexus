@@ -1,7 +1,21 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { NoteLabel } from '../../../models/types';
+
+/** Data passed to the LabelManagerModal dialog */
+export interface LabelManagerDialogData {
+  labels: NoteLabel[];
+}
+
+/** Result returned from the LabelManagerModal dialog */
+export interface LabelManagerDialogResult {
+  action: 'create' | 'delete';
+  labelId?: string;
+  name?: string;
+  color?: string;
+}
 
 @Component({
   selector: 'app-label-manager-modal',
@@ -11,11 +25,10 @@ import { NoteLabel } from '../../../models/types';
   styleUrls: ['./label-manager-modal.component.css']
 })
 export class LabelManagerModalComponent {
-  @Input() labels: NoteLabel[] = [];
-  @Output() createLabel = new EventEmitter<{ name: string; color: string }>();
-  @Output() deleteLabel = new EventEmitter<string>();
-  @Output() close = new EventEmitter<void>();
+  private dialogRef = inject(DialogRef<LabelManagerDialogResult | undefined>);
+  private data = inject<LabelManagerDialogData>(DIALOG_DATA);
 
+  labels: NoteLabel[] = [];
   newLabelName = '';
   newLabelColor = '#9c33ff';
 
@@ -30,23 +43,29 @@ export class LabelManagerModalComponent {
     { name: 'Teal', value: '#14b8a6' }
   ];
 
+  constructor() {
+    this.labels = this.data.labels;
+  }
+
   onClose(): void {
-    this.close.emit();
+    this.dialogRef.close();
   }
 
   onCreateLabel(): void {
     if (!this.newLabelName.trim()) return;
-    this.createLabel.emit({
+    this.dialogRef.close({
+      action: 'create',
       name: this.newLabelName.trim(),
       color: this.newLabelColor
     });
-    this.newLabelName = '';
-    this.newLabelColor = '#9c33ff';
   }
 
   onDeleteLabel(labelId: string): void {
     if (confirm('Delete this label? Notes with this label will not be deleted.')) {
-      this.deleteLabel.emit(labelId);
+      this.dialogRef.close({
+        action: 'delete',
+        labelId
+      });
     }
   }
 }

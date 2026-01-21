@@ -149,12 +149,6 @@
         </div>
     </section>
 </div>
-<!-- Modal -->
-<app-edit-app-modal *ngIf="showModal" [app]="editingItem" [sections]="sections" (saveApp)="onSaveApp($event)" (deleteApp)="onDeleteApp($event); showModal = false" (cancel)="showModal = false">
-</app-edit-app-modal>
-<!-- Settings Modal -->
-<app-settings-modal *ngIf="showSettingsModal" [sections]="sections" (close)="onSettingsClose()" (sectionsUpdated)="loadSections()">
-</app-settings-modal>
 <!-- Reorder Modal -->
 <div class="reorder-modal-overlay" *ngIf="showReorderModal" (click)="closeReorderModal()">
     <div class="reorder-modal" (click)="$event.stopPropagation()">

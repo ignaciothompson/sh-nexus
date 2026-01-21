@@ -1,150 +1,147 @@
-<div class="modal-overlay" (click)="close.emit()">
-    <div class="settings-modal" (click)="$event.stopPropagation()">
-        <!-- Sidebar with tabs -->
-        <div class="settings-sidebar">
-            <div class="settings-logo">
-                <span class="material-symbols-outlined">settings</span>
-                <h2>Settings</h2>
-            </div>
-            <nav class="sh-tab-list">
-                <button class="sh-tab" [class.active]="activeTab === 'sections'" (click)="setTab('sections')">
-                    <span class="material-symbols-outlined tab-icon">folder</span>
-                    <span>Sections</span>
-                </button>
-                <button class="sh-tab" [class.active]="activeTab === 'appearance'" (click)="setTab('appearance')">
-                    <span class="material-symbols-outlined tab-icon">palette</span>
-                    <span>Appearance</span>
-                </button>
-                <button class="sh-tab" [class.active]="activeTab === 'about'" (click)="setTab('about')">
-                    <span class="material-symbols-outlined tab-icon">info</span>
-                    <span>About</span>
-                </button>
-            </nav>
-            <div class="settings-version">
-                <span>SH-Nexus v2.0.4</span>
-            </div>
+<div class="settings-modal">
+    <!-- Sidebar with tabs -->
+    <div class="settings-sidebar">
+        <div class="settings-logo">
+            <span class="material-symbols-outlined">settings</span>
+            <h2>Settings</h2>
         </div>
-        <!-- Content area -->
-        <div class="settings-content">
-            <!-- Header -->
-            <div class="content-header">
-                <h3 *ngIf="activeTab === 'sections'">Manage Sections</h3>
-                <h3 *ngIf="activeTab === 'appearance'">Appearance</h3>
-                <h3 *ngIf="activeTab === 'about'">About SH-Nexus</h3>
-                <button class="close-btn" (click)="close.emit()">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
+        <nav class="sh-tab-list">
+            <button class="sh-tab" [class.active]="activeTab === 'sections'" (click)="setTab('sections')">
+                <span class="material-symbols-outlined tab-icon">folder</span>
+                <span>Sections</span>
+            </button>
+            <button class="sh-tab" [class.active]="activeTab === 'appearance'" (click)="setTab('appearance')">
+                <span class="material-symbols-outlined tab-icon">palette</span>
+                <span>Appearance</span>
+            </button>
+            <button class="sh-tab" [class.active]="activeTab === 'about'" (click)="setTab('about')">
+                <span class="material-symbols-outlined tab-icon">info</span>
+                <span>About</span>
+            </button>
+        </nav>
+        <div class="settings-version">
+            <span>SH-Nexus v2.0.4</span>
+        </div>
+    </div>
+    <!-- Content area -->
+    <div class="settings-content">
+        <!-- Header -->
+        <div class="content-header">
+            <h3 *ngIf="activeTab === 'sections'">Manage Sections</h3>
+            <h3 *ngIf="activeTab === 'appearance'">Appearance</h3>
+            <h3 *ngIf="activeTab === 'about'">About SH-Nexus</h3>
+            <button class="close-btn" (click)="close()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <!-- Sections Tab -->
+        <div class="content-body" *ngIf="activeTab === 'sections'">
+            <div class="section-actions-header">
+                <p class="section-description">Reorder, rename, or delete app sections.</p>
+                <button class="sh-btn sh-btn-primary" (click)="addSection()">
+                    <span class="material-symbols-outlined">add</span> Add Section </button>
             </div>
-            <!-- Sections Tab -->
-            <div class="content-body" *ngIf="activeTab === 'sections'">
-                <div class="section-actions-header">
-                    <p class="section-description">Reorder, rename, or delete app sections.</p>
-                    <button class="sh-btn sh-btn-primary" (click)="addSection()">
-                        <span class="material-symbols-outlined">add</span> Add Section 
-                    </button>
-                </div>
-                <div class="section-list">
-                    <div *ngFor="let section of sections; let i = index" class="section-item">
-                        <span class="section-name">{{section.title}}</span>
-                        <span class="section-count">{{section.AppItems?.length || 0}} apps</span>
-                        <div class="item-actions">
-                            <button class="btn-icon" (click)="moveUp(i)" [disabled]="i === 0" title="Move Up">
-                                <span class="material-symbols-outlined">keyboard_arrow_up</span>
-                            </button>
-                            <button class="btn-icon" (click)="moveDown(i)" [disabled]="i === sections.length - 1" title="Move Down">
-                                <span class="material-symbols-outlined">keyboard_arrow_down</span>
-                            </button>
-                            <button class="btn-icon" (click)="renameSection(section)" title="Rename">
-                                <span class="material-symbols-outlined">edit</span>
-                            </button>
-                            <button class="btn-icon danger" (click)="deleteSection(section)" title="Delete">
-                                <span class="material-symbols-outlined">delete</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div *ngIf="sections.length === 0" class="empty-state">
-                    <span class="material-symbols-outlined">folder_off</span>
-                    <p>No sections yet. Click "Add Section" to create one.</p>
-                </div>
-            </div>
-            <!-- Appearance Tab -->
-            <div class="content-body" *ngIf="activeTab === 'appearance'">
-                <div class="settings-group">
-                    <label class="setting-label">Theme</label>
-                    <div class="theme-options">
-                        <button class="theme-btn active">
-                            <span class="material-symbols-outlined">dark_mode</span> Dark </button>
-                        <button class="theme-btn" disabled>
-                            <span class="material-symbols-outlined">light_mode</span> Light <span class="coming-soon">Soon</span>
+            <div class="section-list">
+                <div *ngFor="let section of sections; let i = index" class="section-item">
+                    <span class="section-name">{{section.title}}</span>
+                    <span class="section-count">{{section.AppItems?.length || 0}} apps</span>
+                    <div class="item-actions">
+                        <button class="btn-icon" (click)="moveUp(i)" [disabled]="i === 0" title="Move Up">
+                            <span class="material-symbols-outlined">keyboard_arrow_up</span>
+                        </button>
+                        <button class="btn-icon" (click)="moveDown(i)" [disabled]="i === sections.length - 1" title="Move Down">
+                            <span class="material-symbols-outlined">keyboard_arrow_down</span>
+                        </button>
+                        <button class="btn-icon" (click)="renameSection(section)" title="Rename">
+                            <span class="material-symbols-outlined">edit</span>
+                        </button>
+                        <button class="btn-icon danger" (click)="deleteSection(section)" title="Delete">
+                            <span class="material-symbols-outlined">delete</span>
                         </button>
                     </div>
                 </div>
-                <div class="settings-group">
-                    <label class="setting-label">Accent Color</label>
-                    <div class="color-options">
-                        <button class="color-btn active" style="--btn-color: #359EFF"></button>
-                        <button class="color-btn" style="--btn-color: #a855f7"></button>
-                        <button class="color-btn" style="--btn-color: #22c55e"></button>
-                        <button class="color-btn" style="--btn-color: #f97316"></button>
-                        <button class="color-btn" style="--btn-color: #ef4444"></button>
-                        <button class="color-btn" style="--btn-color: #facc15"></button>
-                    </div>
-                    <p class="setting-hint">Color customization coming soon</p>
-                </div>
-                <div class="settings-group">
-                    <label class="setting-label">Status Bar</label>
-                    <div class="toggle-row">
-                        <span>Show system stats</span>
-                        <label class="toggle">
-                            <input type="checkbox" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="toggle-row">
-                        <span>Show clock</span>
-                        <label class="toggle">
-                            <input type="checkbox" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
+            </div>
+            <div *ngIf="sections.length === 0" class="empty-state">
+                <span class="material-symbols-outlined">folder_off</span>
+                <p>No sections yet. Click "Add Section" to create one.</p>
+            </div>
+        </div>
+        <!-- Appearance Tab -->
+        <div class="content-body" *ngIf="activeTab === 'appearance'">
+            <div class="settings-group">
+                <label class="setting-label">Theme</label>
+                <div class="theme-options">
+                    <button class="theme-btn active">
+                        <span class="material-symbols-outlined">dark_mode</span> Dark </button>
+                    <button class="theme-btn" disabled>
+                        <span class="material-symbols-outlined">light_mode</span> Light <span class="coming-soon">Soon</span>
+                    </button>
                 </div>
             </div>
-            <!-- About Tab -->
-            <div class="content-body" *ngIf="activeTab === 'about'">
-                <div class="about-hero">
-                    <div class="about-logo">
-                        <span class="material-symbols-outlined">dns</span>
-                    </div>
-                    <h2>SH-Nexus Hub</h2>
-                    <p class="version">Version 2.0.4</p>
+            <div class="settings-group">
+                <label class="setting-label">Accent Color</label>
+                <div class="color-options">
+                    <button class="color-btn active" style="--btn-color: #359EFF"></button>
+                    <button class="color-btn" style="--btn-color: #a855f7"></button>
+                    <button class="color-btn" style="--btn-color: #22c55e"></button>
+                    <button class="color-btn" style="--btn-color: #f97316"></button>
+                    <button class="color-btn" style="--btn-color: #ef4444"></button>
+                    <button class="color-btn" style="--btn-color: #facc15"></button>
                 </div>
-                <div class="about-info">
-                    <div class="info-row">
-                        <span class="info-label">Framework</span>
-                        <span class="info-value">Angular 19</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Backend</span>
-                        <span class="info-value">PocketBase</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Design</span>
-                        <span class="info-value">Glassmorphism UI</span>
-                    </div>
-                </div>
-                <div class="about-links">
-                    <a href="https://github.com" target="_blank" class="about-link">
-                        <span class="material-symbols-outlined">code</span> Source Code </a>
-                    <a href="#" class="about-link">
-                        <span class="material-symbols-outlined">description</span> Documentation </a>
-                </div>
-                <p class="copyright">© 2026 SH-Nexus. All rights reserved.</p>
+                <p class="setting-hint">Color customization coming soon</p>
             </div>
+            <div class="settings-group">
+                <label class="setting-label">Status Bar</label>
+                <div class="toggle-row">
+                    <span>Show system stats</span>
+                    <label class="toggle">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-row">
+                    <span>Show clock</span>
+                    <label class="toggle">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <!-- About Tab -->
+        <div class="content-body" *ngIf="activeTab === 'about'">
+            <div class="about-hero">
+                <div class="about-logo">
+                    <span class="material-symbols-outlined">dns</span>
+                </div>
+                <h2>SH-Nexus Hub</h2>
+                <p class="version">Version 2.0.4</p>
+            </div>
+            <div class="about-info">
+                <div class="info-row">
+                    <span class="info-label">Framework</span>
+                    <span class="info-value">Angular 21</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Backend</span>
+                    <span class="info-value">PocketBase</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Design</span>
+                    <span class="info-value">Glassmorphism UI</span>
+                </div>
+            </div>
+            <div class="about-links">
+                <a href="https://github.com" target="_blank" class="about-link">
+                    <span class="material-symbols-outlined">code</span> Source Code </a>
+                <a href="#" class="about-link">
+                    <span class="material-symbols-outlined">description</span> Documentation </a>
+            </div>
+            <p class="copyright">© 2026 SH-Nexus. All rights reserved.</p>
         </div>
     </div>
 </div>
-<!-- Input Modal -->
+<!-- Input Modal (for rename/add section) -->
 <div class="input-modal-overlay" *ngIf="showInputModal" (click)="closeInputModal()">
     <div class="input-modal" (click)="$event.stopPropagation()">
         <div class="input-modal-header">

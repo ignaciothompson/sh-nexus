@@ -1,14 +1,15 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotesService } from '../../../services/notes.service';
+import { DialogService } from '../../../services/dialog.service';
 import { Note, NoteLabel, TodoItem, NoteType } from '../../../models/types';
-import { NoteCreateModalComponent } from '../../modals/note-create-modal/note-create-modal.component';
-import { LabelManagerModalComponent } from '../../modals/label-manager-modal/label-manager-modal.component';
+import { NoteCreateModalComponent, NoteCreateDialogData, NoteCreateDialogResult } from '../../modals/note-create-modal/note-create-modal.component';
+import { LabelManagerModalComponent, LabelManagerDialogData, LabelManagerDialogResult } from '../../modals/label-manager-modal/label-manager-modal.component';
 
 @Component({
   selector: 'app-notes-list',
   standalone: true,
-  imports: [CommonModule, NoteCreateModalComponent, LabelManagerModalComponent],
+  imports: [CommonModule],
   templateUrl: './notes-list.component.html',
   styleUrl: './notes-list.component.css'
 })
@@ -18,15 +19,12 @@ export class NotesListComponent implements OnInit {
   searchQuery = '';
   selectedLabelId: string | null = null;
   labels: NoteLabel[] = [];
-  
-  showModal = false;
-  editingNote: Note | null = null;
-  showLabelManagerModal = false;
 
   private isLoading = false;
 
   constructor(
     private notesService: NotesService,
+    private dialogService: DialogService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -89,21 +87,32 @@ export class NotesListComponent implements OnInit {
   }
 
   openCreateModal(): void {
-    this.editingNote = null;
-    this.showModal = true;
+    this.openNoteDialog(null);
   }
 
   openEditModal(note: Note): void {
-    this.editingNote = note;
-    this.showModal = true;
+    this.openNoteDialog(note);
   }
 
-  closeModal(): void {
-    this.showModal = false;
-    this.editingNote = null;
+  private openNoteDialog(note: Note | null): void {
+    const dialogRef = this.dialogService.open<NoteCreateDialogResult | undefined, NoteCreateDialogData, NoteCreateModalComponent>(
+      NoteCreateModalComponent,
+      { note, labels: this.labels }
+    );
+
+    dialogRef.closed.subscribe(async result => {
+      if (result?.action === 'save') {
+        await this.onSaveNote({ note: result.note!, file: result.file }, note);
+      } else if (result?.action === 'createLabel') {
+        await this.onCreateLabel({ name: result.labelName!, color: result.labelColor! });
+        // Reopen the dialog with fresh labels
+        await this.loadLabels();
+        this.openNoteDialog(note);
+      }
+    });
   }
 
-  async onSaveNote(event: { note: Partial<Note>; file?: File }): Promise<void> {
+  async onSaveNote(event: { note: Partial<Note>; file?: File }, existingNote: Note | null): Promise<void> {
     try {
       let payload: any;
 
@@ -134,13 +143,12 @@ export class NotesListComponent implements OnInit {
         if (!payload.todo_items || payload.todo_items.length === 0) delete payload.todo_items;
       }
 
-      if (this.editingNote) {
-        await this.notesService.update(this.editingNote.id, payload);
+      if (existingNote) {
+        await this.notesService.update(existingNote.id, payload);
       } else {
         await this.notesService.create(payload);
       }
       await this.loadNotes();
-      this.closeModal();
     } catch (error) {
       console.error('Error saving note:', error);
     }
@@ -199,11 +207,18 @@ export class NotesListComponent implements OnInit {
 
   // Label Management
   openLabelManager(): void {
-    this.showLabelManagerModal = true;
-  }
+    const dialogRef = this.dialogService.open<LabelManagerDialogResult | undefined, LabelManagerDialogData, LabelManagerModalComponent>(
+      LabelManagerModalComponent,
+      { labels: this.labels }
+    );
 
-  closeLabelManager(): void {
-    this.showLabelManagerModal = false;
+    dialogRef.closed.subscribe(async result => {
+      if (result?.action === 'create') {
+        await this.onCreateLabel({ name: result.name!, color: result.color! });
+      } else if (result?.action === 'delete') {
+        await this.onDeleteLabel(result.labelId!);
+      }
+    });
   }
 
   async onDeleteLabel(labelId: string): Promise<void> {

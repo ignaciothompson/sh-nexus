@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
 interface IconOption {
   name: string;
@@ -19,6 +20,13 @@ export interface NewBookData {
   iconColor: string;
 }
 
+/** Data passed to the AddBookModal dialog */
+export interface AddBookDialogData {
+  mode: 'create' | 'edit';
+  bookId?: string;
+  initialData?: NewBookData;
+}
+
 @Component({
   selector: 'app-add-book-modal',
   standalone: true,
@@ -27,26 +35,29 @@ export interface NewBookData {
   styleUrls: ['./add-book-modal.component.css']
 })
 export class AddBookModalComponent implements OnInit {
-  @Input() mode: 'create' | 'edit' = 'create';
-  @Input() bookId?: string;
-  @Input() initialData?: NewBookData;
-  
-  @Output() close = new EventEmitter<void>();
-  @Output() save = new EventEmitter<NewBookData>();
+  private dialogRef = inject(DialogRef<NewBookData | undefined>);
+  private data = inject<AddBookDialogData>(DIALOG_DATA);
 
+  mode: 'create' | 'edit' = 'create';
+  bookId?: string;
+  
   title = '';
   selectedIcon = 'menu_book';
   selectedColor = 'text-purple-400';
   iconSearchQuery = '';
   colorSearchQuery = '';
-  isSaving = false; // Prevent double-save
+  isSaving = false;
 
   ngOnInit(): void {
+    // Initialize from dialog data
+    this.mode = this.data.mode;
+    this.bookId = this.data.bookId;
+    
     // Pre-fill form if editing
-    if (this.mode === 'edit' && this.initialData) {
-      this.title = this.initialData.title;
-      this.selectedIcon = this.initialData.icon;
-      this.selectedColor = this.initialData.iconColor;
+    if (this.mode === 'edit' && this.data.initialData) {
+      this.title = this.data.initialData.title;
+      this.selectedIcon = this.data.initialData.icon;
+      this.selectedColor = this.data.initialData.iconColor;
       
       // Find and set icon name in search
       const iconOption = this.iconOptions.find(opt => opt.icon === this.selectedIcon);
@@ -129,30 +140,26 @@ export class AddBookModalComponent implements OnInit {
 
   selectIcon(icon: string, name: string): void {
     this.selectedIcon = icon;
-    this.iconSearchQuery = name; // Show selected icon name in search
+    this.iconSearchQuery = name;
   }
 
   selectColor(colorClass: string, name: string): void {
     this.selectedColor = colorClass;
-    this.colorSearchQuery = name; // Show selected color name in search
+    this.colorSearchQuery = name;
   }
 
   onClose(): void {
-    this.close.emit();
+    this.dialogRef.close();
   }
 
   onSave(): void {
     if (this.title.trim() && !this.isSaving) {
       this.isSaving = true;
-      this.save.emit({
+      this.dialogRef.close({
         title: this.title.trim(),
         icon: this.selectedIcon,
         iconColor: this.selectedColor
       });
-      // Reset isSaving flag after a short delay to allow parent to close modal
-      setTimeout(() => {
-        this.isSaving = false;
-      }, 500);
     }
   }
 }

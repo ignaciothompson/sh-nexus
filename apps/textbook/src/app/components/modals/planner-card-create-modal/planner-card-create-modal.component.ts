@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DialogRef } from '@angular/cdk/dialog';
 
 export interface NewProjectData {
   name: string;
@@ -16,8 +17,7 @@ export interface NewProjectData {
   styleUrls: ['./planner-card-create-modal.component.css']
 })
 export class PlannerCardCreateModalComponent {
-  @Output() save = new EventEmitter<NewProjectData>();
-  @Output() close = new EventEmitter<void>();
+  private dialogRef = inject(DialogRef<NewProjectData | undefined>);
 
   newProject: NewProjectData = {
     name: '',
@@ -48,11 +48,11 @@ export class PlannerCardCreateModalComponent {
   ];
 
   onClose(): void {
-    this.close.emit();
+    this.dialogRef.close();
   }
 
   onSave(): void {
     if (!this.newProject.name.trim()) return;
-    this.save.emit({ ...this.newProject });
+    this.dialogRef.close({ ...this.newProject });
   }
 }

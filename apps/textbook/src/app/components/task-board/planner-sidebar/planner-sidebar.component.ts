@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlannerService } from '../../../services/planner.service';
+import { DialogService } from '../../../services/dialog.service';
 import { PlannerProject } from '../../../models/types';
 import { Subscription } from 'rxjs';
 import { PlannerCardCreateModalComponent, NewProjectData } from '../../modals/planner-card-create-modal/planner-card-create-modal.component';
@@ -8,19 +9,19 @@ import { PlannerCardCreateModalComponent, NewProjectData } from '../../modals/pl
 @Component({
   selector: 'app-planner-sidebar',
   standalone: true,
-  imports: [CommonModule, PlannerCardCreateModalComponent],
+  imports: [CommonModule],
   templateUrl: './planner-sidebar.component.html',
   styleUrls: ['./planner-sidebar.component.css']
 })
 export class PlannerSidebarComponent implements OnInit, OnDestroy {
   projects: PlannerProject[] = [];
   selectedProjectId: string | null = null;
-  showAddModal = false;
 
   private subscription = new Subscription();
 
   constructor(
     private plannerService: PlannerService,
+    private dialogService: DialogService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -54,17 +55,20 @@ export class PlannerSidebarComponent implements OnInit, OnDestroy {
   }
 
   openAddModal(): void {
-    this.showAddModal = true;
-  }
+    const dialogRef = this.dialogService.open<NewProjectData | undefined, void, PlannerCardCreateModalComponent>(
+      PlannerCardCreateModalComponent
+    );
 
-  closeAddModal(): void {
-    this.showAddModal = false;
+    dialogRef.closed.subscribe(result => {
+      if (result) {
+        this.onSaveProject(result);
+      }
+    });
   }
 
   async onSaveProject(projectData: NewProjectData): Promise<void> {
     try {
       await this.plannerService.createProject(projectData);
-      this.closeAddModal();
     } catch (error) {
       console.error('Error creating project:', error);
     }

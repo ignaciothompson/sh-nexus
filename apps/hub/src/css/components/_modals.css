@@ -3,23 +3,6 @@
    Dialog and modal styles
    ================================ */
 
-/* Modal Overlay */
-.sh-skin .sh-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--sh-bg-overlay);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 1rem;
-}
-
 /* Modal Container */
 .sh-skin .sh-modal {
   background: var(--sh-bg-surface);
@@ -27,28 +10,32 @@
   border-radius: var(--sh-radius-xl);
   box-shadow: var(--sh-shadow-xl);
   width: 100%;
-  max-width: 500px;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .sh-skin .sh-modal-sm {
-  max-width: 400px;
+  width: 300px;
+}
+
+.sh-skin .sh-modal-md {
+  width: 500px;
 }
 
 .sh-skin .sh-modal-lg {
-  max-width: 700px;
+  width: 700px;
 }
 
 .sh-skin .sh-modal-xl {
-  max-width: 900px;
+  width: 900px;
 }
 
 .sh-skin .sh-modal-full {
-  max-width: calc(100vw - 2rem);
-  max-height: calc(100vh - 2rem);
+  width: calc(100vw - 2rem);
+  height: calc(100vh - 2rem);
 }
 
 /* Modal Header */
@@ -137,3 +124,30 @@
   justify-content: center;
   gap: 0.75rem;
 }
+
+/* ================================
+   CDK DIALOG INTEGRATION
+   Overlay and panel styles for @angular/cdk/dialog
+   ================================ */
+
+/* Dark backdrop overlay */
+.cdk-overlay-dark-backdrop {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Center dialog panels */
+.cdk-global-overlay-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  pointer-events: none;
+}
+
+/* Ensure CDK overlay container has proper z-index */
+.cdk-overlay-container {
+  z-index: 1000;
+}
+

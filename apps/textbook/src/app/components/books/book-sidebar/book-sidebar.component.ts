@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AddBookModalComponent, NewBookData } from '../../modals/add-book-modal/add-book-modal.component';
-import { AddPageModalComponent, NewPageData } from '../../modals/add-page-modal/add-page-modal.component';
+import { AddBookModalComponent, NewBookData, AddBookDialogData } from '../../modals/add-book-modal/add-book-modal.component';
+import { AddPageModalComponent, NewPageData, AddPageDialogData } from '../../modals/add-page-modal/add-page-modal.component';
 import { ConfirmDialogComponent } from '../../modals/confirm-dialog/confirm-dialog.component';
 import { BooksService } from '../../../services/books.service';
+import { DialogService } from '../../../services/dialog.service';
 import { Book, Page } from '../../../models/types';
 import { Subscription } from 'rxjs';
 
@@ -18,17 +19,13 @@ interface BookWithPages extends Book {
 @Component({
   selector: 'app-book-sidebar',
   standalone: true,
-  imports: [CommonModule, FormsModule, AddBookModalComponent, AddPageModalComponent, ConfirmDialogComponent],
+  imports: [CommonModule, FormsModule, ConfirmDialogComponent],
   templateUrl: './book-sidebar.component.html',
   styleUrls: ['./book-sidebar.component.css']
 })
 export class BookSidebarComponent implements OnInit, OnDestroy {
   searchQuery = '';
-  showAddModal = false;
-  showAddPageModal = false;
   showAddMenu = false;
-  modalMode: 'create' | 'edit' = 'create';
-  editingBook: BookWithPages | null = null;
   books: BookWithPages[] = [];
   selectedPageId = '';
   activeDropdownId: string | null = null;
@@ -39,7 +36,10 @@ export class BookSidebarComponent implements OnInit, OnDestroy {
   
   private subscription = new Subscription();
 
-  constructor(private booksService: BooksService) {}
+  constructor(
+    private booksService: BooksService,
+    private dialogService: DialogService
+  ) {}
 
   get selectedBookIdForPage(): string | undefined {
     return this.books.find(b => b.expanded)?.id;
@@ -126,43 +126,71 @@ export class BookSidebarComponent implements OnInit, OnDestroy {
   }
 
   openAddBookModal(): void {
-    this.modalMode = 'create';
-    this.editingBook = null;
-    this.showAddModal = true;
+    const dialogRef = this.dialogService.open<NewBookData | undefined, AddBookDialogData, AddBookModalComponent>(
+      AddBookModalComponent,{
+          data: { mode: 'create' },
+          size: 'md'
+      }
+    );
+
+    dialogRef.closed.subscribe(result => {
+      if (result) {
+        this.onSaveBook(result);
+      }
+    });
   }
 
-  closeAddBookModal(): void {
-    this.showAddModal = false;
-    this.editingBook = null;
+  editBook(book: BookWithPages, event: Event): void {
+    event.stopPropagation();
+    this.activeDropdownId = null;
+
+    const dialogRef = this.dialogService.open<NewBookData | undefined, AddBookDialogData, AddBookModalComponent>(
+      AddBookModalComponent,{
+          data: { 
+            mode: 'edit', 
+            bookId: book.id,
+            initialData: {
+              title: book.title,
+              icon: book.icon || 'menu_book',
+              iconColor: book.icon_color || 'text-purple-400'
+            }
+          },
+          size: 'md'
+      }
+    );
+
+    dialogRef.closed.subscribe(result => {
+      if (result) {
+        this.updateBook(book.id, result);
+      }
+    });
   }
 
   async onSaveBook(bookData: NewBookData): Promise<void> {
     try {
-      if (this.modalMode === 'edit' && this.editingBook) {
-        // Update existing book
-        console.log('Updating book:', this.editingBook.id, bookData);
-        await this.booksService.updateBook(this.editingBook.id, {
-          title: bookData.title,
-          icon: bookData.icon,
-          icon_color: bookData.iconColor
-        });
-      } else {
-        // Create new book
-        console.log('Creating new book:', bookData);
-        await this.booksService.createBook({
-          title: bookData.title,
-          icon: bookData.icon,
-          icon_color: bookData.iconColor
-        });
-      }
+      console.log('Creating new book:', bookData);
+      await this.booksService.createBook({
+        title: bookData.title,
+        icon: bookData.icon,
+        icon_color: bookData.iconColor
+      });
     } catch (error) {
       console.error('Error saving book:', error);
       alert('Failed to save book. Please try again.');
-    } finally {
-      // Always close modal and reset state
-      this.showAddModal = false;
-      this.editingBook = null;
-      this.modalMode = 'create';
+    }
+  }
+
+  async updateBook(bookId: string, bookData: NewBookData): Promise<void> {
+    try {
+      console.log('Updating book:', bookId, bookData);
+      await this.booksService.updateBook(bookId, {
+        title: bookData.title,
+        icon: bookData.icon,
+        icon_color: bookData.iconColor
+      });
+    } catch (error) {
+      console.error('Error updating book:', error);
+      alert('Failed to update book. Please try again.');
     }
   }
 
@@ -191,14 +219,6 @@ export class BookSidebarComponent implements OnInit, OnDestroy {
     this.bookToDelete = null;
   }
 
-  editBook(book: BookWithPages, event: Event): void {
-    event.stopPropagation();
-    this.activeDropdownId = null;
-    this.modalMode = 'edit';
-    this.editingBook = book;
-    this.showAddModal = true;
-  }
-
   toggleDropdown(book: BookWithPages, event: Event): void {
     event.stopPropagation(); // Prevent book toggle
     this.activeDropdownId = this.activeDropdownId === book.id ? null : book.id;
@@ -218,11 +238,23 @@ export class BookSidebarComponent implements OnInit, OnDestroy {
 
   openAddPageModal(): void {
     this.showAddMenu = false;
-    this.showAddPageModal = true;
-  }
 
-  closeAddPageModal(): void {
-    this.showAddPageModal = false;
+    const dialogRef = this.dialogService.open<NewPageData | undefined, AddPageDialogData, AddPageModalComponent>(
+      AddPageModalComponent,
+      {
+        data: { 
+          books: this.books.filter(b => !b.is_section),
+          selectedBookId: this.selectedBookIdForPage 
+        },
+        size: 'md'
+      }
+    );
+
+    dialogRef.closed.subscribe(result => {
+      if (result) {
+        this.onSavePage(result);
+      }
+    });
   }
 
   addSection(): void {
@@ -281,9 +313,6 @@ export class BookSidebarComponent implements OnInit, OnDestroy {
       }
     } catch (err: any) {
       console.error('Error creating page:', err);
-    } finally {
-      // Always close modal
-      this.closeAddPageModal();
     }
   }
 
