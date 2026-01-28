@@ -1,0 +1,63 @@
+.movie-card {
+  width: 200px;
+  min-width: 200px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--sh-transition-base), box-shadow var(--sh-transition-base);
+}
+
+.movie-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sh-shadow-lg);
+}
+
+.poster {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: var(--sh-radius-lg) var(--sh-radius-lg) 0 0;
+}
+
+.card-content {
+  padding: var(--sh-space-4);
+  background: var(--sh-bg-card);
+  border-radius: 0 0 var(--sh-radius-lg) var(--sh-radius-lg);
+}
+
+.card-title {
+  margin: 0 0 var(--sh-space-2) 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--sh-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: var(--sh-space-1);
+  color: var(--sh-yellow);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin: 0 0 var(--sh-space-3) 0;
+}
+
+.star-icon {
+  font-size: 16px;
+  color: var(--sh-yellow);
+}
+
+.btn-watchlist {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sh-space-2);
+  font-size: 0.85rem;
+}
+
+.btn-watchlist .material-symbols-outlined {
+  font-size: 18px;
+}

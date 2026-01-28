@@ -1,14 +1,15 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ApiService } from '../../services/api.service';
+import { ChatService } from '../../services/chat.service';
+import { ChatResponse } from '../../models/types';
 
 @Component({
   selector: 'app-chat-page',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './chat-page.html',
-  styleUrl: './chat-page.scss'
+  styleUrl: './chat-page.css'
 })
 export class ChatPageComponent {
   genres = ['Action', 'Comedy', 'Drama', 'Sci-Fi', 'Horror', 'Romance', 'Documentary', 'Anime'];
@@ -18,12 +19,12 @@ export class ChatPageComponent {
   selectedMovies: string[] = [];
   
   userInput = '';
-  messages: { text: string, isUser: boolean }[] = [
+  messages: { text: string; isUser: boolean }[] = [
     { text: "Hi! Select some preferences or just ask me for a recommendation.", isUser: false }
   ];
   isLoading = false;
 
-  private api = inject(ApiService);
+  private chatService = inject(ChatService);
 
   toggleGenre(genre: string) {
     if (this.selectedGenres.includes(genre)) {
@@ -62,8 +63,8 @@ export class ChatPageComponent {
       movies: this.selectedMovies
     };
 
-    this.api.getRecommendation(text, context).subscribe({
-      next: (res) => {
+    this.chatService.getRecommendation(text, context).subscribe({
+      next: (res: ChatResponse) => {
         this.messages.push({ text: res.response, isUser: false });
         this.isLoading = false;
       },

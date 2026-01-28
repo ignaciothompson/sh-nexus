@@ -1,32 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ApiService } from '../../services/api.service';
+import { ChatService } from '../../services/chat.service';
+import { ChatResponse } from '../../models/types';
 
 @Component({
   selector: 'app-chatbox',
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="chat-container glass-panel" [class.open]="isOpen">
+    <div class="chat-container sh-card" [class.open]="isOpen">
       <div class="chat-header" (click)="toggleChat()">
         <span>🤖 AI Assistant</span>
         <span class="toggle-icon">{{ isOpen ? '▼' : '▲' }}</span>
       </div>
       
-      <div class="chat-body" *ngIf="isOpen">
-        <div class="messages">
-          <div *ngFor="let msg of messages" [class]="'message ' + msg.sender">
-            <p>{{ msg.text }}</p>
+      @if (isOpen) {
+        <div class="chat-body">
+          <div class="messages">
+            @for (msg of messages; track $index) {
+              <div [class]="'message ' + msg.sender">
+                <p>{{ msg.text }}</p>
+              </div>
+            }
+            @if (isLoading) {
+              <div class="message bot loading">Thinking...</div>
+            }
           </div>
-          <div *ngIf="isLoading" class="message bot loading">Thinking...</div>
+          
+          <div class="input-area">
+            <input [(ngModel)]="userInput" (keyup.enter)="sendMessage()" placeholder="Ask for a recommendation..." [disabled]="isLoading">
+            <button (click)="sendMessage()" [disabled]="isLoading || !userInput.trim()">Send</button>
+          </div>
         </div>
-        
-        <div class="input-area">
-          <input [(ngModel)]="userInput" (keyup.enter)="sendMessage()" placeholder="Ask for a recommendation..." [disabled]="isLoading">
-          <button (click)="sendMessage()" [disabled]="isLoading || !userInput.trim()">Send</button>
-        </div>
-      </div>
+      }
     </div>
   `,
   styles: [`
@@ -45,18 +52,19 @@ import { ApiService } from '../../services/api.service';
     }
     .chat-header {
       padding: 15px;
-      background: rgba(99, 102, 241, 0.8);
+      background: var(--sh-primary);
       cursor: pointer;
       display: flex;
       justify-content: space-between;
-      border-radius: 12px 12px 0 0;
+      border-radius: var(--sh-radius-lg) var(--sh-radius-lg) 0 0;
       font-weight: bold;
+      color: white;
     }
     .chat-body {
       height: 400px;
       display: flex;
       flex-direction: column;
-      background: rgba(15, 23, 42, 0.9);
+      background: var(--sh-bg-card);
     }
     .messages {
       flex: 1;
@@ -72,13 +80,17 @@ import { ApiService } from '../../services/api.service';
       max-width: 80%;
       font-size: 0.9rem;
     }
+    .message p {
+      margin: 0;
+    }
     .message.user {
-      background: var(--primary-color);
+      background: var(--sh-primary);
       align-self: flex-end;
       border-bottom-right-radius: 2px;
+      color: white;
     }
     .message.bot {
-      background: var(--surface-light);
+      background: var(--sh-bg-elevated);
       align-self: flex-start;
       border-bottom-left-radius: 2px;
     }
@@ -86,23 +98,23 @@ import { ApiService } from '../../services/api.service';
       padding: 15px;
       display: flex;
       gap: 10px;
-      border-top: 1px solid var(--glass-border);
+      border-top: 1px solid var(--sh-border-default);
     }
     input {
       flex: 1;
-      background: rgba(0,0,0,0.3);
-      border: 1px solid var(--glass-border);
-      color: white;
+      background: var(--sh-bg-elevated);
+      border: 1px solid var(--sh-border-default);
+      color: var(--sh-text-primary);
       padding: 8px 12px;
-      border-radius: 8px;
+      border-radius: var(--sh-radius-md);
       outline: none;
     }
     button {
-      background: var(--secondary-color);
+      background: var(--sh-secondary);
       border: none;
       color: white;
       padding: 5px 15px;
-      border-radius: 8px;
+      border-radius: var(--sh-radius-md);
       cursor: pointer;
     }
     button:disabled {
@@ -113,12 +125,12 @@ import { ApiService } from '../../services/api.service';
 export class ChatboxComponent {
   isOpen = false;
   userInput = '';
-  messages: { text: string, sender: 'user' | 'bot' }[] = [
+  messages: { text: string; sender: 'user' | 'bot' }[] = [
     { text: 'Hi! I can help you find movies and shows to watch. What are you in the mood for?', sender: 'bot' }
   ];
   isLoading = false;
 
-  constructor(private api: ApiService) {}
+  private chatService = inject(ChatService);
 
   toggleChat() {
     this.isOpen = !this.isOpen;
@@ -132,8 +144,8 @@ export class ChatboxComponent {
     this.userInput = '';
     this.isLoading = true;
 
-    this.api.getRecommendation(text).subscribe({
-      next: (res) => {
+    this.chatService.getRecommendation(text).subscribe({
+      next: (res: ChatResponse) => {
         this.messages.push({ text: res.response, sender: 'bot' });
         this.isLoading = false;
       },

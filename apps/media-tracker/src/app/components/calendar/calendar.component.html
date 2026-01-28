@@ -1,0 +1,43 @@
+<div class="calendar-page">
+    <div class="calendar-container">
+        <!-- Header -->
+        <div class="calendar-header">
+            <div class="header-left">
+                <h1 class="page-title">
+                    <span class="material-symbols-outlined text-primary">calendar_month</span> Release Calendar
+                </h1>
+            </div>
+            <div class="header-center">
+                <button class="nav-btn" (click)="previousMonth()">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <span class="current-month">{{ currentMonthYear }}</span>
+                <button class="nav-btn" (click)="nextMonth()">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+            </div>
+            <div class="header-right">
+                <button class="today-btn" (click)="goToToday()">Today</button>
+            </div>
+        </div>
+        <!-- Calendar Grid -->
+        <div class="calendar-grid">
+            <!-- Week Days Header --> @for (day of weekDays; track day) { <div class="week-day">{{ day }}</div> } <!-- Calendar Days --> @for (day of calendarDays; track day.date) { <div class="calendar-day" [class.other-month]="!day.isCurrentMonth" [class.today]="day.isToday" [class.has-releases]="day.releases.length > 0">
+                <span class="day-number">{{ day.day }}</span> @if (day.releases.length > 0) { <div class="day-releases"> @for (release of day.releases.slice(0, 2); track release.id) { <div class="release-dot" [title]="release.title || release.name"></div> } @if (day.releases.length > 2) { <span class="more-releases">+{{ day.releases.length - 2 }}</span> } </div> }
+            </div> }
+        </div>
+    </div>
+    <!-- Upcoming Releases Sidebar -->
+    <div class="upcoming-sidebar">
+        <h3 class="sidebar-title">
+            <span class="material-symbols-outlined text-primary">upcoming</span> Upcoming Releases
+        </h3>
+        <div class="upcoming-list"> @for (release of upcomingReleases; track release.id) { <div class="upcoming-item">
+                <img [src]="getImageUrl(release.poster_path)" [alt]="release.title" class="upcoming-poster">
+                <div class="upcoming-info">
+                    <h4 class="upcoming-title">{{ release.title || release.name }}</h4>
+                    <p class="upcoming-date">{{ release.release_date | date:'MMM d, yyyy' }}</p>
+                </div>
+            </div> } </div>
+    </div>
+</div>

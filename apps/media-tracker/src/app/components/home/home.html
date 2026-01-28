@@ -1,23 +1,23 @@
 <div class="home-container">
     <!-- Popular Movies -->
     <section class="content-section">
-        <h2>Popular Movies</h2>
-        <div class="carousel">
-            <app-movie-card *ngFor="let movie of movies$ | async" [movie]="movie" type="movie"></app-movie-card>
-        </div>
+        <h2 class="section-title">
+            <span class="material-symbols-outlined">movie</span> Popular Movies
+        </h2>
+        <div class="carousel"> @for (movie of movies$ | async; track movie.id) { <app-movie-card [movie]="movie" type="movie"></app-movie-card> } </div>
     </section>
-    <!-- Popular TV -->
+    <!-- Popular TV Shows -->
     <section class="content-section">
-        <h2>Popular Series</h2>
-        <div class="carousel">
-            <app-movie-card *ngFor="let show of tvShows$ | async" [movie]="show" type="tv"></app-movie-card>
-        </div>
+        <h2 class="section-title">
+            <span class="material-symbols-outlined">live_tv</span> Popular Series
+        </h2>
+        <div class="carousel"> @for (show of tvShows$ | async; track show.id) { <app-movie-card [movie]="show" type="tv"></app-movie-card> } </div>
     </section>
     <!-- Recommended -->
     <section class="content-section">
-        <h2>Recommended for You</h2>
-        <div class="carousel">
-            <app-movie-card *ngFor="let item of recommended$ | async" [movie]="item" [type]="item.name ? 'tv' : 'movie'"></app-movie-card>
-        </div>
+        <h2 class="section-title">
+            <span class="material-symbols-outlined">recommend</span> Recommended for You
+        </h2>
+        <div class="carousel"> @for (item of recommended$ | async; track item.id) { <app-movie-card [movie]="item" [type]="item.name ? 'tv' : 'movie'"></app-movie-card> } </div>
     </section>
 </div>

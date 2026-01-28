@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SH-Nexus Media Tracker - Series Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF9F1C",
+                        "background-dark": "#0f0f0f",
+                        "surface-dark": "#161616",
+                        "card-dark": "#1c1c1e",
+                        "sidebar-dark": "#161618"
+                    },
+                    fontFamily: {
+                        display: "Manrope",
+                        body: ["Manrope", "sans-serif"]
+                    }
+                }
+            }
+        };
+    </script>
+<style type="text/tailwindcss">
+        .glass-panel {
+            background: rgba(22, 22, 22, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .nav-item-active {
+            background: rgba(255, 159, 28, 0.15);
+            color: #FF9F1C;
+            border-right: 2px solid #FF9F1C;
+        }
+        .nav-item:hover:not(.nav-item-active) {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+        .series-card {
+            transition: all 0.3s ease;
+        }
+        .series-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px -10px rgba(255, 159, 28, 0.3);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0f0f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a2a2a;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FF9F1C;
+        }
+    </style>
+</head>
+<body class="bg-[#0f0f0f] font-display text-white overflow-hidden h-screen flex w-full">
+<aside class="w-20 lg:w-64 h-full bg-[#161618] border-r border-white/5 flex flex-col justify-between shrink-0 transition-all duration-300 z-20">
+<div class="flex flex-col gap-8 pt-6">
+<div class="flex items-center gap-3 px-6 justify-center lg:justify-start">
+<div class="size-8 rounded-full bg-gradient-to-br from-primary to-primary/40 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-black text-lg">movie_filter</span>
+</div>
+<div class="hidden lg:flex flex-col">
+<h1 class="text-white text-lg font-bold leading-none tracking-tight">SH-Nexus</h1>
+<span class="text-primary/80 text-[10px] font-mono uppercase tracking-widest">Media Tracker</span>
+</div>
+</div>
+<nav class="flex flex-col gap-2 px-3">
+<a class="nav-item flex items-center gap-4 px-3 py-3 rounded-lg text-gray-400 transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="hidden lg:block text-sm font-medium">Dashboard</span>
+</a>
+<a class="nav-item-active flex items-center gap-4 px-3 py-3 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">tv</span>
+<span class="hidden lg:block text-sm font-medium">Series</span>
+</a>
+<a class="nav-item flex items-center gap-4 px-3 py-3 rounded-lg text-gray-400 transition-colors" href="#">
+<span class="material-symbols-outlined">movie</span>
+<span class="hidden lg:block text-sm font-medium">Movies</span>
+</a>
+<a class="nav-item flex items-center gap-4 px-3 py-3 rounded-lg text-gray-400 transition-colors" href="#">
+<span class="material-symbols-outlined">schedule</span>
+<span class="hidden lg:block text-sm font-medium">Watchlist</span>
+</a>
+<a class="nav-item flex items-center gap-4 px-3 py-3 rounded-lg text-gray-400 transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="hidden lg:block text-sm font-medium">Statistics</span>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-2 p-4 border-t border-white/5">
+<div class="flex items-center gap-3 px-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 shrink-0 ring-2 ring-primary/20" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDunhyQiyFDn7VJScFXyUz91s6yxBylBTvrXNc6EGbZJzZUmV8vErp0nNLMGHXuoltkSMGYZJn_Hpt6ejAp1hBPINDDZyavYpZDTFvjM65z5bfQcC3oKPByWQ7rB5_p2jzTQ_sHxsqZeylIcJvW3D-bwOssDknpdYF8fm2ji49FqH7Cz4wNmRIxF4rm1NGzDGj4-i7vgXSylxn6zNzXrcOlXKUQLh46f2GsUGoxqXI3b6VerWIW5MjBFFjJi8JUelN7Xyh0artUxdC_");'></div>
+<div class="hidden lg:flex flex-col">
+<p class="text-white text-xs font-medium leading-none">Admin</p>
+<p class="text-gray-500 text-[10px]">Active Session</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-full overflow-hidden bg-[#0f0f0f]">
+<header class="flex items-center justify-between px-8 py-5 border-b border-white/5 bg-[#0f0f0f]/90 backdrop-blur-sm z-10">
+<div class="flex items-center gap-8">
+<h2 class="text-white text-xl font-semibold tracking-tight">Series Library</h2>
+<div class="flex bg-[#161616] rounded-lg p-1 border border-white/5">
+<button class="px-3 py-1 rounded-md bg-white/10 text-white text-sm">
+<span class="material-symbols-outlined text-sm align-middle mr-1">grid_view</span>Grid
+                </button>
+<button class="px-3 py-1 rounded-md text-gray-400 hover:text-white text-sm">
+<span class="material-symbols-outlined text-sm align-middle mr-1">list</span>List
+                </button>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="bg-[#161616] border border-white/5 text-gray-300 text-sm rounded-lg focus:ring-1 focus:ring-primary focus:border-primary block w-80 pl-10 p-2.5 placeholder-gray-600 transition-all" placeholder="Search series, seasons, genres..." type="text"/>
+</div>
+<button class="p-2 text-gray-400 hover:text-white transition-colors rounded-lg bg-primary/10 border border-primary/20">
+<span class="material-symbols-outlined text-primary">add</span>
+</button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-8 scroll-smooth">
+<div class="max-w-7xl mx-auto flex flex-col gap-10">
+<section>
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-medium text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">event_upcoming</span> Upcoming this Week
+                    </h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+<div class="glass-panel p-4 rounded-xl flex gap-4 items-center">
+<div class="w-16 h-24 bg-zinc-800 rounded-lg shrink-0 overflow-hidden relative">
+<img alt="Show cover" class="w-full h-full object-cover grayscale opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaoxIk142nUbZCP9H-pdiEKe5wG_Kd3hCmvgD0gNDkYlNZYnPF4KsCgDrO-EX7jGDqPAMKzviOqUyvh34Wj328d_1L3GAh58uIvlqr35qZmBe-DMueiDH5iR-L3EbHsiGtsZDkLsj2NygCBx4O8riAEMBZexux6oEuyLojleRAWl9Hdf3b_r1Qdi6-2h7T-PaQuu-I3QoN2ms2sMbPqWlXZ1QMvEgiCDKobsaK_q4bnZnrs7263BH8EQj1p2tGL0PkWKifhbAhHFwv"/>
+<div class="absolute inset-0 bg-primary/20"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<span class="text-[10px] font-bold text-primary uppercase tracking-tighter">Tuesday • 9:00 PM</span>
+<span class="text-[10px] bg-white/5 px-1.5 py-0.5 rounded text-gray-400 uppercase tracking-widest">S05E08</span>
+</div>
+<h4 class="text-white font-bold truncate mt-1">Foundations</h4>
+<p class="text-gray-400 text-xs truncate">The Galactic Empire Falls</p>
+<div class="mt-2 h-1 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[85%]"></div>
+</div>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-xl flex gap-4 items-center">
+<div class="w-16 h-24 bg-zinc-800 rounded-lg shrink-0 overflow-hidden relative">
+<img alt="Show cover" class="w-full h-full object-cover grayscale opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7Xi4En4slWJAVSq5FfO97fGgAYDGc84yLzbc8kLkVzREQeB-QGI_ehZC_Vd-r9yQLGT-ofKrDSCCaZRs_Pmxmgose0Jidv6zV8cLzFCj7pfS3bRv2a2zdqnIL31B6wiph2pNavB-QsbN6l-N7jGELTyKbCDjH5DSMS-IIPBwrmuIFc9XpmLbEIb_HHXIggE_hxQUgp81VHtV5T93T1sHKkrtQCkp9S_Eo7HZ2fPVtnWH6P8pruggyX0vIAyzTNT3LhZLKu1P6jJKD"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<span class="text-[10px] font-bold text-primary uppercase tracking-tighter">Friday • 8:30 PM</span>
+<span class="text-[10px] bg-white/5 px-1.5 py-0.5 rounded text-gray-400 uppercase tracking-widest">S02E03</span>
+</div>
+<h4 class="text-white font-bold truncate mt-1">Neon Horizon</h4>
+<p class="text-gray-400 text-xs truncate">Ghost in the Machine</p>
+<div class="mt-2 h-1 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[40%]"></div>
+</div>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-xl flex gap-4 items-center">
+<div class="w-16 h-24 bg-zinc-800 rounded-lg shrink-0 overflow-hidden relative">
+<img alt="Show cover" class="w-full h-full object-cover grayscale opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDec1SUZvT_LAA4qnkHl6Kj5CjdqGCMNBxHHLEOZQo8JnG7JCSyDR-oYKJlVuAVtMExzEG32w8v185n6GFWJxPMAOiL0Yx57Ev7pb3pT-RDQyOLiUdcdbCLpM2UAVd2-Xvrr46_zCdBhQKLQgFO27JsMR87WDpjNlflfupFYdFA0LsNE04_nEjXpFeZ_0iWk_gxXL_p0UlpmREazxmk5LMI5XBysMOKySRZPwCA5ok--1gYZ7USBoJTiWhVx7T8Xfm5qAGGAdNrYwtw"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<span class="text-[10px] font-bold text-primary uppercase tracking-tighter">Sunday • 10:00 PM</span>
+<span class="text-[10px] bg-white/5 px-1.5 py-0.5 rounded text-gray-400 uppercase tracking-widest">S01E12</span>
+</div>
+<h4 class="text-white font-bold truncate mt-1">Last Refuge</h4>
+<p class="text-gray-400 text-xs truncate">Season Finale</p>
+<div class="mt-2 h-1 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[95%]"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-medium text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-400">library_books</span> Collection <span class="text-gray-500 font-normal text-sm ml-2">48 Series</span>
+</h3>
+<div class="flex gap-4">
+<select class="bg-transparent border-none text-sm text-gray-400 focus:ring-0 cursor-pointer hover:text-white transition-colors">
+<option>Sort by: Last Watched</option>
+<option>Sort by: Alphabetical</option>
+<option>Sort by: Completion</option>
+</select>
+<select class="bg-transparent border-none text-sm text-gray-400 focus:ring-0 cursor-pointer hover:text-white transition-colors">
+<option>Filter: All</option>
+<option>Filter: Watching</option>
+<option>Filter: Completed</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
+<div class="series-card group cursor-pointer">
+<div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-3">
+<img alt="The Expanse" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBExxpL4xoUMD0li_QW_51yyPRBJkFV1EGOBNwRHwZL1CjYFLcuTfviAiAmhDw_wHwW63xT_b7OetVjAZdnH_racaDMU_bosXEOfuSUPb7jaA_G8J10zIC6o8pWPSipDu-JzBls_b0DxF-nPXYB9rQWKyAKQS4KSQC1j_jTAeqqTNYinViYiPC2A6bOeQUTmTNdotzElsvSW9qRPtyqNp19soYWLFASWoqmweGOTGh7aEQaUfJt_H2fqGzMiLle45rN0lBr_CiiCjPK"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<button class="w-full py-2 bg-primary text-black font-bold rounded-lg text-sm mb-2">Continue S06E02</button>
+<button class="w-full py-2 bg-white/10 text-white font-bold rounded-lg text-sm backdrop-blur-md">Details</button>
+</div>
+<div class="absolute top-2 right-2 bg-black/60 backdrop-blur-md px-2 py-1 rounded text-[10px] font-bold text-white border border-white/10">4K HDR</div>
+</div>
+<h4 class="text-sm font-bold truncate group-hover:text-primary transition-colors">The Expanse</h4>
+<div class="flex items-center justify-between mt-1 mb-2">
+<span class="text-[10px] text-gray-500 uppercase tracking-wider">6 Seasons • 82%</span>
+</div>
+<div class="flex gap-0.5 h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary flex-1"></div>
+<div class="h-full bg-primary flex-1"></div>
+<div class="h-full bg-primary flex-1"></div>
+<div class="h-full bg-primary flex-1"></div>
+<div class="h-full bg-primary flex-1"></div>
+<div class="h-full bg-white/20 flex-1"></div>
+</div>
+</div>
+<div class="series-card group cursor-pointer">
+<div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-3">
+<img alt="The Crown" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmf4ft2Fb88fJ-78azD4ckLFk1SWoeV1eLVOZG6OJhxgMnZGr-PRyIEmUDhYP1OBeG3Loj__k5XPUgxCWnMEEGCwCw01tZA2yVncjtyGreTi0NfkEoM5BY6cO88BqYwVbaQRLiQ4gZ3JIwSwGxxWvSNNsO0g_QgOR2umMZkJQO_TtbUWEdAqHOY0s5oMDZEvirku2LrREojKQO3a5D4wtGtMsyVHQ1nGSh0Pvbr7hw6U1sWaBZDuBkYFBYL6CnIsGG1-zrjqyd9onB"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<button class="w-full py-2 bg-primary text-black font-bold rounded-lg text-sm mb-2">Continue S04E10</button>
+<button class="w-full py-2 bg-white/10 text-white font-bold rounded-lg text-sm backdrop-blur-md">Details</button>
+</div>
+</div>
+<h4 class="text-sm font-bold truncate group-hover:text-primary transition-colors">Sovereignty</h4>
+<div class="flex items-center justify-between mt-1 mb-2">
+<span class="text-[10px] text-gray-500 uppercase tracking-wider">4 Seasons • 100%</span>
+</div>
+<div class="flex gap-0.5 h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary flex-1"></div>
+<div class="h-full bg-primary flex-1"></div>
+<div class="h-full bg-primary flex-1"></div>
+<div class="h-full bg-primary flex-1"></div>
+</div>
+</div>
+<div class="series-card group cursor-pointer">
+<div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-3">
+<img alt="Better Call Saul" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeMD_ZMaMs6nV035mxEBEK0BblOIxarPLzTDiZsI1vSBOD7jlhL51Os3xbY2U_-QQauLrMCu_jui5o4wMpbpoF2wbXseYBT7YnzFZ7eCPDNvYkXo6qeXXlkBHMG1zShuqzcBwNQL5L1EjiYa09MpLTx_szjUXrAeWZ1UDj8szmrUo9_yM4RP7mMDk8o2QS_JHy9H-ayqDoRAll1gu6LDZ3d92U_DAEyIJ2trkB9egQscDLo-Gf-BJs1yf4VZiyb6jifwW5PrXYrxjf"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<button class="w-full py-2 bg-primary text-black font-bold rounded-lg text-sm mb-2">Start S01E01</button>
+<button class="w-full py-2 bg-white/10 text-white font-bold rounded-lg text-sm backdrop-blur-md">Details</button>
+</div>
+</div>
+<h4 class="text-sm font-bold truncate group-hover:text-primary transition-colors">Shadow Legal</h4>
+<div class="flex items-center justify-between mt-1 mb-2">
+<span class="text-[10px] text-gray-500 uppercase tracking-wider">6 Seasons • 0%</span>
+</div>
+<div class="flex gap-0.5 h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-white/10 flex-1"></div>
+<div class="h-full bg-white/10 flex-1"></div>
+<div class="h-full bg-white/10 flex-1"></div>
+<div class="h-full bg-white/10 flex-1"></div>
+<div class="h-full bg-white/10 flex-1"></div>
+<div class="h-full bg-white/10 flex-1"></div>
+</div>
+</div>
+<div class="series-card group cursor-pointer">
+<div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-3">
+<img alt="Succession" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJuQlJGHK7B6e-m5V7jbLYvry2DU-cZit9BmtXureNS-fH7o2FJwwlyu1f_4ONMxJ4b6ReZhplxOtYlzexMjgnlrfQ9tB4D3hKn8n8KkaEckZAIV2O8EIQMp9o4LvhCpwhTQkoYX5NtzcgJGxXcmbAKLjAIadXW34L-Ggl2jYq62z9jUyhQwMvez3G6P9DQMM02Vka0Bq7RBblZzvvxpxZ95TVdGRCPJKWhc0duhz3dclDo0d5EbAAK3pcJ3qVJpcwuh4jXrXHQrwY"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<button class="w-full py-2 bg-primary text-black font-bold rounded-lg text-sm mb-2">Continue S03E01</button>
+<button class="w-full py-2 bg-white/10 text-white font-bold rounded-lg text-sm backdrop-blur-md">Details</button>
+</div>
+</div>
+<h4 class="text-sm font-bold truncate group-hover:text-primary transition-colors">Inheritance</h4>
+<div class="flex items-center justify-between mt-1 mb-2">
+<span class="text-[10px] text-gray-500 uppercase tracking-wider">4 Seasons • 50%</span>
+</div>
+<div class="flex gap-0.5 h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary flex-1"></div>
+<div class="h-full bg-primary flex-1"></div>
+<div class="h-full bg-white/10 flex-1"></div>
+<div class="h-full bg-white/10 flex-1"></div>
+</div>
+</div>
+<div class="series-card group cursor-pointer">
+<div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-3">
+<img alt="Arcane" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDERgBrlD2NZIyt2TxnmyV4SF4bnvPBfBw_pwHiai3cLFQZD_rRXILW_gq402iXLwHxe19djVdn8CDEREVaOkN_IjAn1B0Mpvnr6LyCiYEU4l4gqqcAnaLuM3YfxjbD_ktueO23uIdniVJGeLEEHm1v7zwDvj_M3SpJZSR3yDLXNL_QMZLQOMRGon22YL6HEeFDU1ybl4jIpx-1GhCtx5P9bqUOd8y-yWZY13rclTOPp6_rb_aOoFhO0ZIuj6bwKQKmiG7uJlPXKNTs"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<button class="w-full py-2 bg-primary text-black font-bold rounded-lg text-sm mb-2">Watch Again</button>
+<button class="w-full py-2 bg-white/10 text-white font-bold rounded-lg text-sm backdrop-blur-md">Details</button>
+</div>
+</div>
+<h4 class="text-sm font-bold truncate group-hover:text-primary transition-colors">Steel &amp; Hex</h4>
+<div class="flex items-center justify-between mt-1 mb-2">
+<span class="text-[10px] text-gray-500 uppercase tracking-wider">1 Season • 100%</span>
+</div>
+<div class="flex gap-0.5 h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary flex-1"></div>
+</div>
+</div>
+<div class="series-card group cursor-pointer">
+<div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-3">
+<img alt="Chernobyl" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2wRivsOQ4o5dXBaFdFcDDg_uJT1hTT1ZJJt3Qx3z4fhgXCnAeeJ9KqtPsr4z6qBWtEPAVNYDX2Gn75IR6KLZPKYo4rnTnGWznpIg51cLxLMudqUSog4dm9BMeR5ZJ4t7YvjrCLY6eAeh7Epn6fcOuoQapwxXx4a-wp9yHvrqTs0QjwrVA5WcBe_FGOPWlmzSBQt0ygr-SRF5plwk2Iv8pNjumPEHaZ4Ym9cK9PdGnorJHa-Iis8ZM_FS6KzS5qbL0XSCeqJHPPnWJ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<button class="w-full py-2 bg-primary text-black font-bold rounded-lg text-sm mb-2">Continue S01E03</button>
+<button class="w-full py-2 bg-white/10 text-white font-bold rounded-lg text-sm backdrop-blur-md">Details</button>
+</div>
+</div>
+<h4 class="text-sm font-bold truncate group-hover:text-primary transition-colors">Critical Mass</h4>
+<div class="flex items-center justify-between mt-1 mb-2">
+<span class="text-[10px] text-gray-500 uppercase tracking-wider">1 Season • 40%</span>
+</div>
+<div class="flex gap-0.5 h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[40%]"></div>
+</div>
+</div>
+<div class="series-card group cursor-pointer">
+<div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-3">
+<img alt="Dark" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRIPGiVtGzAxzVEC48eF4onw7HGtxyyMVfTrZc-6RG2MboRvtjAsdKQdOw1Xy0LhnfsdmmcGS5d7OFmaZoNo6CXXaeXpcO16cxQmr8f8vvilFTQSxQ1vCHXUAwRoRJUQh-_-11u3KG-KJY8GX-Q9X4sE0H3b1tIjySb5_vK3pOFgr3ozzN7jdsVzESjDXnD4hI7vPOq0kY5EXvX4pQmSTkFAk776lN1QKe8Hv_7jCecJCVQlKriZFpqPzTNDsUP5v8s7xQMi8iKj_O"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<button class="w-full py-2 bg-primary text-black font-bold rounded-lg text-sm mb-2">Continue S02E05</button>
+<button class="w-full py-2 bg-white/10 text-white font-bold rounded-lg text-sm backdrop-blur-md">Details</button>
+</div>
+</div>
+<h4 class="text-sm font-bold truncate group-hover:text-primary transition-colors">Temporal Knot</h4>
+<div class="flex items-center justify-between mt-1 mb-2">
+<span class="text-[10px] text-gray-500 uppercase tracking-wider">3 Seasons • 45%</span>
+</div>
+<div class="flex gap-0.5 h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary flex-1"></div>
+<div class="h-full bg-white/30 flex-1"></div>
+<div class="h-full bg-white/10 flex-1"></div>
+</div>
+</div>
+<div class="series-card group cursor-pointer">
+<div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-3">
+<img alt="Severance" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcWVSDJ1YB4HBj84B0PfZvCfHMX_KbSxBELs5OPZ31529V3IS9rBmtTTpm5OGmptTAFah0ymxyqqm08BYZ8LAswVZ3UA6KdL1DEfdEhl_N3cWmx3sCayTVLAPF3ftW4JB92xbxSVYowr_Gr0qqKFpkPnc7GzSbzlwy5A_3GbxvGYB7NLs9jv6R7th1fnn5FkMRvz5yrEFry037tKD9tgk3s6lTH9Nd3PGoafVf_R1xRsRzcFYVUHFcbjdjY-8MNUZIa2nf2rIsOm9h"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+<button class="w-full py-2 bg-primary text-black font-bold rounded-lg text-sm mb-2">Continue S01E09</button>
+<button class="w-full py-2 bg-white/10 text-white font-bold rounded-lg text-sm backdrop-blur-md">Details</button>
+</div>
+</div>
+<h4 class="text-sm font-bold truncate group-hover:text-primary transition-colors">Split Mind</h4>
+<div class="flex items-center justify-between mt-1 mb-2">
+<span class="text-[10px] text-gray-500 uppercase tracking-wider">1 Season • 90%</span>
+</div>
+<div class="flex gap-0.5 h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[90%]"></div>
+</div>
+</div>
+<div class="group border-2 border-dashed border-white/5 rounded-xl aspect-[2/3] flex flex-col items-center justify-center cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-all">
+<span class="material-symbols-outlined text-4xl text-gray-600 group-hover:text-primary">add_circle</span>
+<span class="text-xs text-gray-500 group-hover:text-primary mt-2 font-medium">Add Series</span>
+</div>
+</div>
+</section>
+<footer class="mt-auto pt-8 pb-4 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 font-mono">
+<div class="flex gap-6">
+<span class="flex items-center gap-2"><span class="size-1.5 bg-primary rounded-full"></span> Storage: 1.4 TB / 12 TB</span>
+<span class="flex items-center gap-2"><span class="size-1.5 bg-green-500 rounded-full"></span> Server Online</span>
+</div>
+<div class="flex gap-4 mt-4 md:mt-0">
+<span class="hover:text-white cursor-pointer transition-colors">Privacy Policy</span>
+<span>v4.2.0-orange</span>
+</div>
+</footer>
+</div>
+</div>
+</main>
+
+</body></html>

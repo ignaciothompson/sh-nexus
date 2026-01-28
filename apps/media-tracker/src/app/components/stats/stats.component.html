@@ -1,0 +1,119 @@
+<div class="stats-page">
+    <!-- Header -->
+    <div class="page-header">
+        <h1 class="page-title">
+            <span class="material-symbols-outlined text-primary">analytics</span> Media Insights
+        </h1>
+        <div class="time-filter">
+            <button class="filter-btn active">All Time</button>
+            <button class="filter-btn">This Year</button>
+            <button class="filter-btn">This Month</button>
+        </div>
+    </div>
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <span class="material-symbols-outlined">visibility</span>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{ stats.totalWatched }}</span>
+                <span class="stat-label">Total Watched</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <span class="material-symbols-outlined">schedule</span>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{ stats.hoursWatched }}h</span>
+                <span class="stat-label">Watch Time</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <span class="material-symbols-outlined">movie</span>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{ stats.moviesWatched }}</span>
+                <span class="stat-label">Movies</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <span class="material-symbols-outlined">tv</span>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{ stats.seriesCompleted }}</span>
+                <span class="stat-label">Series</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <span class="material-symbols-outlined">star</span>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{ stats.avgRating }}</span>
+                <span class="stat-label">Avg Rating</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <span class="material-symbols-outlined">category</span>
+            </div>
+            <div class="stat-content">
+                <span class="stat-value">{{ stats.topGenre }}</span>
+                <span class="stat-label">Top Genre</span>
+            </div>
+        </div>
+    </div>
+    <!-- Charts Section -->
+    <div class="charts-section">
+        <!-- Monthly Activity Chart -->
+        <div class="chart-card">
+            <h3 class="chart-title">Monthly Activity</h3>
+            <div class="bar-chart"> @for (month of monthlyData; track month.month) { <div class="bar-group">
+                    <div class="bars">
+                        <div class="bar movies" [style.height.%]="getBarHeight(month.movies)"></div>
+                        <div class="bar series" [style.height.%]="getBarHeight(month.series)"></div>
+                    </div>
+                    <span class="bar-label">{{ month.month }}</span>
+                </div> } </div>
+            <div class="chart-legend">
+                <span class="legend-item"><span class="legend-dot movies"></span> Movies</span>
+                <span class="legend-item"><span class="legend-dot series"></span> Series</span>
+            </div>
+        </div>
+        <!-- Genre Breakdown -->
+        <div class="chart-card">
+            <h3 class="chart-title">Genre Breakdown</h3>
+            <div class="genre-list"> @for (genre of genreBreakdown; track genre.genre) { <div class="genre-item">
+                    <div class="genre-info">
+                        <span class="genre-name">{{ genre.genre }}</span>
+                        <span class="genre-percent">{{ genre.percentage }}%</span>
+                    </div>
+                    <div class="genre-bar">
+                        <div class="genre-fill" [style.width.%]="genre.percentage" [style.background]="genre.color"></div>
+                    </div>
+                </div> } </div>
+        </div>
+    </div>
+    <!-- Recent Activity -->
+    <div class="activity-section">
+        <h3 class="section-title">
+            <span class="material-symbols-outlined text-primary">history</span> Recent Activity
+        </h3>
+        <div class="activity-list"> @for (item of recentActivity; track item.title) { <div class="activity-item">
+                <div class="activity-icon">
+                    <span class="material-symbols-outlined">{{ item.type === 'Movie' ? 'movie' : 'tv' }}</span>
+                </div>
+                <div class="activity-content">
+                    <span class="activity-title">{{ item.title }}</span>
+                    <span class="activity-meta">{{ item.type }} • {{ item.date }}</span>
+                </div>
+                <div class="activity-rating">
+                    <span class="material-symbols-outlined">star</span> {{ item.rating }}
+                </div>
+            </div> } </div>
+    </div>
+</div>

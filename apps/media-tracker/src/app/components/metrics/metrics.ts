@@ -1,42 +1,41 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
-import { ApiService } from '../../services/api.service';
+import { HistoryService } from '../../services/history.service';
+import { SeenHistoryItem } from '../../models/types';
 
 @Component({
   selector: 'app-metrics',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './metrics.html',
-  styleUrl: './metrics.scss'
+  styleUrl: './metrics.css'
 })
 export class MetricsComponent implements OnInit {
   stats = { movies: 0, episodes: 0, hours: 0, total: 0 };
-  genreCounts: {name: string, count: number}[] = [];
-  recentHistory: any[] = [];
+  genreCounts: { name: string; count: number }[] = [];
+  recentHistory: SeenHistoryItem[] = [];
 
-  private api = inject(ApiService);
+  private history = inject(HistoryService);
   private location = inject(Location);
 
-  ngOnInit() {
-    this.api.getSeenHistory().then(({ data, error }) => {
-      if (error) {
-        console.error('Error fetching history:', error);
-      }
-      if (data) {
-        this.processData(data);
-      }
-    });
+  async ngOnInit() {
+    try {
+      const data = await this.history.getAll();
+      this.processData(data);
+    } catch (error) {
+      console.error('Error fetching history:', error);
+    }
   }
 
-  processData(history: any[]) {
+  processData(history: SeenHistoryItem[]) {
     this.recentHistory = history.slice(0, 10);
     
     // Stats
     this.stats.movies = history.filter(h => h.media_type === 'movie').length;
-    this.stats.episodes = history.filter(h => h.media_type === 'tv').length; // Assuming each entry is an episode or show watch
+    this.stats.episodes = history.filter(h => h.media_type === 'tv').length;
     this.stats.total = history.length;
     
-    // Calculate hours (Assuming runtime is in minutes)
+    // Calculate hours (runtime is in minutes)
     const totalMinutes = history.reduce((acc, curr) => acc + (curr.runtime || 0), 0);
     this.stats.hours = totalMinutes / 60;
 

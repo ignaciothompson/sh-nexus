@@ -1,4 +1,4 @@
-# Stage 1: Builder
+# Stage 1: Build Angular app
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -10,7 +10,7 @@ COPY . .
 
 RUN npx ng build --configuration production
 
-# Stage 2: Runtime
+# Stage 2: PocketBase runtime
 FROM alpine:latest
 
 WORKDIR /pb
@@ -23,7 +23,11 @@ RUN unzip /tmp/pb.zip -d /pb/ && \
     chmod +x /pb/pocketbase
 
 COPY --from=builder /app/dist/*/browser /pb/pb_public/
+COPY --from=builder /app/pb_schema.json /pb/pb_schema.json
+COPY --from=builder /app/init-pb.sh /pb/init-pb.sh
+
+RUN sed -i 's/\r$//' /pb/init-pb.sh && chmod +x /pb/init-pb.sh
 
 EXPOSE 8080
 
-CMD ["./pocketbase", "serve", "--http=0.0.0.0:8080"]
+CMD ["/pb/init-pb.sh"]

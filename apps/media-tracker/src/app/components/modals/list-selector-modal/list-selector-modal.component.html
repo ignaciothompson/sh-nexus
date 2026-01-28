@@ -1,0 +1,24 @@
+<div class="list-selector">
+    <div class="sh-modal-header">
+        <h3 class="sh-modal-title">Add to List</h3>
+        <button class="sh-modal-close" (click)="close()">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+    </div>
+    <div class="sh-modal-body">
+        <div class="lists-container" *ngIf="!loading; else loadingTpl"> @if (lists.length === 0) { <p class="empty-state">No lists yet. Create one below!</p> } @for (list of lists; track list.id) { <button class="list-item" [class.selected]="isInList(list.id)" (click)="toggleList(list)">
+                <span class="material-symbols-outlined list-icon"> {{ isInList(list.id) ? 'check_circle' : 'circle' }} </span>
+                <span class="list-name">{{ list.name }}</span>
+                <span class="list-count">{{ list.items ? list.items.length : 0 }} items</span>
+            </button> } </div>
+        <ng-template #loadingTpl>
+            <div class="loading-state">
+                <span class="material-symbols-outlined spinning">progress_activity</span>
+            </div>
+        </ng-template>
+    </div>
+    <div class="sh-modal-footer">
+        <button class="sh-btn sh-btn-ghost" (click)="createNewList()">
+            <span class="material-symbols-outlined">add</span> Create New List </button>
+    </div>
+</div>

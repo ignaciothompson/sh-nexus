@@ -1,0 +1,14 @@
+<header class="app-header">
+    <div class="search-container">
+        <span class="material-symbols-outlined search-icon">search</span>
+        <input type="text" class="sh-input search-input" placeholder="Search movies, TV shows..." [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" (keyup.enter)="onSearch()" />
+    </div>
+    <div class="header-actions">
+        <button class="sh-btn sh-btn-ghost icon-btn">
+            <span class="material-symbols-outlined">notifications</span>
+        </button>
+        <button class="sh-btn sh-btn-ghost icon-btn">
+            <span class="material-symbols-outlined">account_circle</span>
+        </button>
+    </div>
+</header>

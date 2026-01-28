@@ -1,0 +1,104 @@
+<div class="media-modal" *ngIf="!loading; else loadingTpl">
+    <!-- Header with close button -->
+    <div class="sh-modal-header">
+        <button class="sh-modal-close" (click)="close()">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+    </div>
+    <!-- Content -->
+    <div class="modal-content">
+        <!-- Left: Poster -->
+        <div class="poster-section">
+            <img [src]="getImageUrl(media?.poster_path)" [alt]="getTitle()" class="poster-image">
+        </div>
+        <!-- Right: Details -->
+        <div class="details-section">
+            <h2 class="title">{{ getTitle() }}</h2>
+            <div class="meta-row">
+                <span class="genres">{{ getGenres() }}</span>
+                <span class="separator" *ngIf="getRuntime()">•</span>
+                <span class="runtime" *ngIf="getRuntime()">{{ getRuntime() }}</span>
+                <span class="separator" *ngIf="getYear()">•</span>
+                <span class="year">{{ getYear() }}</span>
+            </div>
+            <div class="director" *ngIf="getDirector()">
+                <span class="label">Director:</span> {{ getDirector() }}
+            </div>
+            <div class="cast" *ngIf="getCast().length">
+                <span class="label">Cast:</span> {{ getCast().join(', ') }}
+            </div>
+            <p class="overview" *ngIf="media?.overview">{{ media?.overview }}</p>
+        </div>
+    </div>
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button class="action-btn" [class.active]="isFavourite" (click)="toggleFavourite()">
+            <span class="material-symbols-outlined">{{ isFavourite ? 'favorite' : 'favorite_border' }}</span>
+            <span class="btn-label">Favourite</span>
+        </button>
+        <button class="action-btn" [class.active]="isInWatchlist" (click)="toggleWatchlist()">
+            <span class="material-symbols-outlined">{{ isInWatchlist ? 'bookmark' : 'bookmark_border' }}</span>
+            <span class="btn-label">Watchlist</span>
+        </button>
+        <button class="action-btn" (click)="openAddToList()">
+            <span class="material-symbols-outlined">playlist_add</span>
+            <span class="btn-label">Add to List</span>
+        </button>
+    </div>
+    <!-- Streaming Services -->
+    <div class="streaming-section">
+        <span class="streaming-label">Watch on:</span>
+        <div class="streaming-icons"> @for (provider of watchProviders; track provider.provider_id) { <button class="streaming-btn" [title]="provider.provider_name" (click)="openStreamingService(provider.provider_name)">
+                <img [src]="getImageUrl(provider.logo_path, 'w92')" [alt]="provider.provider_name">
+            </button> } <!-- Jellyfin always visible -->
+            <button class="streaming-btn jellyfin" title="Jellyfin" (click)="openJellyfin()">
+                <img src="/assets/icons/jellyfin.svg" alt="Jellyfin">
+            </button>
+        </div>
+    </div>
+    <!-- Seasons Section -->
+    <div class="seasons-section" *ngIf="showSeasons.length > 0">
+        <h3>Seasons</h3>
+        <div class="season-accordion">
+            <div class="season-item" *ngFor="let season of showSeasons">
+                <div class="season-header" (click)="toggleSeason(season)" [class.expanded]="season.expanded">
+                    <div class="season-info-left">
+                        <img [src]="getImageUrl(season.poster_path, 'w92')" class="season-poster" onerror="this.style.display='none'">
+                        <div class="season-meta">
+                            <span class="season-name">{{ season.name }}</span>
+                            <span class="episode-count">{{ season.episode_count }} Episodes</span>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined expand-icon">{{ season.expanded ? 'expand_less' : 'expand_more' }}</span>
+                </div>
+                <div class="season-content" *ngIf="season.expanded">
+                    <div *ngIf="episodesLoading && !season.episodes?.length" class="loading-episodes">
+                        <span class="material-symbols-outlined spinning">progress_activity</span>
+                    </div>
+                    <div class="episode-list" *ngIf="season.episodes?.length">
+                        <div class="episode-item" *ngFor="let ep of season.episodes">
+                            <div class="episode-info">
+                                <span class="ep-num">S{{season.season_number}} E{{ep.episode_number}}</span>
+                                <span class="ep-name">{{ ep.name }}</span>
+                            </div>
+                            <button class="ep-watch-btn" [class.watched]="isEpisodeWatched(season.season_number, ep.episode_number)" (click)="toggleEpisode(season.season_number, ep.episode_number, $event)" title="Toggle Watched">
+                                <span class="material-symbols-outlined">{{ isEpisodeWatched(season.season_number, ep.episode_number) ? 'check_circle' : 'visibility' }}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Mark as Watched Button -->
+    <div class="watched-section">
+        <button class="sh-btn watched-btn" [class.sh-btn-primary]="!isWatched" [class.sh-btn-success]="isWatched" (click)="markAsWatched()">
+            <span class="material-symbols-outlined">{{ isWatched ? 'check_circle' : 'visibility' }}</span> {{ isWatched ? 'Watched' : 'Mark as Watched' }} </button>
+    </div>
+</div>
+<ng-template #loadingTpl>
+    <div class="loading-state">
+        <span class="material-symbols-outlined spinning">progress_activity</span>
+        <p>Loading...</p>
+    </div>
+</ng-template>

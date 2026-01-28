@@ -1,0 +1,76 @@
+<div class="series-page">
+    <!-- Header -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                <span class="material-symbols-outlined text-primary">tv</span> TV Series
+            </h1>
+            <p class="page-subtitle">{{ series.length }} Series</p>
+        </div>
+        <div class="header-actions">
+            <div class="view-toggle">
+                <button class="toggle-btn" [class.active]="viewMode === 'grid'" (click)="viewMode = 'grid'">
+                    <span class="material-symbols-outlined">grid_view</span>
+                </button>
+                <button class="toggle-btn" [class.active]="viewMode === 'list'" (click)="viewMode = 'list'">
+                    <span class="material-symbols-outlined">view_list</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Filters -->
+    <div class="filters-bar">
+        <div class="search-box">
+            <span class="material-symbols-outlined">search</span>
+            <input type="text" placeholder="Search series..." [(ngModel)]="searchQuery">
+        </div>
+        <div class="filter-group">
+            <select [(ngModel)]="selectedGenre" class="filter-select"> @for (genre of genres; track genre.id) { <option [value]="genre.id">{{ genre.name }}</option> } </select>
+            <select [(ngModel)]="selectedStatus" class="filter-select">
+                <option value="all">All Status</option> @for (status of statuses; track status) { @if (status !== 'all') { <option [value]="status">{{ status }}</option> } }
+            </select>
+            <select [(ngModel)]="sortBy" class="filter-select">
+                <option value="popular">Most Popular</option>
+                <option value="rating">Highest Rated</option>
+                <option value="newest">Newest First</option>
+                <option value="title">A-Z</option>
+            </select>
+        </div>
+    </div>
+    <!-- Series Grid -->
+    <div class="series-grid" [class.list-view]="viewMode === 'list'"> @for (show of series; track show.id) { <div class="series-card" (click)="openMediaModal(show)">
+            <div class="series-poster">
+                <img [src]="getImageUrl(show.poster_path)" [alt]="show.name">
+                <div class="poster-overlay">
+                    <button class="action-btn">
+                        <span class="material-symbols-outlined">play_arrow</span>
+                    </button>
+                    <button class="action-btn small">
+                        <span class="material-symbols-outlined">bookmark</span>
+                    </button>
+                </div>
+                <div class="rating-badge">
+                    <span class="material-symbols-outlined">star</span> {{ getRating(show.vote_average) }}
+                </div>
+                <div class="status-badge">Airing</div>
+            </div>
+            <div class="series-info">
+                <h3 class="series-title">{{ show.name }}</h3>
+                <p class="series-meta">{{ show.first_air_date | slice:0:4 }}</p>
+            </div>
+        </div> } </div>
+    <!-- Pagination -->
+    <div class="pagination">
+        <button class="page-btn" disabled>
+            <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <span class="page-ellipsis">...</span>
+        <button class="page-btn">15</button>
+        <button class="page-btn">
+            <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+    </div>
+</div>

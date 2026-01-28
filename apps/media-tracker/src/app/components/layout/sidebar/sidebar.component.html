@@ -1,0 +1,46 @@
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo-icon-wrapper">
+            <span class="material-symbols-outlined logo-icon">movie_filter</span>
+        </div>
+        <div class="logo-text-wrapper">
+            <span class="logo-text">MediaTracker</span>
+            <span class="logo-version">v1.0</span>
+        </div>
+    </div>
+    <nav class="sidebar-nav">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
+            <span class="material-symbols-outlined">home</span>
+            <span class="nav-text">Dashboard</span>
+        </a>
+        <a routerLink="/movies" routerLinkActive="active" class="nav-item">
+            <span class="material-symbols-outlined">movie</span>
+            <span class="nav-text">Movies</span>
+        </a>
+        <a routerLink="/series" routerLinkActive="active" class="nav-item">
+            <span class="material-symbols-outlined">tv</span>
+            <span class="nav-text">Series</span>
+        </a>
+        <a routerLink="/calendar" routerLinkActive="active" class="nav-item">
+            <span class="material-symbols-outlined">calendar_month</span>
+            <span class="nav-text">Calendar</span>
+        </a>
+        <a routerLink="/stats" routerLinkActive="active" class="nav-item">
+            <span class="material-symbols-outlined">analytics</span>
+            <span class="nav-text">Statistics</span>
+        </a>
+    </nav>
+    <div class="sidebar-footer">
+        <button class="nav-item settings-btn" (click)="openSettings()">
+            <span class="material-symbols-outlined">settings</span>
+            <span class="nav-text">Settings</span>
+        </button>
+        <div class="user-info">
+            <div class="user-avatar"></div>
+            <div class="user-details">
+                <span class="user-name">Admin</span>
+                <span class="user-status">Active Session</span>
+            </div>
+        </div>
+    </div>
+</aside>

@@ -1,8 +1,11 @@
-<div class="movie-card glass-panel" (click)="goToDetails()">
-    <img [src]="'https://image.tmdb.org/t/p/w500' + (movie.poster_path || movie.backdrop_path)" alt="{{ movie.title }}" class="poster">
-    <div class="info">
-        <h3>{{ movie.title || movie.name }}</h3>
-        <p class="rating">⭐ {{ movie.vote_average | number:'1.1-1' }}</p>
-        <button class="btn-add" (click)="addToWatchlist($event)">+ Watchlist</button>
+<div class="movie-card sh-card" (click)="goToDetails()">
+    <img [src]="posterUrl" [alt]="title" class="poster">
+    <div class="card-content">
+        <h3 class="card-title">{{ title }}</h3>
+        <p class="rating">
+            <span class="material-symbols-outlined star-icon">star</span> {{ movie.vote_average | number:'1.1-1' }}
+        </p>
+        <button class="sh-btn sh-btn-secondary btn-watchlist" (click)="addToWatchlist($event)">
+            <span class="material-symbols-outlined">bookmark_add</span> Watchlist </button>
     </div>
 </div>

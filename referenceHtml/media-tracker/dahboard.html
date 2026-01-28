@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SH-Nexus Media Tracker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        :root {
+            --primary: #FF9F1C;
+            --background: #0f0f0f;
+            --surface: #161618;
+            --card: #1c1c1e;
+        }
+        @layer base {
+            body { @apply bg-[var(--background)] text-white font-['Manrope']; }
+        }
+        .nav-item-active {
+            background: rgba(255, 159, 28, 0.15);
+            color: var(--primary);
+            border-right: 2px solid var(--primary);
+        }
+        .glass-panel {
+            background: rgba(28, 28, 30, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .media-card {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .media-card:hover {
+            transform: scale(1.02);
+        }
+        .scroll-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scroll-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF9F1C",
+                        background: "#0f0f0f",
+                        surface: "#161618",
+                        card: "#1c1c1e"
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body class="overflow-hidden h-screen flex w-full">
+<aside class="w-20 lg:w-64 h-full bg-[#161618] border-r border-white/5 flex flex-col justify-between shrink-0 z-20">
+<div class="flex flex-col gap-8 pt-6">
+<div class="flex items-center gap-3 px-6 justify-center lg:justify-start">
+<div class="size-8 rounded-full bg-gradient-to-br from-primary/80 to-primary/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-black text-lg">dns</span>
+</div>
+<div class="hidden lg:flex flex-col">
+<h1 class="text-white text-lg font-bold leading-none tracking-tight">SH-Nexus</h1>
+<span class="text-primary/60 text-xs font-mono">OS v2.0.4</span>
+</div>
+</div>
+<nav class="flex flex-col gap-2 px-3">
+<a class="flex items-center gap-4 px-3 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="hidden lg:block text-sm font-medium">Home</span>
+</a>
+<a class="nav-item-active flex items-center gap-4 px-3 py-3 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_display</span>
+<span class="hidden lg:block text-sm font-medium">Media Tracker</span>
+</a>
+<a class="flex items-center gap-4 px-3 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">router</span>
+<span class="hidden lg:block text-sm font-medium">Network</span>
+</a>
+<a class="flex items-center gap-4 px-3 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="hidden lg:block text-sm font-medium">Calendar</span>
+</a>
+<a class="flex items-center gap-4 px-3 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="hidden lg:block text-sm font-medium">Notes</span>
+</a>
+<a class="flex items-center gap-4 px-3 py-3 rounded-lg text-gray-400 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined">code</span>
+<span class="hidden lg:block text-sm font-medium">Code</span>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-2 p-4 border-t border-white/5">
+<div class="flex items-center gap-3 px-3 lg:px-0 justify-center lg:justify-start">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 shrink-0 ring-2 ring-primary/20" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBUyPzrhg49lESJLKZx7GuMp9XrGyz2pfI2uKiR9epv0QEqEf1dsyKA9a7fgtNAotAJBldHzCuDdklZcnjEzW5geUSOImeKtpaUdjXvRFtJ7SMVvVPN9G-wNVuiGlEy5EDS1nY2V8ZPU6JoaCcltt370XcAI6Tb1Sogrws73z4s4rtNC0ocurrNbDc-ir4iDfU73P47jYhYGxGP5GWhpCXnhf7kpVolB-w0Osu-kGjCnSEW068KLL2eTE2n7ilAEXApaHhpLNhGnwGI");'></div>
+<div class="hidden lg:flex flex-col">
+<p class="text-white text-xs font-medium leading-none">Admin</p>
+<p class="text-gray-500 text-[10px]">Active Session</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-full overflow-hidden">
+<header class="flex items-center justify-between px-8 py-5 border-b border-white/5 bg-[#0f0f0f]/90 backdrop-blur-sm z-10">
+<div class="flex items-center gap-4">
+<h2 class="text-white text-xl font-medium tracking-tight">Media Tracker</h2>
+<div class="flex gap-2 ml-4">
+<span class="px-2.5 py-1 rounded bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider">4 New Releases</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group hidden md:block">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="bg-[#161616] border border-white/5 text-gray-300 text-sm rounded-lg focus:ring-1 focus:ring-primary focus:border-primary block w-80 pl-10 p-2.5 placeholder-gray-600 transition-all" placeholder="Search Movies, Shows, Collections..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+<button class="relative p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full"></span>
+</button>
+</div>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-8 space-y-12">
+<section>
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-semibold flex items-center gap-2 text-white">
+<span class="material-symbols-outlined text-primary">play_circle</span>
+                    Currently Watching
+                </h3>
+<div class="flex gap-2">
+<button class="size-8 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5"><span class="material-symbols-outlined text-sm">chevron_left</span></button>
+<button class="size-8 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5"><span class="material-symbols-outlined text-sm">chevron_right</span></button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="relative group aspect-video rounded-xl overflow-hidden glass-panel media-card cursor-pointer">
+<img alt="Show poster" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpJIHA2SrpQ7SrFExdrc3clEX7SqGLgdMX_tCxmmbdn-H6U5eeWvsjI-lIFuGlo9zBSE5w38t3wWq-qeUFLGFPJVi1iLqBlC2t9ooov3GLaZpX0jhCa-nEHv1nAKslQlj-cebyzGHN3D7Nu1t7R9euhlaBMgGNNTE9wSzfVli5g03YyqKdYOqiaJqtoAVT_giSLXKOyuudQihIgIwnnnExrimMgdj1zxHTfvpYRfRlKc3qICols77rBTgKhFxImUfJOPwgBin-jBYW"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 rounded bg-primary text-black text-[10px] font-bold uppercase">S04 E12</span>
+<span class="text-xs text-gray-300 font-medium">45:12 remaining</span>
+</div>
+<h4 class="text-xl font-bold text-white mb-4">Cyberpunk: Edgerunners</h4>
+<div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[65%] rounded-full shadow-[0_0_8px_rgba(255,159,28,0.5)]"></div>
+</div>
+</div>
+</div>
+<div class="relative group aspect-video rounded-xl overflow-hidden glass-panel media-card cursor-pointer">
+<img alt="Show poster" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdcc1w3f4LhjVQZRj41nDS0H16Xtq0nikLvE3d0kyhWOOqFgETGvQnz_PQZAKXV1sRqdR1VrHR0VJ5VZ0903sgV_dauyaV5QnHI_PMxHhVBLkMqgSHMpomrx3S3IuwVqCoIig5GwR20k1zI8KxMPML-cwMi06HoAEc31UduJuPQuCEOh7D-AYG07xzyfXC8XrWlbH1M_Aaq61h5mpVRazjm-XrNHCfBIcbUBNHAQ9B72DYkwZfY7FittC4GWv_gf8hNrvgbkgu29_x"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 rounded bg-primary text-black text-[10px] font-bold uppercase">Movie</span>
+<span class="text-xs text-gray-300 font-medium">1:22:05 remaining</span>
+</div>
+<h4 class="text-xl font-bold text-white mb-4">Interstellar</h4>
+<div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[40%] rounded-full shadow-[0_0_8px_rgba(255,159,28,0.5)]"></div>
+</div>
+</div>
+</div>
+<div class="relative group aspect-video rounded-xl overflow-hidden glass-panel media-card cursor-pointer hidden lg:block">
+<img alt="Show poster" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGuGO5RQTY-YEA90WmlYcBmrJIeo5f3RQ6z0DgKF-kaDlo9AtMPldlv_iUYedlyr4WbdukXABNlmgUP0jmnxk69YwZ7cDIyH6bEUOddlKqTxb6DkNRmwMONMmn04Y_bI9PwDIJ_Pv0o9Jnuq88QT4_I0MHASs05bSP1OpiWliPCj1DNsZAIzlL79PaWBpCKR7uwZsvt9Y4PEMJn3ZKwwWSmuLUwG6xmqJFNmp3j563jwsFdw2VDd_0APpXo36ykJC9IWBSQ0OBSftH"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 rounded bg-primary text-black text-[10px] font-bold uppercase">S01 E02</span>
+<span class="text-xs text-gray-300 font-medium">05:30 remaining</span>
+</div>
+<h4 class="text-xl font-bold text-white mb-4">Foundation</h4>
+<div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[90%] rounded-full shadow-[0_0_8px_rgba(255,159,28,0.5)]"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-semibold flex items-center gap-2 text-white">
+<span class="material-symbols-outlined text-primary">new_releases</span>
+                    Recently Released
+                </h3>
+<button class="text-xs text-primary hover:underline">View All</button>
+</div>
+<div class="flex gap-6 overflow-x-auto pb-4 scroll-hide">
+<div class="flex-none w-44 space-y-3 cursor-pointer group">
+<div class="aspect-[2/3] rounded-lg overflow-hidden bg-white/5 media-card border border-white/5">
+<img alt="poster" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlirjZDMminu4a7ibwjEUkUiy0Jv7heUCBop2NZI6b4zBF-FBg0c1g9RpZ0Xuk_edWBhpiHQ1Sw_jidFgxcgASPqWxIG_Gc0UqUoOC34LwSwbaY5Fm9iriiJIWSeiWS-abKQs22RL9iDHODoGd98HXwBAgwwjMtGBiPJ6e9Lw4Urh72O5_M1a1AHfVDi2bx5w6adHLbOsmA0RQjFlLgzS-Ym6dOvErFmarGGBSr7EkRTrqNNtwPtNc2LkCXRs9pWHhdrx26K9B1zcg"/>
+</div>
+<div>
+<h5 class="text-sm font-medium text-white truncate">The Last Of Us</h5>
+<p class="text-xs text-gray-500">HBO Max • 2023</p>
+</div>
+</div>
+<div class="flex-none w-44 space-y-3 cursor-pointer group">
+<div class="aspect-[2/3] rounded-lg overflow-hidden bg-white/5 media-card border border-white/5">
+<img alt="poster" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMjHSqmLh1feiGkZOMjLfzQyW5nOLSdEMloWRWbuHs2cFTt2fJupg8SuxcEPto3SKNdluscPL5XZtT85ps2leeKmlyrdQW-s3iVbH1_8ATFUL2kHA9_Ckrn5KHhBB_GUYHEeFqBH93m0x7aJRGAnWptqeqT50pdQRXfYHshSZZZj5qsHwB8AoaSc00VBIrQpYOSwCjhGPKArNfV-CtJvDNYEzCXxriyDrrHyYvsCe8oBqTdGeY8QtSeIYAnGmcnE6MF12OaGSIoKOI"/>
+</div>
+<div>
+<h5 class="text-sm font-medium text-white truncate">Dune: Part Two</h5>
+<p class="text-xs text-gray-500">Theatrical • 2024</p>
+</div>
+</div>
+<div class="flex-none w-44 space-y-3 cursor-pointer group">
+<div class="aspect-[2/3] rounded-lg overflow-hidden bg-white/5 media-card border border-white/5">
+<img alt="poster" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkPoqDoKtUyoBRYAqbCeTj8_qwzPrwWQvscTBMmr-pW9jNVG2mHp4KJ12t5dZnLw99qrEx35BBWpY5pH3Ey4KDuUln6EPoFVkUnn4hP_zXhqLc9b1lKIcc2mPjBR3y5ZmD1RNAbNvf1nspWBhrFi1ggP4kCeZSGs8y_CNjgW9eu7yddwy-ifr8IETbhA2x8PzPfI82g8Ew3O5LpO5gfk7-dsA54V-keVLJyQJnQwKrJoNREJ89aobbRwy7dUuk9xFDhqFUVWA3huO9"/>
+</div>
+<div>
+<h5 class="text-sm font-medium text-white truncate">Arcane: Season 2</h5>
+<p class="text-xs text-gray-500">Netflix • 2024</p>
+</div>
+</div>
+<div class="flex-none w-44 space-y-3 cursor-pointer group">
+<div class="aspect-[2/3] rounded-lg overflow-hidden bg-white/5 media-card border border-white/5">
+<img alt="poster" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAavyWoBBocmP-u9E0I_yCpVWEFLYNA-0cakT5pqGS4Hmdvv3X3MQm3NBafWJw4x-4u_iDUCEByRzxS6K1RQxoZhd_qgxNp8hWLtWv-vqBQ3mKPL7vOLwiTalgPjP02RVP9pjmFBQem7z9DIDttcrzozNfouGaA6AoD9DUOrCT4qRBIEilPS5J0gBMQHOBLC06dxJSGgJKtnrZUJGL21MCUPDofISwtYgsgx01E-JKqV-ewf7qxVZB8pE_NL7nDS739Xp9kcq4DpKae"/>
+</div>
+<div>
+<h5 class="text-sm font-medium text-white truncate">Severance</h5>
+<p class="text-xs text-gray-500">Apple TV+ • 2024</p>
+</div>
+</div>
+<div class="flex-none w-44 space-y-3 cursor-pointer group">
+<div class="aspect-[2/3] rounded-lg overflow-hidden bg-white/5 media-card border border-white/5">
+<img alt="poster" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBx1nS3lVKygxmtNawBfWI1Qy0e7p7QFNjLTERuirY4dPENvMNjYv4vyws3_LgYVCuqTNxla6ZTdYRKXy06BNKQXXwGNJPt-ILaA7cUoEJ5JfCg8qLTdQOu2Vz9SlKYWlDFjIVUToVUrzZEFGaXTZKImhVUlwo3-jpIW4oZ29PfqCRsJG6rEEGARoIfnkdJFDeoxTuB6_pgY06TwOQpJoEcBFcPTA6mqnicwxvwfzHqTen8JtJI78s7AB0IqEXxN7oEwdt8Y2tfIGvp"/>
+</div>
+<div>
+<h5 class="text-sm font-medium text-white truncate">The Bear</h5>
+<p class="text-xs text-gray-500">Hulu • 2024</p>
+</div>
+</div>
+<div class="flex-none w-44 space-y-3 cursor-pointer group">
+<div class="aspect-[2/3] rounded-lg overflow-hidden bg-white/5 media-card border border-white/5">
+<img alt="poster" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIuTtoZcoRd-UE5_mBGZ6dy7Jf3wybKwfPfixIt_00Nj_soIaP30ZcsoTU2iwXL6-XOtgcAFsNYPPI6M85ZJcTnzvj7tcOkKp9VBRmtvsN00wqqKxlQnxuNQnpp3Y3QChFTiwpZWA4B4_946rgWZghjCRho1Q29quS9rQEzfy3zChsEIcn8SCijSO3ykK_zicRvI6pKgLW-soES0_IlmgeydZcA9Gk5wAeXUpV2FIcY5WkUT0gSGp36pidtUDpX6yT-YjeaHZiP6WR"/>
+</div>
+<div>
+<h5 class="text-sm font-medium text-white truncate">The Boys</h5>
+<p class="text-xs text-gray-500">Prime Video • 2024</p>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-semibold flex items-center gap-2 text-white">
+<span class="material-symbols-outlined text-primary">bookmark_heart</span>
+                    Watchlist
+                </h3>
+<div class="flex items-center gap-4">
+<select class="bg-transparent border-none text-xs text-gray-500 focus:ring-0 cursor-pointer hover:text-white transition-colors">
+<option>Date Added</option>
+<option>Rating</option>
+<option>Release Year</option>
+</select>
+<button class="text-xs text-primary hover:underline">Manage</button>
+</div>
+</div>
+<div class="flex gap-6 overflow-x-auto pb-4 scroll-hide">
+<div class="flex-none w-44 space-y-3 cursor-pointer group">
+<div class="aspect-[2/3] rounded-lg overflow-hidden bg-white/5 media-card border border-white/5">
+<img alt="poster" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvDO_1yaDCcF5Vp5vihM1xGyoMbWlq9yPegtZ8GE0IrsA6zt-6bbfZR3XGxu_FY8bLMNOlDIoQ2ee2CObK9hBcA3nb8LxBsHoxblkv7xZK3J5IcMUuKUFSx4659sF6QtPbc9TY3DEj9WSQZS-YuqUvZvY65agrO7bjZxzwHGMsvoIa7rVC1TdG_v7dDTL62wr_mclFiEVJ8qkYayh5L48wRHmixUU4LCK0l_nmbD_5ht0j1r77f9eeJj3RY3MHweslZ6IvLUWEewjq"/>
+</div>
+<div>
+<h5 class="text-sm font-medium text-white truncate">Oppenheimer</h5>
+<p class="text-xs text-gray-500">Added 2d ago</p>
+</div>
+</div>
+<div class="flex-none w-44 space-y-3 cursor-pointer group">
+<div class="aspect-[2/3] rounded-lg overflow-hidden bg-white/5 media-card border border-white/5">
+<img alt="poster" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeD3lNj00OSvZzmfOfOWUh-kmBLjastUnltEKma8_PrFmztKbq2O8GR63CjJxseYDU6MiTCDFTgXzfCX4fEbR3DZ40qJvjf9MVx9JsNz46g60EQ9URd7bgOIJNYgV2_dqOiJTVTm83QBVHwXZ80vvypRpXdNHcU375y-Jk425w2_1X-U4GUjJYoNDzTZJ__QdT3YYTwDPcPyRguTvmHtxUZdnLUTvXpWM80ymyYy-LKXeeIZ8PZdB2UyoXiHM67ynIZ2cr-Mnmbg03"/>
+</div>
+<div>
+<h5 class="text-sm font-medium text-white truncate">Succession</h5>
+<p class="text-xs text-gray-500">Added 5d ago</p>
+</div>
+</div>
+<div class="flex-none w-44 space-y-3 cursor-pointer group">
+<div class="aspect-[2/3] rounded-lg overflow-hidden bg-white/5 media-card border border-white/5">
+<img alt="poster" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5TpoctaBay6-V9zvQ9sHUhWcwWPm7dvetXN8wEXxEucukjANx1USoHOnzPXbTW2Hm43b53XiqHtqijO4Mq3jvINbDsokFipsxVACVn05EOAPIVyA4LQYraSutmNt2Vfn3aap76t0wEk6nWyGHZBzjBtMW4ZL9erPS2IRHPbkTcay74MXokh2wVGqBIzurOfHRqbXaBYLEEuqm6Jhts5ontVHUymqctCOCj9O4TwasI9NmihSPHTP-MnRwM326z7HYb8ck6ERQzmsf"/>
+</div>
+<div>
+<h5 class="text-sm font-medium text-white truncate">Spider-Man: Across the Spider-Verse</h5>
+<p class="text-xs text-gray-500">Added 1w ago</p>
+</div>
+</div>
+<div class="flex-none w-44 space-y-3 cursor-pointer group">
+<div class="aspect-[2/3] rounded-lg overflow-hidden bg-white/5 media-card border border-white/5">
+<img alt="poster" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbk1kUXNw6oIeyOU_u5mQyYUlktmM73cSceINdgxNo0uTJcpntkN3eTTLzzwxgbpQXUDLN1qUYR8aJJCJlrbL3iGuU70D_w7TIuxGf7hxqTTISvVU1_s2zq9Jxld0y_yCJH3hLAHGy4uXJ4i5LOOl6-iSFFVNFAKSBjtI2ZeqooDKWyFb0oYiA3pQsv7DFhWDcKdlJqxWat4wu47sbd3qsvFVQWRBv0Bn44TNGT30BD8Ods0KKkjyWWiMqUoMVlqBSpyZzTdYWHzAt"/>
+</div>
+<div>
+<h5 class="text-sm font-medium text-white truncate">The Batman</h5>
+<p class="text-xs text-gray-500">Added 2w ago</p>
+</div>
+</div>
+<div class="flex-none w-44 space-y-3 cursor-pointer group">
+<div class="aspect-[2/3] rounded-lg overflow-hidden bg-white/5 media-card border border-white/5 relative">
+<div class="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-colors">
+<span class="material-symbols-outlined text-4xl text-white opacity-0 group-hover:opacity-100 transition-opacity">add_circle</span>
+</div>
+<img alt="poster" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQtgn04oV3yyeYh0EJtEoMXDvvkmUBmbRZ28IRYB4uIbIwXwSy3K8_k-Zx66CoEALhEpp9ABQalf31hR2vTLhtKpjLhmMtT749U-9pNMlguBQGuUnXaeoIBMEvZ8EiMLTKoFRjKyP9JyAkX-bfe4FRnbheCSUT5NemODht4mc0Zm9N3V1LxdmfKprkZrvjMs6WqOV63w6bE3z0RVWOe-k8sEAoJJFZj8wlV0RtuRAFzAGvVHZEXCJk91p8bc7SHuhYpRgKUY6MWGjj"/>
+</div>
+<div>
+<h5 class="text-sm font-medium text-white truncate">Blade Runner 2049</h5>
+<p class="text-xs text-gray-500">Added 1mo ago</p>
+</div>
+</div>
+<div class="flex-none w-44 h-[264px] rounded-lg border-2 border-dashed border-white/10 flex flex-col items-center justify-center hover:border-primary/50 transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-gray-600 group-hover:text-primary text-3xl mb-2">add</span>
+<span class="text-xs font-medium text-gray-500">Add to Watchlist</span>
+</div>
+</div>
+</section>
+<footer class="mt-auto pt-6 pb-2 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 font-mono">
+<div class="flex gap-4">
+<span class="flex items-center gap-2"><span class="size-2 bg-green-500 rounded-full"></span> Media Server: Online</span>
+<span class="hidden md:inline">|</span>
+<span>Storage: 4.2TB Available</span>
+</div>
+<div class="flex gap-4 mt-2 md:mt-0">
+<span>Active Streams: 3</span>
+<span class="hidden md:inline">|</span>
+<span>Sync Status: Idle</span>
+</div>
+</footer>
+</div>
+</main>
+
+</body></html>
