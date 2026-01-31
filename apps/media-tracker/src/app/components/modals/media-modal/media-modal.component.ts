@@ -1,17 +1,19 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { TmdbService } from '../../../services/tmdb.service';
 import { MovieTrackerService } from '../../../services/movie-tracker.service';
 import { DialogService } from '../../../services/dialog.service';
 import { ListSelectorModalComponent } from '../list-selector-modal/list-selector-modal.component';
-import { TrackedMovie, Movie, TVShow, SeasonSummary, Episode } from '../../../models/types';
+import { TrackedMovie, Movie, TVShow, SeasonSummary, Episode, NetworkInfo } from '../../../models/types';
 import { ToastrService } from 'ngx-toastr';
 import { firstValueFrom } from 'rxjs';
 
 export interface MediaModalData {
   mediaId: number;
   mediaType: 'movie' | 'tv';
+  networks?: { id: number; logo_path: string; name: string; origin_country: string }[];
 }
 
 interface MovieCredits {
@@ -28,7 +30,7 @@ interface WatchProvider {
 @Component({
   selector: 'app-media-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './media-modal.component.html',
   styleUrl: './media-modal.component.css'
 })
@@ -43,7 +45,7 @@ export class MediaModalComponent implements OnInit {
 
   media: Movie | TVShow | null = null;
   credits: MovieCredits | null = null;
-  watchProviders: WatchProvider[] = [];
+  watchProviders: (WatchProvider | NetworkInfo)[] = [];
   trackedMovie: TrackedMovie | null = null;
   loading = true;
   
@@ -54,6 +56,10 @@ export class MediaModalComponent implements OnInit {
   isFavourite = false;
   isInWatchlist = false;
   isWatched = false;
+
+  // Platform selection for currently watching
+  selectedPlatform: number | null = null;
+  isCurrentlyWatching = false;
 
   ngOnInit() {
     this.loadMediaDetails();
@@ -126,16 +132,41 @@ export class MediaModalComponent implements OnInit {
   }
 
   private async loadWatchProviders(): Promise<void> {
-    // Placeholder - in real implementation, would call TMDB watch providers endpoint
-    this.watchProviders = [];
+    // Use networks from data if provided, otherwise get from loaded media
+    if (this.data.networks) {
+      this.watchProviders = this.data.networks;
+    } else if (this.media && 'networks' in this.media) {
+      this.watchProviders = (this.media as TVShow).networks || [];
+    } else {
+      this.watchProviders = [];
+    }
   }
 
-  private async loadTrackedStatus(): Promise<void> {
+  private  async loadTrackedStatus() {
+    // Check main tracking collection
     this.trackedMovie = await this.movieTracker.getByTmdbId(this.data.mediaId, this.data.mediaType);
+    
+    // Check separate watchlist collection
+    this.isInWatchlist = await this.movieTracker.isInWatchlist(this.data.mediaId, this.data.mediaType);
+
     if (this.trackedMovie) {
-      this.isFavourite = this.trackedMovie.status?.favourite ?? false;
-      this.isInWatchlist = this.trackedMovie.status?.watchlist ?? false;
-      this.isWatched = this.trackedMovie.status?.watched ?? false;
+      this.isFavourite = this.trackedMovie.status?.favourite || false;
+      this.isWatched = this.trackedMovie.status?.watched || false;
+      // Note: watchlist status is now handled separately via isInWatchlist
+    }
+
+    // Check if this show is in currently_watching
+    if (this.data.mediaType === 'tv') {
+      try {
+        const currentlyWatching = await this.movieTracker.getCurrentlyWatching();
+        const watchingItem = currentlyWatching.find(item => item.tmdb_id === this.data.mediaId);
+        if (watchingItem) {
+          this.isCurrentlyWatching = true;
+          this.selectedPlatform = watchingItem.platform || null;
+        }
+      } catch (error) {
+        console.error('Failed to load currently watching status', error);
+      }
     }
   }
 
@@ -194,18 +225,15 @@ export class MediaModalComponent implements OnInit {
     }
   }
 
-  async toggleWatchlist(): Promise<void> {
+  async toggleWatchlist() {
     if (!this.media) return;
+
     try {
-      this.trackedMovie = await this.movieTracker.toggleStatus(
-        this.data.mediaId, 
-        'watchlist', 
-        this.media!,
-        this.data.mediaType
-      );
-      this.isInWatchlist = this.trackedMovie.status.watchlist;
-      this.toastr.success(this.isInWatchlist ? 'Added to watchlist' : 'Removed from watchlist');
-    } catch {
+      const added = await this.movieTracker.toggleWatchlist(this.data.mediaId, this.media, this.data.mediaType);
+      this.isInWatchlist = added;
+      
+      this.toastr.success(added ? 'Added to watchlist' : 'Removed from watchlist');
+    } catch (e) {
       this.toastr.error('Failed to update watchlist');
     } finally {
       this.cdr.detectChanges();
@@ -252,7 +280,7 @@ export class MediaModalComponent implements OnInit {
 
   openJellyfin(): void {
     const title = encodeURIComponent(this.getTitle());
-    window.open(`https://jellyfin.sh-nexus.com/web/index.html#!/search.html?query=${title}`, '_blank');
+    window.open(`https://pelis.ignaciothompson.com/web/index.html#!/search.html?query=${title}`, '_blank');
   }
 
   async toggleSeason(season: any) {
@@ -303,12 +331,43 @@ export class MediaModalComponent implements OnInit {
     }
 
     try {
-      this.trackedMovie = await this.movieTracker.toggleEpisode(this.data.mediaId, seasonNum, episodeNum);
+      const total = (this.media as TVShow).number_of_episodes || 0;
+      this.trackedMovie = await this.movieTracker.toggleEpisode(
+        this.data.mediaId, 
+        seasonNum, 
+        episodeNum, 
+        total, 
+        this.media!
+      );
       this.toastr.success('Progress updated');
     } catch (e) {
       this.toastr.error('Failed to update progress');
     } finally {
       this.cdr.detectChanges();
+    }
+  }
+
+  async savePlatform() {
+    if (!this.selectedPlatform || !this.media) return;
+    
+    try {
+      const total = (this.media as TVShow).number_of_episodes || 0;
+      const currentlyWatching = await this.movieTracker.getCurrentlyWatching();
+      const watchingItem = currentlyWatching.find(item => item.tmdb_id === this.data.mediaId);
+      
+      if (watchingItem) {
+        await this.movieTracker.updateCurrentlyWatching(
+          this.data.mediaId,
+          this.media,
+          watchingItem.episodes_watched,
+          total,
+          this.selectedPlatform
+        );
+        this.toastr.success('Platform updated');
+      }
+    } catch (error) {
+      console.error('Failed to save platform', error);
+      this.toastr.error('Failed to update platform');
     }
   }
 

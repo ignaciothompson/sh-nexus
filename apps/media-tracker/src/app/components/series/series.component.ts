@@ -1,6 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TmdbService } from '../../services/tmdb.service';
 import { DialogService } from '../../services/dialog.service';
@@ -10,7 +9,7 @@ import { MediaItem } from '../../models/types';
 @Component({
   selector: 'app-series',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './series.component.html',
   styleUrl: './series.component.css'
 })

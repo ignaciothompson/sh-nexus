@@ -1,72 +1,109 @@
 <div class="dashboard">
-    <!-- Currently Watching -->
-    <section class="section">
-        <div class="section-header">
-            <h3 class="section-title">
-                <span class="material-symbols-outlined text-primary">play_circle</span> Currently Watching
-            </h3>
-            <div class="nav-arrows">
-                <button class="arrow-btn"><span class="material-symbols-outlined">chevron_left</span></button>
-                <button class="arrow-btn"><span class="material-symbols-outlined">chevron_right</span></button>
-            </div>
-        </div>
-        <div class="watching-grid"> @for (item of currentlyWatching; track item.id) { <div class="watching-card" (click)="openMediaModal(item, 'movie')">
-                <img [src]="getImageUrl(item.backdrop_path || item.poster_path)" [alt]="getTitle(item)" class="watching-bg">
-                <div class="watching-overlay"></div>
-                <div class="watching-content">
-                    <div class="watching-meta">
-                        <span class="badge">{{ item.media_type === 'tv' ? 'S01 E05' : 'Movie' }}</span>
-                        <span class="remaining">45:12 remaining</span>
-                    </div>
-                    <h4 class="watching-title">{{ getTitle(item) }}</h4>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 65%"></div>
-                    </div>
-                </div>
-            </div> } </div> @if (currentlyWatching.length === 0) { <div class="empty-state-large">
-            <span class="material-symbols-outlined">movie_filter</span>
-            <p>Not watching anything right now. Pick something to start!</p>
-        </div> }
-    </section>
-    <!-- Two Column Section -->
-    <div class="two-column-section">
-        <!-- Watchlist -->
-        <section class="section column">
-            <div class="section-header">
-                <h3 class="section-title">
-                    <span class="material-symbols-outlined text-primary">bookmark_heart</span> Watchlist
-                </h3>
-                <button class="view-all">View All</button>
-            </div>
-            <div class="media-grid"> @for (item of watchlist; track item.id) { <div class="media-card" (click)="openMediaModal(item, 'movie')">
-                    <div class="media-poster">
-                        <img [src]="getImageUrl(item.poster_path)" [alt]="item.title">
-                    </div>
-                    <div class="media-info">
-                        <h5 class="media-title">{{ item.title }}</h5>
-                    </div>
-                </div> } @if (watchlist.length === 0) { <div class="empty-state">
-                    <span class="material-symbols-outlined">bookmark_border</span>
-                    <p>No items in watchlist</p>
-                </div> } </div>
-        </section>
-        <!-- Recently Added -->
-        <section class="section column">
-            <div class="section-header">
-                <h3 class="section-title">
-                    <span class="material-symbols-outlined text-primary">new_releases</span> Recently Added
-                </h3>
-                <button class="view-all">View All</button>
-            </div>
-            <div class="media-grid"> @for (item of recentlyAdded; track item.id) { <div class="media-card" (click)="openMediaModal(item, 'movie')">
-                    <div class="media-poster">
-                        <img [src]="getImageUrl(item.poster_path)" [alt]="getTitle(item)">
-                    </div>
-                    <div class="media-info">
-                        <h5 class="media-title">{{ getTitle(item) }}</h5>
-                        <p class="media-meta">{{ item.release_date | slice:0:4 }}</p>
-                    </div>
-                </div> } </div>
-        </section>
+  <!-- Currently Watching -->
+  <section class="section">
+    <div class="section-header">
+      <h3 class="section-title">
+        <span class="material-symbols-outlined text-primary">play_circle</span> Currently Watching
+      </h3>
+      <div class="nav-arrows">
+        <button class="arrow-btn">
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+        <button class="arrow-btn">
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+      </div>
     </div>
+    <!-- Currently Watching Grid -->
+    <div class="watching-grid">
+      @for (item of currentlyWatching; track item.id) {
+        <div class="watching-card" (click)="openMediaModal(item, item.media_type)">
+          <img [src]="getImageUrl(item.poster_path)" [alt]="item.title" class="watching-bg" />
+          <div class="watching-overlay"></div>
+          <div class="watching-content">
+            <div class="watching-meta">
+              <span class="badge">{{ item.episodes_watched }} / {{ item.total_episodes }} EPs</span>
+              <span class="remaining" *ngIf="item.total_episodes > 0"
+                >{{ (item.episodes_watched / item.total_episodes) * 100 | number: '1.0-0' }}%</span
+              >
+            </div>
+            <h4 class="watching-title">{{ item.title }}</h4>
+            <div class="progress-bar">
+              <div
+                class="progress-fill"
+                [style.width.%]="(item.episodes_watched / item.total_episodes) * 100"
+              ></div>
+            </div>
+          </div>
+          <!-- Action Buttons -->
+          <div class="card-actions">
+            <button class="action-icon-btn" (click)="playShow(item, $event)" *ngIf="item.platform" title="Play">
+              <span class="material-symbols-outlined">play_arrow</span>
+            </button>
+            <button class="action-icon-btn" (click)="markEpisodeCompleted(item, $event)" title="Mark as Watched">
+              <span class="material-symbols-outlined">check</span>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+    @if (currentlyWatching.length === 0) {
+      <div class="empty-state-large">
+        <span class="material-symbols-outlined">movie_filter</span>
+        <p>Not watching anything right now. Pick something to start!</p>
+      </div>
+    }
+  </section>
+  <!-- Two Column Section -->
+  <div class="two-column-section">
+    <!-- Watchlist -->
+    <section class="section column">
+      <div class="section-header">
+        <h3 class="section-title">
+          <span class="material-symbols-outlined text-primary">bookmark_heart</span> Watchlist
+        </h3>
+        <button class="view-all">View All</button>
+      </div>
+      <div class="media-grid">
+        @for (item of watchlist.slice(0, 8); track item.id) {
+          <div class="media-card" (click)="openMediaModal(item, item.media_type)">
+            <div class="media-poster">
+              <img [src]="getImageUrl(item.poster_path)" [alt]="item.title" />
+            </div>
+          </div>
+        }
+      </div>
+      @if (watchlist.length === 0) {
+        <div class="empty-state">
+          <span class="material-symbols-outlined">bookmark_border</span>
+          <p>Your watchlist is empty</p>
+          <button class="sh-btn-outline" (click)="discover()">Discover</button>
+        </div>
+      }
+    </section>
+    <!-- Recently Added -->
+    <section class="section column">
+      <div class="section-header">
+        <h3 class="section-title">
+          <span class="material-symbols-outlined text-primary">new_releases</span> Recently Added
+        </h3>
+        <button class="view-all">View All</button>
+      </div>
+      <div class="media-grid">
+        @for (item of recentlyAdded.slice(0, 8); track item.id) {
+          <div class="media-card" (click)="openMediaModal(item, 'movie')">
+            <div class="media-poster">
+              <img [src]="getImageUrl(item.poster_path)" [alt]="getTitle(item)" />
+            </div>
+          </div>
+        }
+      </div>
+      @if (recentlyAdded.length === 0) {
+        <div class="empty-state">
+          <span class="material-symbols-outlined">new_releases</span>
+          <p>No recently added media</p>
+        </div>
+      }
+    </section>
+  </div>
 </div>

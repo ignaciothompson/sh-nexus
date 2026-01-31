@@ -1,13 +1,13 @@
 .dashboard {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 2rem;
 }
 
 .section {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .section-header {
@@ -206,17 +206,22 @@
 /* Media Grid (for columns) */
 .media-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
 }
 
 .media-card {
   flex-shrink: 0;
   cursor: pointer;
+  height: 300px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
 .media-poster {
-  aspect-ratio: 2/3;
+  flex: 1;
   border-radius: 0.5rem;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.05);
@@ -332,11 +337,12 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  padding: 4rem;
   background: rgba(255, 255, 255, 0.02);
   border: 1px dashed rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
   color: white;
+  height: 300px;
+  box-sizing: border-box;
 }
 
 .empty-state-large .material-symbols-outlined {
@@ -348,11 +354,6 @@
   margin: 0;
   font-size: 1rem;
   color: #9ca3af;
-}
-
-/* Ensure uniform card sizes in grid */
-.media-grid .media-card {
-  width: 100%;
 }
 
 .media-grid .media-poster {
@@ -370,4 +371,82 @@
   .watching-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  color: #9ca3af;
+  text-align: center;
+  height: 300px;
+  box-sizing: border-box;
+}
+
+.empty-state .material-symbols-outlined {
+  font-size: 2.5rem;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+.sh-btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.sh-btn-outline:hover {
+  border-color: var(--sh-primary);
+  color: var(--sh-primary);
+}
+
+/* Action Buttons on Cards */
+.card-actions {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.watching-card:hover .card-actions {
+  opacity: 1;
+}
+
+.action-icon-btn {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  transition: all 0.2s;
+}
+
+.action-icon-btn span {
+  font-size: 1.25rem;
 }

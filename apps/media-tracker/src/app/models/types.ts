@@ -46,6 +46,7 @@ export interface TVShow extends MediaItem {
   genres?: Genre[];
   tagline?: string;
   seasons?: SeasonSummary[];
+  networks?: NetworkInfo[];
 }
 
 export interface SeasonSummary {
@@ -183,6 +184,36 @@ export interface UserList extends BaseModel {
   is_public: boolean;
   sort_order: number;
   items: ListItem[];
+}
+
+// Watchlist Collection Item
+export interface WatchlistRecord extends BaseModel {
+  tmdb_id: number;
+  title: string;
+  poster_path: string | null;
+  media_type: 'movie' | 'tv';
+}
+
+// Currently Watching Collection Item
+export interface CurrentlyWatchingRecord extends BaseModel {
+  tmdb_id: number;
+  title: string;
+  poster_path: string | null;
+  backdrop_path?: string | null;
+  media_type: 'movie' | 'tv';
+  total_episodes: number;
+  episodes_watched: number;
+  platform?: number; // 1=Jellyfin, 2=Netflix, 3=Paramount, 4=Disney, 5=Prime
+  last_season?: number; // Track current season
+  last_episode?: number; // Track current episode within season
+}
+
+// Network Info from TMDB
+export interface NetworkInfo {
+  id: number;
+  logo_path: string | null;
+  name: string;
+  origin_country: string;
 }
 
 // Cached reference to last watched media

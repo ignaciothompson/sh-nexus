@@ -22,7 +22,7 @@
     <div class="filters-bar">
         <div class="search-box">
             <span class="material-symbols-outlined">search</span>
-            <input type="text" placeholder="Search movies..." [(ngModel)]="searchQuery">
+            <input type="text" class="c-input" placeholder="Search movies..." [(ngModel)]="searchQuery">
         </div>
         <div class="filter-group">
             <select [(ngModel)]="selectedGenre" class="filter-select"> @for (genre of genres; track genre.id) { <option [value]="genre.id">{{ genre.name }}</option> } </select>
