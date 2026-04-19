@@ -1,0 +1,38 @@
+/* ================================
+   SH-SKIN COMPONENT LIBRARY
+   Index file - imports all components
+   ================================ */
+
+/* Variables (must be first) */
+@import './components/_variables.css';
+
+/* Components */
+@import './components/_buttons.css';
+@import './components/_containers.css';
+@import './components/_modals.css';
+@import './components/_tabs.css';
+@import './components/_alerts.css';
+@import './components/_labels.css';
+@import './components/_forms.css';
+
+/* ================================
+   HOW TO USE
+   ================================
+   
+   1. Add class "sh-skin" to your <body> tag
+   2. Import this file after Tailwind in your styles
+   3. Use sh-* classes on elements
+   
+   Example:
+   <body class="sh-skin">
+     <button class="sh-btn sh-btn-primary">Click me</button>
+   </body>
+   
+   To customize colors, override the CSS variables in your own stylesheet:
+   
+   .sh-skin {
+     --sh-primary: #your-color;
+     --sh-bg: #your-background;
+   }
+   
+   ================================ */

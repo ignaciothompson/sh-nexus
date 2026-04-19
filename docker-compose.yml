@@ -38,6 +38,19 @@ services:
     networks:
       - nexus_net
 
+  finance-tracker:
+    build:
+      context: ./apps/finance-tracker
+      dockerfile: Dockerfile
+    container_name: nexus-finance
+    restart: unless-stopped
+    ports:
+      - "5103:8080"
+    volumes:
+      - ./data/finance_pb_data:/pb/pb_data
+    networks:
+      - nexus_net
+
 networks:
   nexus_net:
     driver: bridge

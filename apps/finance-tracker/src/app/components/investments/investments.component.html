@@ -1,0 +1,174 @@
+<div class="investments-container fade-in">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Inversiones</h1>
+            <p class="page-subtitle">Crea y monitorea tus inversiones con interés compuesto</p>
+        </div>
+        <button class="sh-btn sh-btn-primary" (click)="openAddModal()">
+            <span class="material-symbols-outlined" style="font-size: 1.125rem;">add</span>
+            Nueva Inversión
+        </button>
+    </div>
+
+    <!-- Portfolio Summary -->
+    <div class="portfolio-summary" *ngIf="investments.length > 0">
+        <div class="portfolio-card">
+            <div class="portfolio-icon">
+                <span class="material-symbols-outlined">account_balance</span>
+            </div>
+            <div class="portfolio-info">
+                <span class="portfolio-label">Portafolio Total</span>
+                <span class="portfolio-value">{{ formatCurrency(totalPortfolio) }}</span>
+            </div>
+        </div>
+        <div class="portfolio-card">
+            <div class="portfolio-icon invested-icon">
+                <span class="material-symbols-outlined">savings</span>
+            </div>
+            <div class="portfolio-info">
+                <span class="portfolio-label">Total Invertido</span>
+                <span class="portfolio-value">{{ formatCurrency(totalInvested) }}</span>
+            </div>
+        </div>
+        <div class="portfolio-card">
+            <div class="portfolio-icon gain-icon">
+                <span class="material-symbols-outlined">trending_up</span>
+            </div>
+            <div class="portfolio-info">
+                <span class="portfolio-label">Ganancia Total</span>
+                <span class="portfolio-value" [class.amount-positive]="totalGain >= 0" [class.amount-negative]="totalGain < 0">
+                    {{ totalGain >= 0 ? '+' : '' }}{{ formatCurrency(totalGain) }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="investments-grid" *ngIf="investments.length > 0">
+        <!-- Investment Cards -->
+        <div class="investments-list">
+            <h3 class="section-title">Mis Inversiones</h3>
+            <div class="inv-cards">
+                <div class="inv-card"
+                     *ngFor="let inv of investments"
+                     [class.selected]="selectedInvestment?.id === inv.id"
+                     [class.inactive]="!inv.activo"
+                     (click)="selectInvestment(inv)">
+                    <div class="inv-card-header">
+                        <div class="inv-name-row">
+                            <span class="inv-name">{{ inv.nombre }}</span>
+                            <span class="inv-type-badge">{{ getTypeLabel(inv.tipo) }}</span>
+                        </div>
+                        <div class="inv-actions">
+                            <button class="inv-action-btn" (click)="toggleActive(inv, $event)" [title]="inv.activo ? 'Desactivar' : 'Activar'">
+                                <span class="material-symbols-outlined">{{ inv.activo ? 'toggle_on' : 'toggle_off' }}</span>
+                            </button>
+                            <button class="inv-action-btn" (click)="openAddModal(inv)" title="Editar">
+                                <span class="material-symbols-outlined">edit</span>
+                            </button>
+                            <button class="inv-action-btn inv-delete-btn" (click)="deleteInvestment(inv, $event)" title="Eliminar">
+                                <span class="material-symbols-outlined">delete</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="inv-card-body">
+                        <div class="inv-stat-row">
+                            <span class="inv-stat-label">Capital</span>
+                            <span class="inv-stat-value">{{ formatCurrency(inv.capital_inicial, inv.moneda) }}</span>
+                        </div>
+                        <div class="inv-stat-row">
+                            <span class="inv-stat-label">Tasa</span>
+                            <span class="inv-stat-value">{{ inv.tasa_anual }}% {{ getFrequencyLabel(inv.frecuencia_compuesta) }}</span>
+                        </div>
+                        <div class="inv-stat-row">
+                            <span class="inv-stat-label">Valor Actual</span>
+                            <span class="inv-stat-value amount-positive">{{ formatCurrency(getCurrentValue(inv), inv.moneda) }}</span>
+                        </div>
+                        <div class="inv-gain-bar">
+                            <span class="inv-gain" [class.amount-positive]="getGain(inv) >= 0" [class.amount-negative]="getGain(inv) < 0">
+                                {{ getGain(inv) >= 0 ? '+' : '' }}{{ formatCurrency(getGain(inv), inv.moneda) }}
+                                ({{ getGainPercent(inv) | number:'1.2-2' }}%)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projection Chart -->
+        <div class="projection-section" *ngIf="selectedInvestment">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">Proyección: {{ selectedInvestment.nombre }}</h3>
+                    <span class="chart-subtitle">24 meses</span>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas baseChart
+                        [datasets]="projectionChartData.datasets"
+                        [labels]="projectionChartData.labels"
+                        [options]="projectionChartOptions"
+                        type="line">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compound Interest Calculator -->
+    <div class="calculator-section">
+        <h3 class="section-title">
+            <span class="material-symbols-outlined" style="font-size: 1.25rem; vertical-align: -3px; margin-right: 0.375rem;">calculate</span>
+            Calculadora de Interés Compuesto
+        </h3>
+        <div class="calculator-grid">
+            <div class="calc-inputs">
+                <div class="calc-field">
+                    <label class="calc-label">Capital Inicial (USD)</label>
+                    <input type="number" class="sh-input" [(ngModel)]="calcCapital" (input)="calculateCompound()" min="0">
+                </div>
+                <div class="calc-field">
+                    <label class="calc-label">Tasa Anual (%)</label>
+                    <input type="number" class="sh-input" [(ngModel)]="calcRate" (input)="calculateCompound()" min="0" step="0.1">
+                </div>
+                <div class="calc-field">
+                    <label class="calc-label">Frecuencia Compuesta</label>
+                    <select class="sh-input sh-select" [(ngModel)]="calcFrequency" (change)="calculateCompound()">
+                        <option value="diario">Diario</option>
+                        <option value="mensual">Mensual</option>
+                        <option value="trimestral">Trimestral</option>
+                        <option value="semestral">Semestral</option>
+                        <option value="anual">Anual</option>
+                    </select>
+                </div>
+                <div class="calc-field">
+                    <label class="calc-label">Años</label>
+                    <input type="number" class="sh-input" [(ngModel)]="calcYears" (input)="calculateCompound()" min="1" max="50">
+                </div>
+            </div>
+            <div class="calc-result">
+                <div class="calc-result-card">
+                    <span class="calc-result-label">Valor Final</span>
+                    <span class="calc-result-value">{{ formatCurrency(calcResult) }}</span>
+                </div>
+                <div class="calc-result-card calc-gain-card">
+                    <span class="calc-result-label">Ganancia</span>
+                    <span class="calc-result-value amount-positive">+{{ formatCurrency(calcGain) }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state-large" *ngIf="investments.length === 0">
+        <div class="empty-icon-wrapper">
+            <span class="material-symbols-outlined">trending_up</span>
+        </div>
+        <h3>Sin inversiones registradas</h3>
+        <p>Crea tu primera inversión para comenzar a monitorear su crecimiento.</p>
+        <button class="sh-btn sh-btn-primary" (click)="openAddModal()">
+            <span class="material-symbols-outlined" style="font-size: 1.125rem;">add</span>
+            Crear Primera Inversión
+        </button>
+    </div>
+</div>

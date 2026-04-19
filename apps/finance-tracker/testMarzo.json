@@ -1,0 +1,502 @@
+{
+    "Mes": "Febrero",
+    "Cuenta": "Caja de Ahorro",
+    "Moneda": "Pesos",
+    "Transacciones": [
+      {
+        "Fecha": "02/02/2026",
+        "Concepto": "CRED.DIRECTOMEGA S.A.",
+        "Débito": null,
+        "Crédito": 45163.0,
+        "Saldo": 45167.61,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "02/02/2026",
+        "Concepto": "COMPRA TIENDA INGLE",
+        "Débito": 264.0,
+        "Crédito": null,
+        "Saldo": 44903.61,
+        "Referencia": "010226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "02/02/2026",
+        "Concepto": "REDIVA 19210TIENDA INGLE",
+        "Débito": null,
+        "Crédito": 8.23,
+        "Saldo": 44911.84,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "02/02/2026",
+        "Concepto": "COMPRA TIENDA INGLE",
+        "Débito": 502.0,
+        "Crédito": null,
+        "Saldo": 44409.84,
+        "Referencia": "310126 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "02/02/2026",
+        "Concepto": "REDIVA 19210TIENDA INGLE",
+        "Débito": null,
+        "Crédito": 4.33,
+        "Saldo": 44414.17,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "02/02/2026",
+        "Concepto": "COMPRA TIENDA INGLE",
+        "Débito": 244.0,
+        "Crédito": null,
+        "Saldo": 44170.17,
+        "Referencia": "020226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "02/02/2026",
+        "Concepto": "REDIVA 19210TIENDA INGLE",
+        "Débito": null,
+        "Crédito": 4.0,
+        "Saldo": 44174.17,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "03/02/2026",
+        "Concepto": "REDIVA 19210TIENDA INGLE",
+        "Débito": null,
+        "Crédito": 1.87,
+        "Saldo": 44176.04,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "03/02/2026",
+        "Concepto": "COMPRA TIENDA INGLE",
+        "Débito": 189.0,
+        "Crédito": null,
+        "Saldo": 43987.04,
+        "Referencia": "030226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "03/02/2026",
+        "Concepto": "COMPRA TIENDA INGLE",
+        "Débito": 114.0,
+        "Crédito": null,
+        "Saldo": 43873.04,
+        "Referencia": "030226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "03/02/2026",
+        "Concepto": "REDIVA 19210TIENDA INGLE",
+        "Débito": null,
+        "Crédito": 3.1,
+        "Saldo": 43876.14,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "04/02/2026",
+        "Concepto": "COMPRA DLO*PEDIDOSY",
+        "Débito": 671.52,
+        "Crédito": null,
+        "Saldo": 43204.62,
+        "Referencia": "040226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "05/02/2026",
+        "Concepto": "TRASPASO A 8557620ILINK",
+        "Débito": 200.0,
+        "Crédito": null,
+        "Saldo": 43004.62,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "05/02/2026",
+        "Concepto": "REDIVA 19210SUPER NATURA",
+        "Débito": null,
+        "Crédito": 13.26,
+        "Saldo": 43017.88,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "05/02/2026",
+        "Concepto": "COMPRA SUPER NATURA",
+        "Débito": 808.72,
+        "Crédito": null,
+        "Saldo": 42209.16,
+        "Referencia": "050226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "06/02/2026",
+        "Concepto": "DEB. VARIOS VISA-ILINK",
+        "Débito": 18655.68,
+        "Crédito": null,
+        "Saldo": 23553.48,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "09/02/2026",
+        "Concepto": "COMPRA KIABI V",
+        "Débito": 898.0,
+        "Crédito": null,
+        "Saldo": 22655.48,
+        "Referencia": "070226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "09/02/2026",
+        "Concepto": "COMPRA TIENDA INGLE",
+        "Débito": 668.0,
+        "Crédito": null,
+        "Saldo": 21987.48,
+        "Referencia": "070226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "09/02/2026",
+        "Concepto": "COMPRA TIENDA INGLE",
+        "Débito": 591.0,
+        "Crédito": null,
+        "Saldo": 21396.48,
+        "Referencia": "080226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "09/02/2026",
+        "Concepto": "REDIVA 19210TIENDA INGLE",
+        "Débito": null,
+        "Crédito": 9.69,
+        "Saldo": 21406.17,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "09/02/2026",
+        "Concepto": "REDIVA 19210KIABI V",
+        "Débito": null,
+        "Crédito": 14.72,
+        "Saldo": 21420.89,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "09/02/2026",
+        "Concepto": "REDIVA 19210TIENDA INGLE",
+        "Débito": null,
+        "Crédito": 10.95,
+        "Saldo": 21431.84,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "09/02/2026",
+        "Concepto": "TRASPASO A 4325371ILINK",
+        "Débito": 500.0,
+        "Crédito": null,
+        "Saldo": 20931.84,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "09/02/2026",
+        "Concepto": "TRASPASO A 5951316ILINK",
+        "Débito": 300.0,
+        "Crédito": null,
+        "Saldo": 20631.84,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "10/02/2026",
+        "Concepto": "COMPRA TIENDA INGLE",
+        "Débito": 2029.0,
+        "Crédito": null,
+        "Saldo": 18602.84,
+        "Referencia": "100226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "10/02/2026",
+        "Concepto": "REDIVA 19210TIENDA INGLE",
+        "Débito": null,
+        "Crédito": 33.26,
+        "Saldo": 18636.1,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "11/02/2026",
+        "Concepto": "CRED.DIRECTOMEGA S.A.",
+        "Débito": null,
+        "Crédito": 30150.0,
+        "Saldo": 48786.1,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "11/02/2026",
+        "Concepto": "COMPRA PARAMOUNT+",
+        "Débito": 199.0,
+        "Crédito": null,
+        "Saldo": 48587.1,
+        "Referencia": "110226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "13/02/2026",
+        "Concepto": "REDIVA 19210TIENDA INGLE",
+        "Débito": null,
+        "Crédito": 22.36,
+        "Saldo": 48609.46,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "13/02/2026",
+        "Concepto": "COMPRA TIENDA INGLE",
+        "Débito": 1364.0,
+        "Crédito": null,
+        "Saldo": 47245.46,
+        "Referencia": "130226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "18/02/2026",
+        "Concepto": "REDIVA 19210CHINA MARKET",
+        "Débito": null,
+        "Crédito": 15.33,
+        "Saldo": 47260.79,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "18/02/2026",
+        "Concepto": "COMPRA CHINA MARKET",
+        "Débito": 935.0,
+        "Crédito": null,
+        "Saldo": 46325.79,
+        "Referencia": "160226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "18/02/2026",
+        "Concepto": "COMPRA MERPAGO*COLO",
+        "Débito": 930.0,
+        "Crédito": null,
+        "Saldo": 45395.79,
+        "Referencia": "180226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "18/02/2026",
+        "Concepto": "COMPRA MERPAGO*EXPA",
+        "Débito": 8190.0,
+        "Crédito": null,
+        "Saldo": 37205.79,
+        "Referencia": "160226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "18/02/2026",
+        "Concepto": "REDIVA 19210MERPAGO*EXPA",
+        "Débito": null,
+        "Crédito": 134.26,
+        "Saldo": 37340.05,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "18/02/2026",
+        "Concepto": "COMPRA TIENDA INGLE",
+        "Débito": 669.0,
+        "Crédito": null,
+        "Saldo": 36671.05,
+        "Referencia": "140226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "18/02/2026",
+        "Concepto": "REDIVA 19210TIENDA INGLE",
+        "Débito": null,
+        "Crédito": 10.97,
+        "Saldo": 36682.02,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "18/02/2026",
+        "Concepto": "TRASPASO A 0432096ILINK",
+        "Débito": 570.0,
+        "Crédito": null,
+        "Saldo": 36112.02,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "18/02/2026",
+        "Concepto": "TRASPASO A 5951316ILINK",
+        "Débito": 3400.0,
+        "Crédito": null,
+        "Saldo": 32712.02,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "18/02/2026",
+        "Concepto": "COMPRA TIENDA INGLE",
+        "Débito": 3327.4,
+        "Crédito": null,
+        "Saldo": 29384.62,
+        "Referencia": "180226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "18/02/2026",
+        "Concepto": "REDIVA 19210TIENDA INGLE",
+        "Débito": null,
+        "Crédito": 54.72,
+        "Saldo": 29439.34,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "19/02/2026",
+        "Concepto": "REDIVA 19210TIENDA INGLE",
+        "Débito": null,
+        "Crédito": 6.94,
+        "Saldo": 29446.28,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "19/02/2026",
+        "Concepto": "COMPRA TIENDA INGLE",
+        "Débito": 423.3,
+        "Crédito": null,
+        "Saldo": 29022.98,
+        "Referencia": "190226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "20/02/2026",
+        "Concepto": "COMPRA TIENDA INGLE",
+        "Débito": 939.0,
+        "Crédito": null,
+        "Saldo": 28083.98,
+        "Referencia": "200226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "20/02/2026",
+        "Concepto": "REDIVA 19210TIENDA INGLE",
+        "Débito": null,
+        "Crédito": 15.39,
+        "Saldo": 28099.37,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "23/02/2026",
+        "Concepto": "DEB. VARIOS ITAU LIQ PES",
+        "Débito": 20000.0,
+        "Crédito": null,
+        "Saldo": 8099.37,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "23/02/2026",
+        "Concepto": "COMPRA TIENDA INGLE",
+        "Débito": 597.0,
+        "Crédito": null,
+        "Saldo": 7502.37,
+        "Referencia": "210226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "23/02/2026",
+        "Concepto": "REDIVA 19210TIENDA INGLE",
+        "Débito": null,
+        "Crédito": 9.79,
+        "Saldo": 7512.16,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "23/02/2026",
+        "Concepto": "COMPRA TIENDA INGLE",
+        "Débito": 157.0,
+        "Crédito": null,
+        "Saldo": 7355.16,
+        "Referencia": "220226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "23/02/2026",
+        "Concepto": "REDIVA 19210TIENDA INGLE",
+        "Débito": null,
+        "Crédito": 5.08,
+        "Saldo": 7360.24,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "23/02/2026",
+        "Concepto": "COMPRA TIENDA INGLE",
+        "Débito": 310.0,
+        "Crédito": null,
+        "Saldo": 7050.24,
+        "Referencia": "210226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "23/02/2026",
+        "Concepto": "REDIVA 19210TIENDA INGLE",
+        "Débito": null,
+        "Crédito": 2.57,
+        "Saldo": 7052.81,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "23/02/2026",
+        "Concepto": "TRASPASO A 0432096ILINK",
+        "Débito": 1000.0,
+        "Crédito": null,
+        "Saldo": 6052.81,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "25/02/2026",
+        "Concepto": "REDIVA 19210MERPAGO*PLAZ",
+        "Débito": null,
+        "Crédito": 43.79,
+        "Saldo": 6096.6,
+        "Referencia": null,
+        "Moneda": "Pesos"
+      },
+      {
+        "Fecha": "25/02/2026",
+        "Concepto": "COMPRA MERPAGO*PLAZ",
+        "Débito": 2671.11,
+        "Crédito": null,
+        "Saldo": 3425.49,
+        "Referencia": "250226 IGNACIO THOMPSON BRA",
+        "Moneda": "Pesos"
+      }
+    ]
+  }

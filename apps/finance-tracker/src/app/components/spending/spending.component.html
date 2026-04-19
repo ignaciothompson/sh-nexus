@@ -1,0 +1,201 @@
+<div class="page-container">
+    <div class="page-header">
+        
+        <!-- Controls row -->
+        <div class="controls-row">
+            <!-- Date Filters -->
+            <div class="date-filters">
+                <input type="date" class="sh-input input-sm" [(ngModel)]="startDate" title="Desde">
+                <span class="date-separator">-</span>
+                <input type="date" class="sh-input input-sm" [(ngModel)]="endDate" title="Hasta">
+                <select class="sh-select select-sm" [(ngModel)]="currencyFilter" title="Filtro de moneda">
+                    <option value="ALL">Moneda: Todas</option>
+                    <option value="UYU">UYU</option>
+                    <option value="USD">USD</option>
+                </select>
+                <button class="sh-btn sh-btn-primary btn-sm" (click)="applyFilters()">
+                    Aplicar
+                </button>
+            </div>
+            
+            <div class="actions">
+                <button class="sh-btn sh-btn-secondary btn-sm" (click)="openCategoriesModal()">
+                    <span class="material-symbols-outlined" style="font-size: 1.125rem;">category</span>
+                    Categorías
+                </button>
+                <button class="sh-btn sh-btn-secondary btn-sm" (click)="recategorizeAll()" title="Re-categorizar transacciones con categoría 'otro'">
+                    <span class="material-symbols-outlined" style="font-size: 1.125rem;">auto_fix_high</span>
+                    Auto-categorizar
+                </button>
+                <button class="sh-btn sh-btn-primary btn-sm" (click)="openImportModal()">
+                    <span class="material-symbols-outlined" style="font-size: 1.125rem;">upload_file</span>
+                    Importar JSON
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4 KPI Cards -->
+    <div class="kpi-grid">
+        <div class="sh-card kpi-card">
+            <div class="kpi-content">
+                <div class="kpi-label">Ingresos Totales</div>
+                <div class="kpi-value amount-positive">{{ formatCurrency(getTotalIngresos(), currencyFilter) }}</div>
+            </div>
+        </div>
+
+        <div class="sh-card kpi-card">
+            <div class="kpi-content">
+                <div class="kpi-label">Gastos Totales</div>
+                <div class="kpi-value amount-negative">{{ formatCurrency(getTotalGastos(), currencyFilter) }}</div>
+            </div>
+        </div>
+
+        <div class="sh-card kpi-card">
+            <div class="kpi-content">
+                <div class="kpi-label">Inversiones</div>
+                <div class="kpi-value text-normal">{{ formatCurrency(getTotalInversiones(), currencyFilter) }}</div>
+            </div>
+        </div>
+
+        <div class="sh-card kpi-card interactive-card" (click)="openDrawer()">
+            <div class="kpi-content">
+                <div class="kpi-label">Análisis Detallado</div>
+                <div class="kpi-value go-to">Ver más detalles <span class="material-symbols-outlined">arrow_forward</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sh-card transactions-card">
+        <div class="card-header">
+            <h2>Transacciones del Período</h2>
+            <div class="search-box">
+                <span class="material-symbols-outlined search-icon">search</span>
+                <input type="text" class="sh-input" placeholder="Buscar concepto o categoría..." 
+                       [(ngModel)]="searchQuery" (ngModelChange)="applyFilters()">
+            </div>
+        </div>
+
+        <div class="table-scroll-wrapper">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Concepto</th>
+                        <th>Categoría</th>
+                        <th>Débito</th>
+                        <th>Crédito</th>
+                        <th>Saldo</th>
+                        <th>Moneda</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tx of paginatedTransactions; let odd = odd" [class.row-alt]="odd">
+                        <td class="td-date">{{ tx.fecha }}</td>
+                        <td class="td-concepto" [title]="tx.concepto">{{ getCleanName(tx.concepto) }}</td>
+                        <td class="td-category">
+                            <select class="category-select"
+                                    [ngModel]="tx.categoria"
+                                    (ngModelChange)="onCategoryChange(tx, $event)"
+                                    [style.color]="getCategoryColor(tx.categoria)"
+                                    [style.border-color]="getCategoryColor(tx.categoria) + '60'">
+                                <option value="">Sin categoría</option>
+                                <option *ngFor="let cat of categories" [value]="cat.nombre">{{ cat.nombre }}</option>
+                            </select>
+                        </td>
+                        <td class="td-amount amount-negative">{{ tx.debito ? formatCurrency(tx.debito, tx.moneda) : '' }}</td>
+                        <td class="td-amount amount-positive">{{ tx.credito ? formatCurrency(tx.credito, tx.moneda) : '' }}</td>
+                        <td class="td-amount">{{ formatCurrency(tx.saldo, tx.moneda) }}</td>
+                        <td>
+                            <span class="inline-badge" [class.currency-uyu]="tx.moneda === 'UYU' || tx.moneda === 'Pesos'" [class.currency-usd]="tx.moneda === 'USD' || tx.moneda === 'Dólares'">
+                                {{ tx.moneda }}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="filteredTransactions.length === 0">
+                        <td colspan="7" class="empty-state">
+                            No hay transacciones en este período.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="pagination-footer" *ngIf="filteredTransactions.length > 0">
+            <div class="pagination-info">
+                Mostrando {{ (currentPage - 1) * itemsPerPage + 1 }} - 
+                {{ Math.min(currentPage * itemsPerPage, filteredTransactions.length) }} 
+                de {{ filteredTransactions.length }}
+            </div>
+            
+            <div class="pagination-controls">
+                <select class="sh-select select-sm" [(ngModel)]="itemsPerPage" (ngModelChange)="onPerPageChange()">
+                    <option *ngFor="let option of itemsPerPageOptions" [value]="option">{{ option }} por pág.</option>
+                </select>
+                
+                <div class="page-buttons">
+                    <button class="sh-btn-icon" [disabled]="currentPage === 1" (click)="prevPage()">
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </button>
+                    <span class="page-current">{{ currentPage }} / {{ totalPages }}</span>
+                    <button class="sh-btn-icon" [disabled]="currentPage === totalPages" (click)="nextPage()">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Drawer: Detalles del Análisis -->
+<div class="drawer-overlay" [class.open]="isDrawerOpen" (click)="closeDrawer()"></div>
+<div class="drawer-panel" [class.open]="isDrawerOpen">
+    <div class="drawer-header">
+        <h2>Detalles del Análisis</h2>
+        <button class="sh-btn-icon" (click)="closeDrawer()">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+    </div>
+    <div class="drawer-content">
+        <div class="drawer-section" *ngIf="filteredTransactions.length > 0">
+            
+            <div class="chart-container-large doughnut">
+                <h3 class="chart-title">Distribución por Categoría (Gastos)</h3>
+                <div class="chart-wrapper">
+                    <canvas baseChart
+                        [data]="donutChartData"
+                        [options]="donutChartOptions"
+                        type="doughnut">
+                    </canvas>
+                </div>
+            </div>
+
+            <div class="chart-container-large">
+                <h3 class="chart-title">Gastos por Categoría</h3>
+                <div class="chart-wrapper">
+                    <canvas baseChart
+                        [data]="barChartData"
+                        [options]="barChartOptions"
+                        type="bar">
+                    </canvas>
+                </div>
+            </div>
+
+            <div class="chart-container-large">
+                <h3 class="chart-title">Ingresos vs Gastos</h3>
+                <div class="chart-wrapper">
+                    <canvas baseChart
+                        [data]="lineChartData"
+                        [options]="lineChartOptions"
+                        type="line">
+                    </canvas>
+                </div>
+            </div>
+
+        </div>
+        <div *ngIf="filteredTransactions.length === 0" class="drawer-empty">
+            <span class="material-symbols-outlined">analytics</span>
+            <p>No hay datos para analizar en este rango.</p>
+        </div>
+    </div>
+</div>

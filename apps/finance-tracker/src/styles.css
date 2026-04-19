@@ -1,0 +1,132 @@
+/* Import SH-Skin Component Library (must be before Tailwind) */
+@import './css/main.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom global styles */
+:root {
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --primary-light: rgba(16, 185, 129, 0.2);
+  --primary-glow: rgba(16, 185, 129, 0.4);
+  --bg: #1c1c1e;
+  --bg-dark: #161618;
+  --bg-light: #2c2c2e;
+  --border: rgba(255, 255, 255, 0.1);
+  --text-muted: #6b7280;
+  
+  /* Currency Colors */
+  --color-uyu: #60a5fa;
+  --color-usd: #10b981;
+  --color-all: #a855f7;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #0f0f0f;
+  color: #f1f5f9;
+}
+
+/* Custom component styles */
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors;
+  }
+  
+  .card {
+    @apply bg-surface rounded-lg shadow-lg p-6;
+  }
+  
+  .input-field {
+    @apply w-full px-3 py-2 bg-background border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary;
+  }
+}
+
+/* KPI Card animations */
+.kpi-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+}
+
+/* Chart container */
+.chart-container {
+  position: relative;
+  background: #1c1c1e;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+/* Currency badge colors */
+.currency-uyu {
+  background: rgba(96, 165, 250, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+}
+
+.currency-usd {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--sh-bg, #0f0f0f);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--sh-bg-elevated, #2c2c2e);
+  border-radius: 4px;
+  border: 1px solid var(--sh-bg, #0f0f0f);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #333;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+/* Pulse animation for loading */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+/* Amount colors */
+.amount-positive {
+  color: #22c55e;
+}
+
+.amount-negative {
+  color: #ef4444;
+}

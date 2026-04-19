@@ -1,0 +1,129 @@
+<div class="dashboard-container fade-in">
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+        <!-- Total Gastos UYU -->
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <div class="kpi-icon kpi-icon-uyu">
+                    <span class="material-symbols-outlined">payments</span>
+                </div>
+                <span class="kpi-badge currency-uyu">UYU</span>
+            </div>
+            <div class="kpi-value">{{ formatCurrency(totalSpendingUYU, 'UYU') }}</div>
+            <div class="kpi-label">Total Gastos</div>
+        </div>
+
+        <!-- Total Gastos USD -->
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <div class="kpi-icon kpi-icon-usd">
+                    <span class="material-symbols-outlined">attach_money</span>
+                </div>
+                <span class="kpi-badge currency-usd">USD</span>
+            </div>
+            <div class="kpi-value">{{ formatCurrency(totalSpendingUSD, 'USD') }}</div>
+            <div class="kpi-label">Total Gastos</div>
+        </div>
+
+        <!-- Portfolio Value -->
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <div class="kpi-icon kpi-icon-investment">
+                    <span class="material-symbols-outlined">trending_up</span>
+                </div>
+                <span class="kpi-trend" [class.positive]="getInvestmentGain() >= 0" [class.negative]="getInvestmentGain() < 0">
+                    {{ getInvestmentGain() >= 0 ? '+' : '' }}{{ getInvestmentGain() | number:'1.2-2' }}
+                </span>
+            </div>
+            <div class="kpi-value">{{ formatCurrency(portfolioValue, 'USD') }}</div>
+            <div class="kpi-label">Portafolio Inversiones</div>
+        </div>
+
+        <!-- Efectivo -->
+        <div class="kpi-card">
+            <div class="kpi-header">
+                <div class="kpi-icon kpi-icon-cash">
+                    <span class="material-symbols-outlined">wallet</span>
+                </div>
+            </div>
+            <div class="kpi-value" [class.amount-positive]="cashBalance >= 0" [class.amount-negative]="cashBalance < 0">
+                {{ formatCurrency(cashBalance >= 0 ? cashBalance : -cashBalance, 'UYU') }}
+            </div>
+            <div class="kpi-label">Balance Efectivo</div>
+        </div>
+    </div>
+
+    <!-- Chart + Recent Transactions -->
+    <div class="dashboard-grid">
+        <!-- Spending Chart -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3 class="chart-title">Gastos por Mes</h3>
+                <span class="chart-subtitle">Últimos 6 meses</span>
+            </div>
+            <div class="chart-wrapper">
+                <canvas baseChart
+                    [datasets]="spendingChartData.datasets"
+                    [labels]="spendingChartData.labels"
+                    [options]="spendingChartOptions"
+                    type="bar">
+                </canvas>
+            </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="recent-transactions">
+            <div class="section-header">
+                <h3 class="section-title">Últimas Transacciones</h3>
+                <span class="material-symbols-outlined section-icon">history</span>
+            </div>
+            <div class="transaction-list" *ngIf="recentTransactions.length > 0">
+                <div class="transaction-item" *ngFor="let tx of getRecentTransactionsSlice()">
+                    <div class="tx-left">
+                        <div class="tx-icon" [class.tx-debit]="tx.debito" [class.tx-credit]="tx.credito">
+                            <span class="material-symbols-outlined">
+                                {{ tx.debito ? 'arrow_upward' : 'arrow_downward' }}
+                            </span>
+                        </div>
+                        <div class="tx-info">
+                            <span class="tx-concepto">{{ getCleanName(tx.concepto) }}</span>
+                            <div class="tx-meta-row">
+                                <span class="tx-date">{{ tx.fecha }}</span>
+                                <span class="tx-cat-dot" [style.background]="getCategoryColor(tx.categoria)"></span>
+                                <span class="tx-cat-label">{{ tx.categoria || 'Otro' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tx-amount" [class.amount-negative]="tx.debito" [class.amount-positive]="tx.credito">
+                        {{ tx.debito ? '-' : '+' }}{{ tx.debito || tx.credito | number:'1.2-2' }}
+                        <span class="tx-currency">{{ tx.moneda }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="empty-state" *ngIf="recentTransactions.length === 0">
+                <span class="material-symbols-outlined empty-icon">receipt_long</span>
+                <p>No hay transacciones importadas</p>
+                <span class="empty-hint">Importa un JSON desde la sección Gastos</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <h3 class="section-title" style="margin-bottom: 0.75rem;">Acciones Rápidas</h3>
+        <div class="actions-grid">
+            <a class="action-card" href="javascript:void(0)" routerLink="/spending">
+                <span class="material-symbols-outlined action-icon">upload_file</span>
+                <span class="action-label">Importar JSON</span>
+            </a>
+            <a class="action-card" href="javascript:void(0)" routerLink="/transactions">
+                <span class="material-symbols-outlined action-icon">add_circle</span>
+                <span class="action-label">Agregar Efectivo</span>
+            </a>
+            <a class="action-card" href="javascript:void(0)" routerLink="/investments">
+                <span class="material-symbols-outlined action-icon">savings</span>
+                <span class="action-label">Nueva Inversión</span>
+            </a>
+        </div>
+    </div>
+</div>

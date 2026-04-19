@@ -1,0 +1,32 @@
+<aside class="sidebar">
+    <div class="sidebar-top">
+        <div class="logo-section">
+            <div class="logo-icon">
+                <span class="material-symbols-outlined">account_balance</span>
+            </div>
+            <div class="logo-text">
+                <h1>Finance</h1>
+                <span class="version">tracker</span>
+            </div>
+        </div>
+        <nav class="nav-list">
+            <a *ngFor="let item of navItems"
+               class="nav-item"
+               [class.nav-item-active]="item.route === activeRoute"
+               (click)="onNavClick(item.route)"
+               href="javascript:void(0)">
+                <span class="material-symbols-outlined"
+                      [class.icon-filled]="item.route === activeRoute">
+                    {{item.icon}}
+                </span>
+                <span class="nav-label">{{item.label}}</span>
+            </a>
+        </nav>
+    </div>
+    <div class="sidebar-bottom">
+        <div class="sidebar-branding">
+            <span class="material-symbols-outlined" style="font-size: 1rem; opacity: 0.3;">dns</span>
+            <span class="branding-text">SH-Nexus</span>
+        </div>
+    </div>
+</aside>

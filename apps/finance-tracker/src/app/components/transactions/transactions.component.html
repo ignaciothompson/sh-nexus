@@ -1,0 +1,107 @@
+<div class="transactions-container fade-in">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-left">
+            <h1 class="page-title">Transacciones en Efectivo</h1>
+            <p class="page-subtitle">
+                <span class="material-symbols-outlined info-icon">info</span>
+                Estas transacciones no se incluyen en el análisis de gastos bancarios
+            </p>
+        </div>
+        <button class="sh-btn sh-btn-primary" (click)="openAddModal()">
+            <span class="material-symbols-outlined" style="font-size: 1.125rem;">add</span>
+            Nueva Transacción
+        </button>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-grid">
+        <div class="summary-card summary-ingresos">
+            <span class="material-symbols-outlined summary-icon">arrow_downward</span>
+            <div class="summary-info">
+                <span class="summary-label">Ingresos</span>
+                <span class="summary-value amount-positive">${{ totalIngresos | number:'1.2-2' }}</span>
+            </div>
+        </div>
+        <div class="summary-card summary-gastos">
+            <span class="material-symbols-outlined summary-icon">arrow_upward</span>
+            <div class="summary-info">
+                <span class="summary-label">Gastos</span>
+                <span class="summary-value amount-negative">${{ totalGastos | number:'1.2-2' }}</span>
+            </div>
+        </div>
+        <div class="summary-card summary-balance">
+            <span class="material-symbols-outlined summary-icon">account_balance_wallet</span>
+            <div class="summary-info">
+                <span class="summary-label">Balance</span>
+                <span class="summary-value" [class.amount-positive]="balance >= 0" [class.amount-negative]="balance < 0">
+                    ${{ (balance >= 0 ? balance : -balance) | number:'1.2-2' }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-bar">
+        <div class="filter-tabs">
+            <button class="filter-tab" [class.active]="filterType === 'all'" (click)="onFilterChange('all')">Todos</button>
+            <button class="filter-tab" [class.active]="filterType === 'ingreso'" (click)="onFilterChange('ingreso')">Ingresos</button>
+            <button class="filter-tab" [class.active]="filterType === 'gasto'" (click)="onFilterChange('gasto')">Gastos</button>
+        </div>
+        <div class="search-box">
+            <span class="material-symbols-outlined search-icon">search</span>
+            <input type="text" class="sh-input search-input" placeholder="Buscar..." [(ngModel)]="searchQuery" (input)="onSearch()">
+        </div>
+    </div>
+
+    <!-- Transaction List -->
+    <div class="tx-list" *ngIf="filteredTransactions.length > 0">
+        <div class="tx-item" *ngFor="let tx of filteredTransactions">
+            <div class="tx-left">
+                <div class="tx-type-icon" [class.tx-ingreso]="tx.tipo === 'ingreso'" [class.tx-gasto]="tx.tipo === 'gasto'">
+                    <span class="material-symbols-outlined">
+                        {{ tx.tipo === 'ingreso' ? 'arrow_downward' : 'arrow_upward' }}
+                    </span>
+                </div>
+                <div class="tx-details">
+                    <span class="tx-concepto">{{ tx.concepto }}</span>
+                    <div class="tx-meta">
+                        <span class="tx-date">{{ formatDate(tx.fecha) }}</span>
+                        <span class="tx-category-badge"
+                              [style.background]="getCategoryColor(tx.categoria) + '20'"
+                              [style.color]="getCategoryColor(tx.categoria)"
+                              [style.border-color]="getCategoryColor(tx.categoria) + '40'">
+                            {{ tx.categoria || 'Otro' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="tx-right">
+                <span class="tx-amount" [class.amount-positive]="tx.tipo === 'ingreso'" [class.amount-negative]="tx.tipo === 'gasto'">
+                    {{ tx.tipo === 'ingreso' ? '+' : '-' }}${{ tx.monto | number:'1.2-2' }}
+                </span>
+                <div class="tx-actions">
+                    <button class="tx-action-btn" (click)="openAddModal(tx)" title="Editar">
+                        <span class="material-symbols-outlined">edit</span>
+                    </button>
+                    <button class="tx-action-btn tx-delete-btn" (click)="deleteTransaction(tx)" title="Eliminar">
+                        <span class="material-symbols-outlined">delete</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state-large" *ngIf="transactions.length === 0">
+        <div class="empty-icon-wrapper">
+            <span class="material-symbols-outlined">receipt_long</span>
+        </div>
+        <h3>Sin transacciones en efectivo</h3>
+        <p>Agrega transacciones hechas en efectivo para llevar un registro personal.</p>
+        <button class="sh-btn sh-btn-primary" (click)="openAddModal()">
+            <span class="material-symbols-outlined" style="font-size: 1.125rem;">add</span>
+            Agregar Primera Transacción
+        </button>
+    </div>
+</div>
