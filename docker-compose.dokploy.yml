@@ -23,18 +23,6 @@ services:
     networks:
       - nexus_net
 
-  textbook:
-    build:
-      context: ./apps/textbook
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    ports:
-      - "5102:8080"
-    volumes:
-      - textbook_pb_data:/pb/pb_data
-    networks:
-      - nexus_net
-
   finance-tracker:
     build:
       context: ./apps/finance-tracker
@@ -54,5 +42,4 @@ networks:
 volumes:
   hub_pb_data:
   media_pb_data:
-  textbook_pb_data:
   finance_pb_data:
